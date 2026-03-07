@@ -62,15 +62,47 @@
 <section class="input-section">
     <div class="container">
         <div class="input-card">
-            <label for="birthDate">Dogum Tarihinizi Girin</label>
+            <label>Dogum Bilgilerinizi Girin</label>
             <div class="input-row">
                 <input type="text" id="birthDate" placeholder="GG.AA.YYYY" maxlength="10" autocomplete="off">
-                <button id="calcBtn" onclick="calculateMatrix()">Matrisi Hesapla</button>
+                <input type="text" id="birthTime" placeholder="SS:DD" maxlength="5" autocomplete="off">
             </div>
-            <p class="input-hint">Ornek: 15.03.1990</p>
+            <div class="input-row city-row">
+                <div class="city-autocomplete-wrapper">
+                    <input type="text" id="birthCity" placeholder="Dogum Sehri" autocomplete="off">
+                    <div class="city-dropdown" id="cityDropdown"></div>
+                </div>
+            </div>
+            <div class="input-row">
+                <button id="calcBtn" onclick="calculateAll()">Haritayi Hesapla</button>
+            </div>
+            <p class="input-hint">Ornek: 15.03.1990 &mdash; 14:30 &mdash; Istanbul</p>
+            <p class="input-hint-sub">Saat ve sehir bilgisi Dogum Haritasi icin gereklidir. Sadece tarih girerseniz yalnizca Karmik Matris hesaplanir.</p>
         </div>
     </div>
 </section>
+
+<!-- Birth Chart -->
+<section class="birthchart-section" id="birthChartSection" style="display:none;">
+    <div class="container">
+        <h2 class="section-title">Natal Dogum Haritasi</h2>
+        <p class="section-desc">Gezegen konumlari ve burclardaki yerlesimleri</p>
+
+        <div class="birthchart-wrapper">
+            <svg id="birthChartSvg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+
+        <div class="planet-summary" id="planetSummary"></div>
+
+        <button class="download-btn" id="downloadChartBtn" onclick="downloadChartAsPNG()" style="display:none;">
+            &#8681; Haritayi PNG Olarak Indir
+        </button>
+
+        <p class="chart-disclaimer">Bu hesaplamalar yaklasik degerler icerir ve profesyonel astroloji yazilimi yerine gecmez.</p>
+    </div>
+</section>
+
+<div class="section-divider" id="chartMatrixDivider" style="display:none;"></div>
 
 <!-- Matrix Diagram -->
 <section class="matrix-section" id="matrixSection" style="display:none;">
@@ -190,6 +222,9 @@
 </footer>
 
 <script src="arcana-data.js"></script>
+<script src="cities-data.js"></script>
+<script src="astro-engine.js"></script>
+<script src="birth-chart.js"></script>
 <script src="calculator.js"></script>
 </body>
 </html>

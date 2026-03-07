@@ -1115,6 +1115,204 @@ body::before {
     margin-bottom: 0;
 }
 
+/* ====== BIRTH CHART ====== */
+.birthchart-section {
+    padding: 50px 20px 40px;
+    position: relative;
+    z-index: 1;
+}
+.birthchart-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+}
+.birthchart-wrapper svg {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 60px rgba(176,106,255,0.08));
+}
+
+/* Zodiac ring stroke animations */
+.zodiac-ring-outer, .zodiac-ring-inner {
+    stroke-dasharray: 1700;
+    stroke-dashoffset: 1700;
+    animation: ringDraw 1.5s ease forwards;
+}
+.zodiac-ring-inner { animation-delay: 200ms; }
+
+.sign-divider {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: ringDraw 0.6s ease forwards;
+}
+.sign-symbol {
+    opacity: 0;
+    animation: symbolFadeIn 0.4s ease forwards;
+}
+.house-line {
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+    animation: ringDraw 0.5s ease forwards;
+}
+.planet-glyph {
+    opacity: 0;
+    animation: planetAppear 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.aspect-line {
+    /* dasharray/offset set inline by JS */
+}
+
+@keyframes ringDraw {
+    to { stroke-dashoffset: 0; }
+}
+@keyframes symbolFadeIn {
+    from { opacity: 0; font-size: 0; }
+    to   { opacity: 1; font-size: inherit; }
+}
+@keyframes planetAppear {
+    from { opacity: 0; transform: scale(0); }
+    50%  { opacity: 1; transform: scale(1.3); }
+    to   { opacity: 1; transform: scale(1); }
+}
+@keyframes downloadBtnFade {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Planet summary cards */
+.planet-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+    margin-top: 30px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.planet-card {
+    background: var(--bg-glass);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid rgba(176,106,255,0.1);
+    border-radius: 14px;
+    padding: 16px 12px;
+    text-align: center;
+    opacity: 0;
+    animation: slideInUp 0.5s ease forwards;
+    transition: all 0.4s ease;
+}
+.planet-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(176,106,255,0.3);
+    box-shadow: 0 8px 24px rgba(176,106,255,0.12);
+}
+.planet-card .planet-symbol {
+    font-size: 1.8rem;
+    margin-bottom: 4px;
+    display: block;
+}
+.planet-card .planet-name {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+.planet-card .planet-sign {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 4px;
+}
+.planet-card .planet-degree {
+    font-size: 0.78rem;
+    color: var(--accent-warm);
+    margin-top: 2px;
+}
+
+/* Download button */
+.download-btn {
+    display: none;
+    margin: 30px auto 0;
+    padding: 14px 36px;
+    font-size: 1rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, rgba(77,232,224,0.12), rgba(176,106,255,0.12));
+    color: var(--accent-cyan);
+    border: 1px solid rgba(77,232,224,0.2);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.5px;
+}
+.download-btn:hover {
+    background: linear-gradient(135deg, rgba(77,232,224,0.22), rgba(176,106,255,0.22));
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(77,232,224,0.15);
+}
+
+/* Chart disclaimer */
+.chart-disclaimer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    opacity: 0.5;
+    font-style: italic;
+}
+
+/* City autocomplete */
+#birthTime {
+    width: 110px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+.city-row {
+    justify-content: center;
+}
+.city-autocomplete-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+}
+.city-autocomplete-wrapper input {
+    width: 100%;
+    letter-spacing: 1px;
+}
+.city-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(15, 5, 35, 0.95);
+    border: 1px solid rgba(176,106,255,0.2);
+    border-top: none;
+    border-radius: 0 0 14px 14px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 100;
+    backdrop-filter: blur(20px);
+}
+.city-option {
+    padding: 12px 20px;
+    cursor: pointer;
+    color: var(--text-soft);
+    transition: all 0.2s;
+    font-size: 0.92rem;
+}
+.city-option:hover {
+    background: rgba(176,106,255,0.15);
+    color: var(--text);
+}
+
+/* Input hint sub */
+.input-hint-sub {
+    margin-top: 6px;
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    opacity: 0.5;
+}
+
 /* ====== FOOTER ====== */
 .footer {
     text-align: center;
@@ -1147,10 +1345,15 @@ body::before {
     .header { padding: 55px 20px 35px; }
     .input-card { padding: 30px 20px; }
     .input-card input { width: 160px; padding: 14px 16px; }
+    #birthTime { width: 100px; }
+    .city-autocomplete-wrapper { max-width: 100%; }
     .result-cards { grid-template-columns: 1fr; }
     .modal-header { flex-direction: column; text-align: center; padding: 28px 20px 16px; }
     .modal-body { padding: 20px; }
     .age-periods { flex-direction: column; align-items: center; }
     .section-title { font-size: 1.6rem; }
     .nebula { display: none; }
+    .planet-summary { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
+    .birthchart-wrapper { max-width: 100%; }
+    .download-btn { padding: 12px 24px; font-size: 0.9rem; }
 }

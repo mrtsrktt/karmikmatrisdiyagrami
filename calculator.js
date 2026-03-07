@@ -105,28 +105,15 @@ function checkKarmicExtended(n) {
     return Math.abs(val);
 }
 
-function calculateMatrix() {
-    const input = document.getElementById('birthDate');
-    const val = input.value.trim();
-
-    const regex = /^(\d{2})\.(\d{2})\.(\d{4})$/;
-    const match = val.match(regex);
-    if (!match) { input.classList.add('error'); return; }
-    input.classList.remove('error');
-
-    const day = parseInt(match[1]);
-    const month = parseInt(match[2]);
-    const year = match[3];
-
-    if (month < 1 || month > 12 || day < 1 || day > 31) { input.classList.add('error'); return; }
-
+// --- Pure matrix calculation (no DOM) ---
+function calculateMatrixValues(day, month, yearStr) {
     const rawDay = day;
     const A = check(day);
     const rawMonth = month;
     const B = check(month);
 
     let yearSum = 0;
-    for (let i = 0; i < year.length; i++) yearSum += parseInt(year[i]);
+    for (let i = 0; i < yearStr.length; i++) yearSum += parseInt(yearStr[i]);
     const rawYear = yearSum;
     const V = check(yearSum);
 
@@ -141,11 +128,14 @@ function calculateMatrix() {
     const M = check(B - V);
     const N = check(I + K + L + M);
 
+    const dayStr = day < 10 ? '0' + day : '' + day;
+    const monthStr = month < 10 ? '0' + month : '' + month;
+
     const A1 = rawDay > 22 ? digitSum(rawDay) : rawDay;
     const B1 = rawMonth;
     const V1 = rawYear > 22 ? digitSum(rawYear) : rawYear;
 
-    const fullDateStr = match[1] + match[2] + year;
+    const fullDateStr = dayStr + monthStr + yearStr;
     let fullDateSum = 0;
     for (let i = 0; i < fullDateStr.length; i++) fullDateSum += parseInt(fullDateStr[i]);
     const G1 = fullDateSum > 22 ? digitSum(fullDateSum) : fullDateSum;
@@ -165,26 +155,94 @@ function calculateMatrix() {
     const period2End = period1End + 9;
     const period3End = period2End + 9;
 
-    const results = {
+    return {
         A, B, V, G, D, E, J, Z, I, K, L, M, N,
         A1, B1, V1, G1, D1, E1, J1, Z1, I1, K1, L1, M1, N1,
         periods: { p1: period1End, p2: period2End, p3: period3End }
     };
+}
 
-    window._matrixResults = results;
+// --- Main entry: handles both birth chart + karma matrix ---
+function calculateAll() {
+    const dateInput = document.getElementById('birthDate');
+    const timeInput = document.getElementById('birthTime');
+    const cityInput = document.getElementById('birthCity');
 
-    renderMatrix(results);
-    renderAgePeriods(results.periods);
-    renderResultCards(results);
+    // Validate date
+    const dateVal = dateInput.value.trim();
+    const dateRegex = /^(\d{2})\.(\d{2})\.(\d{4})$/;
+    const dateMatch = dateVal.match(dateRegex);
+    if (!dateMatch) { dateInput.classList.add('error'); return; }
+    dateInput.classList.remove('error');
 
+    const day = parseInt(dateMatch[1]);
+    const month = parseInt(dateMatch[2]);
+    const year = dateMatch[3];
+    if (month < 1 || month > 12 || day < 1 || day > 31) { dateInput.classList.add('error'); return; }
+
+    // Calculate karma matrix (always)
+    const matrixResults = calculateMatrixValues(day, month, year);
+    window._matrixResults = matrixResults;
+
+    renderMatrix(matrixResults);
+    renderAgePeriods(matrixResults.periods);
+    renderResultCards(matrixResults);
+
+    // Check for birth chart (optional: time + city)
+    const timeVal = timeInput ? timeInput.value.trim() : '';
+    const cityVal = cityInput ? cityInput.value.trim() : '';
+    const timeRegex = /^(\d{2}):(\d{2})$/;
+    const timeMatch = timeVal.match(timeRegex);
+    const city = cityVal ? getCityByName(cityVal) : null;
+
+    let hasBirthChart = false;
+
+    if (timeMatch && city) {
+        const hour = parseInt(timeMatch[1]);
+        const minute = parseInt(timeMatch[2]);
+        if (hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59) {
+            // Calculate birth chart
+            const chartData = calculateBirthChart(
+                parseInt(year), month, day, hour, minute,
+                city.lat, city.lng
+            );
+            renderBirthChart(chartData, 'birthChartSvg');
+            renderPlanetSummary(chartData, 'planetSummary');
+
+            document.getElementById('birthChartSection').style.display = 'block';
+            document.getElementById('chartMatrixDivider').style.display = 'block';
+
+            // Show download button after animations
+            setTimeout(() => {
+                const btn = document.getElementById('downloadChartBtn');
+                btn.style.display = 'inline-block';
+                btn.style.animation = 'downloadBtnFade 0.5s ease forwards';
+            }, 3800);
+
+            hasBirthChart = true;
+        }
+    }
+
+    if (!hasBirthChart) {
+        document.getElementById('birthChartSection').style.display = 'none';
+        document.getElementById('chartMatrixDivider').style.display = 'none';
+        document.getElementById('downloadChartBtn').style.display = 'none';
+    }
+
+    // Show matrix sections
     document.getElementById('matrixSection').style.display = 'block';
     document.getElementById('resultsSection').style.display = 'block';
     document.getElementById('resultsDivider').style.display = 'block';
 
-    document.getElementById('matrixSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Scroll to birth chart or matrix
+    const scrollTarget = hasBirthChart ? 'birthChartSection' : 'matrixSection';
+    document.getElementById(scrollTarget).scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     requestAnimationFrame(() => initScrollAnimations());
 }
+
+// Keep old function name as alias for backward compatibility
+function calculateMatrix() { calculateAll(); }
 
 // --- Animated SVG Matrix Rendering ---
 function renderMatrix(results) {
@@ -557,8 +615,63 @@ document.getElementById('birthDate').addEventListener('input', function() {
 });
 
 document.getElementById('birthDate').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') calculateMatrix();
+    if (e.key === 'Enter') calculateAll();
 });
+
+// Auto-format time input (SS:DD)
+(function() {
+    const timeEl = document.getElementById('birthTime');
+    if (!timeEl) return;
+    timeEl.addEventListener('input', function() {
+        let val = this.value.replace(/[^0-9:]/g, '');
+        if (val.length === 2 && !val.includes(':')) val += ':';
+        this.value = val;
+    });
+    timeEl.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') calculateAll();
+    });
+})();
+
+// City autocomplete
+(function() {
+    const cityEl = document.getElementById('birthCity');
+    const dropdown = document.getElementById('cityDropdown');
+    if (!cityEl || !dropdown) return;
+
+    cityEl.addEventListener('input', function() {
+        const results = searchCities(this.value);
+        if (results.length === 0) {
+            dropdown.style.display = 'none';
+            return;
+        }
+        dropdown.innerHTML = results.map(c =>
+            `<div class="city-option" data-city="${c.name}">${c.name}${c.country !== 'TR' ? ' (' + c.country + ')' : ''}</div>`
+        ).join('');
+        dropdown.style.display = 'block';
+    });
+
+    dropdown.addEventListener('click', function(e) {
+        const opt = e.target.closest('.city-option');
+        if (opt) {
+            cityEl.value = opt.getAttribute('data-city');
+            dropdown.style.display = 'none';
+        }
+    });
+
+    cityEl.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            dropdown.style.display = 'none';
+            calculateAll();
+        }
+    });
+
+    // Close dropdown on outside click
+    document.addEventListener('click', function(e) {
+        if (!cityEl.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+})();
 
 // Init scroll animations for info cards on page load
 document.addEventListener('DOMContentLoaded', () => {
