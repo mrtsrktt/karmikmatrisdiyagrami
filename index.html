@@ -9,13 +9,20 @@
 </head>
 <body>
 
-<!-- Floating Particles -->
-<div class="particles">
-    <div class="p"></div><div class="p"></div><div class="p"></div>
-    <div class="p"></div><div class="p"></div><div class="p"></div>
-    <div class="p"></div><div class="p"></div><div class="p"></div>
-    <div class="p"></div><div class="p"></div><div class="p"></div>
-</div>
+<!-- Nebula blobs -->
+<div class="nebula"></div>
+<div class="nebula"></div>
+<div class="nebula"></div>
+
+<!-- Starfield -->
+<div class="starfield" id="starfield"></div>
+
+<!-- Shooting Stars -->
+<div class="shooting-star" style="--dur:8s;--delay:1s;--angle:-35deg;top:10%;left:15%;"></div>
+<div class="shooting-star" style="--dur:12s;--delay:5s;--angle:-30deg;top:25%;left:60%;"></div>
+<div class="shooting-star" style="--dur:10s;--delay:9s;--angle:-40deg;top:5%;left:40%;"></div>
+<div class="shooting-star" style="--dur:15s;--delay:3s;--angle:-25deg;top:50%;left:10%;width:80px;"></div>
+<div class="shooting-star" style="--dur:11s;--delay:7s;--angle:-35deg;top:35%;left:75%;width:100px;"></div>
 
 <!-- Header -->
 <header class="header">
@@ -26,6 +33,23 @@
         <span class="sym">&#9788;</span>
         <span class="sym">&#10017;</span>
     </div>
+    <!-- Sacred Geometry Mandala -->
+    <svg class="mandala" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="200" cy="200" r="180" fill="none" stroke="currentColor" stroke-width="0.5"/>
+        <circle cx="200" cy="200" r="140" fill="none" stroke="currentColor" stroke-width="0.3"/>
+        <circle cx="200" cy="200" r="100" fill="none" stroke="currentColor" stroke-width="0.3"/>
+        <circle cx="200" cy="200" r="60" fill="none" stroke="currentColor" stroke-width="0.3"/>
+        <polygon points="200,20 380,200 200,380 20,200" fill="none" stroke="currentColor" stroke-width="0.4"/>
+        <polygon points="200,60 340,200 200,340 60,200" fill="none" stroke="currentColor" stroke-width="0.3"/>
+        <line x1="200" y1="20" x2="200" y2="380" stroke="currentColor" stroke-width="0.3"/>
+        <line x1="20" y1="200" x2="380" y2="200" stroke="currentColor" stroke-width="0.3"/>
+        <line x1="73" y1="73" x2="327" y2="327" stroke="currentColor" stroke-width="0.3"/>
+        <line x1="327" y1="73" x2="73" y2="327" stroke="currentColor" stroke-width="0.3"/>
+        <circle cx="200" cy="20" r="4" fill="currentColor" opacity="0.3"/>
+        <circle cx="380" cy="200" r="4" fill="currentColor" opacity="0.3"/>
+        <circle cx="200" cy="380" r="4" fill="currentColor" opacity="0.3"/>
+        <circle cx="20" cy="200" r="4" fill="currentColor" opacity="0.3"/>
+    </svg>
     <div class="container">
         <h1>Karmik Matris Analizi</h1>
         <p class="subtitle">Anael Sistemi ile Derinlemesine Karmik Harita</p>
@@ -58,17 +82,29 @@
             <svg id="matrixSvg" viewBox="0 0 600 700" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <filter id="glow-gold">
-                        <feGaussianBlur stdDeviation="4" result="blur"/>
+                        <feGaussianBlur stdDeviation="6" result="blur"/>
                         <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
                     </filter>
-                    <filter id="glow-green">
-                        <feGaussianBlur stdDeviation="4" result="blur"/>
+                    <filter id="glow-cyan">
+                        <feGaussianBlur stdDeviation="6" result="blur"/>
                         <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
                     </filter>
-                    <filter id="glow-orange">
-                        <feGaussianBlur stdDeviation="4" result="blur"/>
+                    <filter id="glow-rose">
+                        <feGaussianBlur stdDeviation="6" result="blur"/>
                         <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
                     </filter>
+                    <radialGradient id="nodeGradGold" cx="40%" cy="35%">
+                        <stop offset="0%" stop-color="#ffe066"/>
+                        <stop offset="100%" stop-color="#e8a020"/>
+                    </radialGradient>
+                    <radialGradient id="nodeGradCyan" cx="40%" cy="35%">
+                        <stop offset="0%" stop-color="#7af0e8"/>
+                        <stop offset="100%" stop-color="#20c5b0"/>
+                    </radialGradient>
+                    <radialGradient id="nodeGradRose" cx="40%" cy="35%">
+                        <stop offset="0%" stop-color="#ff9dbf"/>
+                        <stop offset="100%" stop-color="#e8455a"/>
+                    </radialGradient>
                 </defs>
             </svg>
         </div>

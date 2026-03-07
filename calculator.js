@@ -1,22 +1,50 @@
 // ============================================================
-// KARMA MATRIX CALCULATOR - Ana Hesaplama ve Animasyonlu UI
+// KARMA MATRIX CALCULATOR - Kozmik Tasarim + Hesaplama Motoru
 // ============================================================
+
+// --- Generate Starfield ---
+(function initStarfield() {
+    const container = document.getElementById('starfield');
+    if (!container) return;
+    const count = 200;
+    for (let i = 0; i < count; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        const size = Math.random() < 0.85 ? (1 + Math.random() * 1.5) : (2 + Math.random() * 2);
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.setProperty('--dur', (2 + Math.random() * 4) + 's');
+        star.style.setProperty('--o1', (0.2 + Math.random() * 0.3).toFixed(2));
+        star.style.setProperty('--o2', (0.7 + Math.random() * 0.3).toFixed(2));
+        star.style.setProperty('--s', (1 + Math.random() * 0.5).toFixed(2));
+        star.style.animationDelay = (Math.random() * 5) + 's';
+        // Some stars get a color tint
+        const r = Math.random();
+        if (r < 0.08) star.style.background = 'rgba(176,106,255,0.8)';
+        else if (r < 0.15) star.style.background = 'rgba(255,107,157,0.7)';
+        else if (r < 0.2) star.style.background = 'rgba(77,232,224,0.7)';
+        else if (r < 0.25) star.style.background = 'rgba(240,192,64,0.7)';
+        container.appendChild(star);
+    }
+})();
 
 // --- Node positions for SVG diagram ---
 const NODE_POSITIONS = {
-    B: { x: 300, y: 50,  color: "#e8a838", type: "path" },
-    D: { x: 100, y: 190, color: "#4ade80", type: "achievement" },
-    J: { x: 300, y: 190, color: "#4ade80", type: "achievement" },
-    Z: { x: 500, y: 190, color: "#4ade80", type: "achievement" },
-    I: { x: 175, y: 290, color: "#fb923c", type: "karmic" },
-    L: { x: 425, y: 290, color: "#fb923c", type: "karmic" },
-    G: { x: 300, y: 340, color: "#e8a838", type: "path" },
-    M: { x: 175, y: 400, color: "#fb923c", type: "karmic" },
-    N: { x: 425, y: 400, color: "#fb923c", type: "karmic" },
-    A: { x: 100, y: 480, color: "#e8a838", type: "path" },
-    K: { x: 300, y: 480, color: "#fb923c", type: "karmic" },
-    V: { x: 500, y: 480, color: "#e8a838", type: "path" },
-    E: { x: 300, y: 590, color: "#4ade80", type: "achievement" }
+    B: { x: 300, y: 50,  color: "#f0c040", gradient: "url(#nodeGradGold)", type: "path",        glow: "#f0c040" },
+    D: { x: 100, y: 190, color: "#4de8e0", gradient: "url(#nodeGradCyan)", type: "achievement",  glow: "#4de8e0" },
+    J: { x: 300, y: 190, color: "#4de8e0", gradient: "url(#nodeGradCyan)", type: "achievement",  glow: "#4de8e0" },
+    Z: { x: 500, y: 190, color: "#4de8e0", gradient: "url(#nodeGradCyan)", type: "achievement",  glow: "#4de8e0" },
+    I: { x: 175, y: 290, color: "#ff6b9d", gradient: "url(#nodeGradRose)", type: "karmic",       glow: "#ff6b9d" },
+    L: { x: 425, y: 290, color: "#ff6b9d", gradient: "url(#nodeGradRose)", type: "karmic",       glow: "#ff6b9d" },
+    G: { x: 300, y: 340, color: "#f0c040", gradient: "url(#nodeGradGold)", type: "path",         glow: "#f0c040" },
+    M: { x: 175, y: 400, color: "#ff6b9d", gradient: "url(#nodeGradRose)", type: "karmic",       glow: "#ff6b9d" },
+    N: { x: 425, y: 400, color: "#ff6b9d", gradient: "url(#nodeGradRose)", type: "karmic",       glow: "#ff6b9d" },
+    A: { x: 100, y: 480, color: "#f0c040", gradient: "url(#nodeGradGold)", type: "path",         glow: "#f0c040" },
+    K: { x: 300, y: 480, color: "#ff6b9d", gradient: "url(#nodeGradRose)", type: "karmic",       glow: "#ff6b9d" },
+    V: { x: 500, y: 480, color: "#f0c040", gradient: "url(#nodeGradGold)", type: "path",         glow: "#f0c040" },
+    E: { x: 300, y: 590, color: "#4de8e0", gradient: "url(#nodeGradCyan)", type: "achievement",  glow: "#4de8e0" }
 };
 
 const NODE_LINES = [
@@ -35,7 +63,7 @@ const NODE_LINES = [
     ["A", "N"], ["V", "M"],
 ];
 
-// --- Calculation logic (unchanged) ---
+// --- Calculation logic ---
 function check(num) {
     if (num > 22) {
         let n = num;
@@ -155,14 +183,12 @@ function calculateMatrix() {
 
     document.getElementById('matrixSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-    // Trigger scroll animations after render
     requestAnimationFrame(() => initScrollAnimations());
 }
 
 // --- Animated SVG Matrix Rendering ---
 function renderMatrix(results) {
     const svg = document.getElementById('matrixSvg');
-    // Keep defs
     const defs = svg.querySelector('defs');
     svg.innerHTML = '';
     if (defs) svg.appendChild(defs);
@@ -192,7 +218,7 @@ function renderMatrix(results) {
         const len = Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
         line.style.strokeDasharray = len;
         line.style.strokeDashoffset = len;
-        line.style.animation = `drawLine 0.8s ease ${idx * 30}ms forwards`;
+        line.style.animation = `drawLine 1s ease ${idx * 25}ms forwards`;
         line.setAttribute("data-from", from);
         line.setAttribute("data-to", to);
 
@@ -207,9 +233,9 @@ function renderMatrix(results) {
         const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
         g.setAttribute("class", "node-circle");
         g.setAttribute("data-key", key);
-        g.style.animationDelay = `${600 + idx * 80}ms`;
+        g.style.animationDelay = `${500 + idx * 70}ms`;
 
-        // Glow pulse circle (behind)
+        // Outer pulse ring
         const pulseCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         pulseCircle.setAttribute("cx", pos.x);
         pulseCircle.setAttribute("cy", pos.y);
@@ -218,29 +244,58 @@ function renderMatrix(results) {
         pulseCircle.setAttribute("stroke", pos.color);
         pulseCircle.setAttribute("stroke-width", "1");
         pulseCircle.setAttribute("class", "node-pulse");
-        pulseCircle.style.animationDelay = `${idx * 200}ms`;
+        pulseCircle.style.animationDelay = `${idx * 230}ms`;
         g.appendChild(pulseCircle);
+
+        // Second pulse ring (offset)
+        const pulse2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        pulse2.setAttribute("cx", pos.x);
+        pulse2.setAttribute("cy", pos.y);
+        pulse2.setAttribute("r", 35);
+        pulse2.setAttribute("fill", "none");
+        pulse2.setAttribute("stroke", pos.color);
+        pulse2.setAttribute("stroke-width", "0.5");
+        pulse2.setAttribute("class", "node-pulse");
+        pulse2.style.animationDelay = `${idx * 230 + 1500}ms`;
+        g.appendChild(pulse2);
 
         // Hover glow
         const glowCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         glowCircle.setAttribute("cx", pos.x);
         glowCircle.setAttribute("cy", pos.y);
-        glowCircle.setAttribute("r", 38);
+        glowCircle.setAttribute("r", 40);
         glowCircle.setAttribute("fill", pos.color);
         glowCircle.setAttribute("opacity", "0");
         glowCircle.setAttribute("class", "node-glow");
         g.appendChild(glowCircle);
 
-        // Main circle
+        // Main circle with gradient
         const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         circle.setAttribute("cx", pos.x);
         circle.setAttribute("cy", pos.y);
         circle.setAttribute("r", 28);
-        circle.setAttribute("fill", pos.color);
-        circle.setAttribute("stroke", "rgba(255,255,255,0.25)");
+        circle.setAttribute("fill", pos.gradient);
+        circle.setAttribute("stroke", "rgba(255,255,255,0.3)");
         circle.setAttribute("stroke-width", "2");
         circle.setAttribute("class", "node-bg");
         g.appendChild(circle);
+
+        // Orbiting particle
+        const orbitG = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        orbitG.setAttribute("class", "node-orbit");
+        orbitG.style.animationDuration = (3 + idx * 0.3) + 's';
+        orbitG.style.animationDelay = (idx * 0.2) + 's';
+        // We need transform-origin at the node center
+        orbitG.setAttribute("transform-origin", `${pos.x} ${pos.y}`);
+        orbitG.style.transformOrigin = `${pos.x}px ${pos.y}px`;
+        const orbitDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        orbitDot.setAttribute("cx", pos.x + 36);
+        orbitDot.setAttribute("cy", pos.y);
+        orbitDot.setAttribute("r", 2);
+        orbitDot.setAttribute("fill", pos.color);
+        orbitDot.setAttribute("opacity", "0.6");
+        orbitG.appendChild(orbitDot);
+        g.appendChild(orbitG);
 
         // Number text
         const numText = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -254,16 +309,13 @@ function renderMatrix(results) {
         // Letter label
         const labelText = document.createElementNS("http://www.w3.org/2000/svg", "text");
         labelText.setAttribute("x", pos.x);
-        labelText.setAttribute("y", pos.y + 46);
+        labelText.setAttribute("y", pos.y + 48);
         labelText.setAttribute("class", "node-sublabel");
         labelText.setAttribute("dominant-baseline", "middle");
         labelText.textContent = letterMap[key];
         g.appendChild(labelText);
 
-        // Click handler
         g.addEventListener('click', () => openNodeDetail(key, posMap[key]));
-
-        // Hover: highlight connected lines
         g.addEventListener('mouseenter', () => highlightConnections(key, true));
         g.addEventListener('mouseleave', () => highlightConnections(key, false));
 
@@ -271,7 +323,7 @@ function renderMatrix(results) {
     });
 }
 
-// Highlight connected lines on node hover
+// Highlight connected lines
 function highlightConnections(nodeKey, active) {
     const svg = document.getElementById('matrixSvg');
     const lines = svg.querySelectorAll('.matrix-line');
@@ -279,14 +331,16 @@ function highlightConnections(nodeKey, active) {
         const from = line.getAttribute('data-from');
         const to = line.getAttribute('data-to');
         if (from === nodeKey || to === nodeKey) {
-            line.style.stroke = active ? 'rgba(167, 139, 250, 0.5)' : '';
-            line.style.strokeWidth = active ? '2.5' : '';
-            line.style.filter = active ? 'drop-shadow(0 0 4px rgba(127,90,240,0.4))' : '';
+            if (active) {
+                line.classList.add('highlight');
+            } else {
+                line.classList.remove('highlight');
+            }
         }
     });
 }
 
-// --- Age Periods with staggered animation ---
+// --- Age Periods ---
 function renderAgePeriods(periods) {
     const container = document.getElementById('agePeriods');
     const data = [
@@ -296,14 +350,14 @@ function renderAgePeriods(periods) {
         { label: "4. Donem", range: `${periods.p3}+ yas` },
     ];
     container.innerHTML = data.map((d, i) =>
-        `<div class="age-period" style="animation-delay: ${1200 + i * 150}ms">
+        `<div class="age-period" style="animation-delay: ${1000 + i * 120}ms">
             <div class="period-label">${d.label}</div>
             <div class="period-range">${d.range}</div>
         </div>`
     ).join('');
 }
 
-// --- Result Cards with staggered entrance ---
+// --- Result Cards ---
 function renderResultCards(results) {
     const pathKeys = [
         { key: 'A', label: 'A', name: 'Gun Arkani', val: results.A, ext: results.A1 },
@@ -352,17 +406,15 @@ function initScrollAnimations() {
             if (entry.isIntersecting) {
                 const el = entry.target;
 
-                // Stagger delay based on sibling index
                 const parent = el.parentElement;
                 const siblings = parent ? Array.from(parent.querySelectorAll('[data-animate]')) : [];
                 const idx = siblings.indexOf(el);
-                const delay = idx * 100;
+                const delay = idx * 120;
 
                 setTimeout(() => {
                     el.classList.add('visible');
-                    el.style.transition = `opacity 0.6s ease, transform 0.6s ease`;
+                    el.style.transition = `opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)`;
 
-                    // Number counter animation for card-num
                     const numEl = el.querySelector('.card-num[data-count]');
                     if (numEl) animateCounter(numEl);
                 }, delay);
@@ -370,7 +422,7 @@ function initScrollAnimations() {
                 observer.unobserve(el);
             }
         });
-    }, { threshold: 0.15 });
+    }, { threshold: 0.12 });
 
     document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
 }
@@ -378,13 +430,13 @@ function initScrollAnimations() {
 // Number counting animation
 function animateCounter(el) {
     const target = parseInt(el.getAttribute('data-count'));
-    const duration = 600;
+    const duration = 800;
     const start = performance.now();
 
     function step(now) {
         const elapsed = now - start;
         const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+        const eased = 1 - Math.pow(1 - progress, 3);
         el.textContent = Math.round(eased * target);
         if (progress < 1) requestAnimationFrame(step);
     }
@@ -446,6 +498,9 @@ function openNodeDetail(posKey, arcanaNum) {
         <p><strong>Karmik Dugum Pozisyonunda (I/K/L/M):</strong> ${arcanaDetail.inKarmic}</p>
         <p><strong>Merkez Pozisyonunda (N):</strong> ${arcanaDetail.inCenter}</p>
     `;
+
+    // Reset scroll
+    body.scrollTop = 0;
 
     document.getElementById('modalOverlay').classList.add('active');
     document.body.style.overflow = 'hidden';
