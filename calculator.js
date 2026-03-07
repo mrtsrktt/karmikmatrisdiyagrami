@@ -234,9 +234,11 @@ function calculateAll() {
     document.getElementById('resultsSection').style.display = 'block';
     document.getElementById('resultsDivider').style.display = 'block';
 
-    // Scroll to birth chart or matrix
+    // Scroll to birth chart or matrix (instant to avoid fighting user scroll on mobile)
     const scrollTarget = hasBirthChart ? 'birthChartSection' : 'matrixSection';
-    document.getElementById(scrollTarget).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const targetEl = document.getElementById(scrollTarget);
+    const y = targetEl.getBoundingClientRect().top + window.pageYOffset - 20;
+    window.scrollTo({ top: y, behavior: 'instant' });
 
     // Init scroll-triggered matrix animation
     initMatrixScrollTrigger();

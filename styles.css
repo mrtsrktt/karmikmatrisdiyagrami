@@ -24,7 +24,7 @@
     --glass-blur: blur(20px);
 }
 
-html { scroll-behavior: smooth; }
+/* scroll-behavior: smooth removed - causes scroll-back issues on mobile */
 
 body {
     font-family: 'Inter', sans-serif;
