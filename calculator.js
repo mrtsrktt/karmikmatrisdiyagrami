@@ -464,6 +464,38 @@ function openNodeDetail(posKey, arcanaNum) {
         posInterpretation = arcanaDetail.inKarmic;
     }
 
+    // Build consultant sections if available
+    let consultantHTML = '';
+    if (arcanaDetail.consultantNote) {
+        consultantHTML += `
+            <div class="consultant-divider">
+                <span>Danisman Rehberi</span>
+            </div>
+
+            <div class="consultant-section">
+                <h3>Danismana Not</h3>
+                <div class="consultant-note">${arcanaDetail.consultantNote}</div>
+            </div>
+        `;
+    }
+    if (arcanaDetail.practicalSolutions && arcanaDetail.practicalSolutions.length) {
+        consultantHTML += `
+            <div class="consultant-section">
+                <h3>Pratik Cozumler ve Oneriler</h3>
+                <ol class="practical-solutions">${arcanaDetail.practicalSolutions.map(s => `<li>${s}</li>`).join('')}</ol>
+            </div>
+        `;
+    }
+    if (arcanaDetail.detailedReading) {
+        const paragraphs = arcanaDetail.detailedReading.split('\n\n').filter(p => p.trim());
+        consultantHTML += `
+            <div class="consultant-section">
+                <h3>Detayli Yorum (Sade Anlatim)</h3>
+                <div class="detailed-reading">${paragraphs.map(p => `<p>${p.trim()}</p>`).join('')}</div>
+            </div>
+        `;
+    }
+
     const body = document.getElementById('modalBody');
     body.innerHTML = `
         <div class="formula-box">
@@ -497,6 +529,8 @@ function openNodeDetail(posKey, arcanaNum) {
         <p><strong>Basari Pozisyonunda (D/E/J/Z):</strong> ${arcanaDetail.inAchievement}</p>
         <p><strong>Karmik Dugum Pozisyonunda (I/K/L/M):</strong> ${arcanaDetail.inKarmic}</p>
         <p><strong>Merkez Pozisyonunda (N):</strong> ${arcanaDetail.inCenter}</p>
+
+        ${consultantHTML}
     `;
 
     // Reset scroll
