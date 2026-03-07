@@ -3,25 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Karmik Matris Hesaplayıcı - Anael Sistemi</title>
+    <title>Karmik Matris Analizi - Anael Sistemi</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
+<!-- Floating Particles -->
+<div class="particles">
+    <div class="p"></div><div class="p"></div><div class="p"></div>
+    <div class="p"></div><div class="p"></div><div class="p"></div>
+    <div class="p"></div><div class="p"></div><div class="p"></div>
+    <div class="p"></div><div class="p"></div><div class="p"></div>
+</div>
+
 <!-- Header -->
 <header class="header">
+    <div class="floating-symbols">
+        <span class="sym">&#9734;</span>
+        <span class="sym">&#9789;</span>
+        <span class="sym">&#10022;</span>
+        <span class="sym">&#9788;</span>
+        <span class="sym">&#10017;</span>
+    </div>
     <div class="container">
         <h1>Karmik Matris Analizi</h1>
         <p class="subtitle">Anael Sistemi ile Derinlemesine Karmik Harita</p>
     </div>
 </header>
 
+<div class="section-divider"></div>
+
 <!-- Input Section -->
 <section class="input-section">
     <div class="container">
         <div class="input-card">
-            <label for="birthDate">Doğum Tarihinizi Girin</label>
+            <label for="birthDate">Dogum Tarihinizi Girin</label>
             <div class="input-row">
                 <input type="text" id="birthDate" placeholder="GG.AA.YYYY" maxlength="10" autocomplete="off">
                 <button id="calcBtn" onclick="calculateMatrix()">Matrisi Hesapla</button>
@@ -35,11 +52,24 @@
 <section class="matrix-section" id="matrixSection" style="display:none;">
     <div class="container">
         <h2 class="section-title">Karmik Matris Diyagrami</h2>
-        <p class="section-desc">Dugümlere tiklayarak detayli analizi goruntuleyebilirsiniz</p>
+        <p class="section-desc">Dugumlere tiklayarak detayli analizi goruntuleyebilirsiniz</p>
 
         <div class="matrix-wrapper">
             <svg id="matrixSvg" viewBox="0 0 600 700" xmlns="http://www.w3.org/2000/svg">
-                <!-- Lines will be drawn by JS -->
+                <defs>
+                    <filter id="glow-gold">
+                        <feGaussianBlur stdDeviation="4" result="blur"/>
+                        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                    <filter id="glow-green">
+                        <feGaussianBlur stdDeviation="4" result="blur"/>
+                        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                    <filter id="glow-orange">
+                        <feGaussianBlur stdDeviation="4" result="blur"/>
+                        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                </defs>
             </svg>
         </div>
 
@@ -48,25 +78,25 @@
     </div>
 </section>
 
+<div class="section-divider" id="resultsDivider" style="display:none;"></div>
+
 <!-- Results Table -->
 <section class="results-section" id="resultsSection" style="display:none;">
     <div class="container">
         <h2 class="section-title">Hesaplama Sonuclari</h2>
+        <p class="section-desc">Detayli yorum icin kartlara tiklayin</p>
 
         <div class="results-grid">
-            <!-- Path Cards -->
             <div class="result-group">
                 <h3>Yol (Temel Arkanlar)</h3>
                 <div class="result-cards" id="pathCards"></div>
             </div>
 
-            <!-- Achievement Numbers -->
             <div class="result-group">
                 <h3>Basari Sayilari (CD)</h3>
                 <div class="result-cards" id="achievementCards"></div>
             </div>
 
-            <!-- Karmic Knots -->
             <div class="result-group">
                 <h3>Karmik Dugumler (KU)</h3>
                 <div class="result-cards" id="karmicCards"></div>
@@ -75,25 +105,27 @@
     </div>
 </section>
 
+<div class="section-divider"></div>
+
 <!-- Info Section -->
 <section class="info-section">
     <div class="container">
         <h2 class="section-title">Sistem Hakkinda</h2>
         <div class="info-grid">
-            <div class="info-card">
+            <div class="info-card" data-animate>
                 <div class="info-icon">&#9733;</div>
                 <h3>Anael Matrisi Nedir?</h3>
                 <p>Anael Karmik Matrisi, dogum tarihine dayali bir numerolojik-ezoterik sistemdir. 22 Buyuk Arkana'ya karsilik gelen sayilar kullanilarak, bir kisinin karmik derslerini, yeteneklerini ve yasam amacini ortaya cikarir.</p>
             </div>
-            <div class="info-card">
+            <div class="info-card" data-animate>
                 <div class="info-icon">&#9776;</div>
                 <h3>Nasil Hesaplanir?</h3>
                 <p>Dogum tarihinin gun, ay ve yil bilesenleri uzerinden 13 farkli pozisyon hesaplanir. Her pozisyon 1-22 arasi bir sayiya indirgenir ve Tarot'un Buyuk Arkana'larina karsilik gelir.</p>
             </div>
-            <div class="info-card">
+            <div class="info-card" data-animate>
                 <div class="info-icon">&#8734;</div>
                 <h3>Ne Ise Yarar?</h3>
-                <p>Matris, kisisel gelisim icin bir rehber niteligindedir. Dogussal yetenekleri, karmik engelleri, yasam gorevini ve farkli yas donemlerindeki temaları ortaya koyar.</p>
+                <p>Matris, kisisel gelisim icin bir rehber niteligindedir. Dogussal yetenekleri, karmik engelleri, yasam gorevini ve farkli yas donemlerindeki temalari ortaya koyar.</p>
             </div>
         </div>
     </div>
