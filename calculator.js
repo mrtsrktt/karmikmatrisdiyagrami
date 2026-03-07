@@ -1,5 +1,5 @@
 // ============================================================
-// KARMA MATRIX CALCULATOR - Kozmik Tasarim + Hesaplama Motoru
+// KARMA MATRIX CALCULATOR - Kozmik Tasarım + Hesaplama Motoru
 // ============================================================
 
 // --- Generate Starfield ---
@@ -408,10 +408,10 @@ function highlightConnections(nodeKey, active) {
 function renderAgePeriods(periods) {
     const container = document.getElementById('agePeriods');
     const data = [
-        { label: "1. Donem", range: `0 - ${periods.p1} yas` },
-        { label: "2. Donem", range: `${periods.p1} - ${periods.p2} yas` },
-        { label: "3. Donem", range: `${periods.p2} - ${periods.p3} yas` },
-        { label: "4. Donem", range: `${periods.p3}+ yas` },
+        { label: "1. Dönem", range: `0 - ${periods.p1} yaş` },
+        { label: "2. Dönem", range: `${periods.p1} - ${periods.p2} yaş` },
+        { label: "3. Dönem", range: `${periods.p2} - ${periods.p3} yaş` },
+        { label: "4. Dönem", range: `${periods.p3}+ yaş` },
     ];
     container.innerHTML = data.map((d, i) =>
         `<div class="age-period" style="opacity:0; animation: none;">
@@ -424,23 +424,23 @@ function renderAgePeriods(periods) {
 // --- Result Cards ---
 function renderResultCards(results) {
     const pathKeys = [
-        { key: 'A', label: 'A', name: 'Gun Arkani', val: results.A, ext: results.A1 },
-        { key: 'B', label: 'B', name: 'Ay Arkani', val: results.B, ext: results.B1 },
-        { key: 'V', label: 'V', name: 'Yil Arkani', val: results.V, ext: results.V1 },
-        { key: 'G', label: 'G', name: 'Kendini Gerceklestirme', val: results.G, ext: results.G1 }
+        { key: 'A', label: 'A', name: 'Gün Arkanı', val: results.A, ext: results.A1 },
+        { key: 'B', label: 'B', name: 'Ay Arkanı', val: results.B, ext: results.B1 },
+        { key: 'V', label: 'V', name: 'Yıl Arkanı', val: results.V, ext: results.V1 },
+        { key: 'G', label: 'G', name: 'Kendini Gerçekleştirme', val: results.G, ext: results.G1 }
     ];
     const achieveKeys = [
-        { key: 'D', label: 'D', name: '1. Basari Sayisi', val: results.D, ext: results.D1 },
-        { key: 'E', label: 'E', name: '2. Basari Sayisi', val: results.E, ext: results.E1 },
-        { key: 'J', label: 'J', name: '3. Basari Sayisi', val: results.J, ext: results.J1 },
-        { key: 'Z', label: 'Z', name: '4. Basari Sayisi', val: results.Z, ext: results.Z1 }
+        { key: 'D', label: 'D', name: '1. Başarı Sayısı', val: results.D, ext: results.D1 },
+        { key: 'E', label: 'E', name: '2. Başarı Sayısı', val: results.E, ext: results.E1 },
+        { key: 'J', label: 'J', name: '3. Başarı Sayısı', val: results.J, ext: results.J1 },
+        { key: 'Z', label: 'Z', name: '4. Başarı Sayısı', val: results.Z, ext: results.Z1 }
     ];
     const karmicKeys = [
-        { key: 'I', label: 'I', name: '1. Karmik Dugum', val: results.I, ext: results.I1 },
-        { key: 'K', label: 'K', name: '2. Karmik Dugum', val: results.K, ext: results.K1 },
-        { key: 'L', label: 'L', name: '3. Karmik Dugum', val: results.L, ext: results.L1 },
-        { key: 'M', label: 'M', name: '4. Karmik Dugum', val: results.M, ext: results.M1 },
-        { key: 'N', label: 'N', name: 'Yasam Boyu Karmik Ders', val: results.N, ext: results.N1 }
+        { key: 'I', label: 'I', name: '1. Karmik Düğüm', val: results.I, ext: results.I1 },
+        { key: 'K', label: 'K', name: '2. Karmik Düğüm', val: results.K, ext: results.K1 },
+        { key: 'L', label: 'L', name: '3. Karmik Düğüm', val: results.L, ext: results.L1 },
+        { key: 'M', label: 'M', name: '4. Karmik Düğüm', val: results.M, ext: results.M1 },
+        { key: 'N', label: 'N', name: 'Yaşam Boyu Karmik Ders', val: results.N, ext: results.N1 }
     ];
 
     document.getElementById('pathCards').innerHTML = pathKeys.map(p => cardHTML(p, 'path')).join('');
@@ -533,11 +533,11 @@ function openNodeDetail(posKey, arcanaNum) {
     if (arcanaDetail.consultantNote) {
         consultantHTML += `
             <div class="consultant-divider">
-                <span>Danisman Rehberi</span>
+                <span>Danışman Rehberi</span>
             </div>
 
             <div class="consultant-section">
-                <h3>Danismana Not</h3>
+                <h3>Danışmana Not</h3>
                 <div class="consultant-note">${arcanaDetail.consultantNote}</div>
             </div>
         `;
@@ -545,7 +545,7 @@ function openNodeDetail(posKey, arcanaNum) {
     if (arcanaDetail.practicalSolutions && arcanaDetail.practicalSolutions.length) {
         consultantHTML += `
             <div class="consultant-section">
-                <h3>Pratik Cozumler ve Oneriler</h3>
+                <h3>Pratik Çözümler ve Öneriler</h3>
                 <ol class="practical-solutions">${arcanaDetail.practicalSolutions.map(s => `<li>${s}</li>`).join('')}</ol>
             </div>
         `;
@@ -554,7 +554,7 @@ function openNodeDetail(posKey, arcanaNum) {
         const paragraphs = arcanaDetail.detailedReading.split('\n\n').filter(p => p.trim());
         consultantHTML += `
             <div class="consultant-section">
-                <h3>Detayli Yorum (Sade Anlatim)</h3>
+                <h3>Detaylı Yorum (Sade Anlatım)</h3>
                 <div class="detailed-reading">${paragraphs.map(p => `<p>${p.trim()}</p>`).join('')}</div>
             </div>
         `;
@@ -564,16 +564,16 @@ function openNodeDetail(posKey, arcanaNum) {
     body.innerHTML = `
         <div class="formula-box">
             <strong>Pozisyon:</strong> ${posInfo.fullName}<br>
-            <strong>Formul:</strong> ${posInfo.formula}
+            <strong>Formül:</strong> ${posInfo.formula}
         </div>
 
-        <h3>Bu Pozisyonun Anlami</h3>
+        <h3>Bu Pozisyonun Anlamı</h3>
         <p>${posInfo.meaning}</p>
 
         <h3>Bu Pozisyondaki Yorum (${arcanaNum}. Arkana)</h3>
         <p>${posInterpretation}</p>
 
-        <h3>Genel Arkana Anlami</h3>
+        <h3>Genel Arkana Anlamı</h3>
         <p>${arcanaDetail.general}</p>
 
         <h3>Anahtar Kelimeler</h3>
@@ -582,16 +582,16 @@ function openNodeDetail(posKey, arcanaNum) {
         <h3>Element & Gezegen</h3>
         <p>Element: <strong>${arcanaDetail.element}</strong> | Gezegen: <strong>${arcanaDetail.planet}</strong></p>
 
-        <h3>Pozitif Yonler</h3>
+        <h3>Pozitif Yönler</h3>
         <ul>${arcanaDetail.positive.map(p => `<li>${p}</li>`).join('')}</ul>
 
-        <h3>Dikkat Edilmesi Gerekenler (Golge Yon)</h3>
+        <h3>Dikkat Edilmesi Gerekenler (Gölge Yön)</h3>
         <ul>${arcanaDetail.negative.map(n => `<li>${n}</li>`).join('')}</ul>
 
-        <h3>Farkli Pozisyonlardaki Anlamlari</h3>
+        <h3>Farklı Pozisyonlardaki Anlamları</h3>
         <p><strong>Yol Pozisyonunda (A/B/V/G):</strong> ${arcanaDetail.inPath}</p>
-        <p><strong>Basari Pozisyonunda (D/E/J/Z):</strong> ${arcanaDetail.inAchievement}</p>
-        <p><strong>Karmik Dugum Pozisyonunda (I/K/L/M):</strong> ${arcanaDetail.inKarmic}</p>
+        <p><strong>Başarı Pozisyonunda (D/E/J/Z):</strong> ${arcanaDetail.inAchievement}</p>
+        <p><strong>Karmik Düğüm Pozisyonunda (I/K/L/M):</strong> ${arcanaDetail.inKarmic}</p>
         <p><strong>Merkez Pozisyonunda (N):</strong> ${arcanaDetail.inCenter}</p>
 
         ${consultantHTML}

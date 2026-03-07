@@ -62,22 +62,22 @@
 <section class="input-section">
     <div class="container">
         <div class="input-card">
-            <label>Dogum Bilgilerinizi Girin</label>
+            <label>Doğum Bilgilerinizi Girin</label>
             <div class="input-row">
                 <input type="text" id="birthDate" placeholder="GG.AA.YYYY" maxlength="10" autocomplete="off">
                 <input type="text" id="birthTime" placeholder="SS:DD" maxlength="5" autocomplete="off">
             </div>
             <div class="input-row city-row">
                 <div class="city-autocomplete-wrapper">
-                    <input type="text" id="birthCity" placeholder="Dogum Sehri" autocomplete="off">
+                    <input type="text" id="birthCity" placeholder="Doğum Şehri" autocomplete="off">
                     <div class="city-dropdown" id="cityDropdown"></div>
                 </div>
             </div>
             <div class="input-row">
-                <button id="calcBtn" onclick="calculateAll()">Haritayi Hesapla</button>
+                <button id="calcBtn" onclick="calculateAll()">Haritayı Hesapla</button>
             </div>
-            <p class="input-hint">Ornek: 15.03.1990 &mdash; 14:30 &mdash; Istanbul</p>
-            <p class="input-hint-sub">Saat ve sehir bilgisi Dogum Haritasi icin gereklidir. Sadece tarih girerseniz yalnizca Karmik Matris hesaplanir.</p>
+            <p class="input-hint">Örnek: 15.03.1990 &mdash; 14:30 &mdash; İstanbul</p>
+            <p class="input-hint-sub">Saat ve şehir bilgisi Doğum Haritası için gereklidir. Sadece tarih girerseniz yalnızca Karmik Matris hesaplanır.</p>
         </div>
     </div>
 </section>
@@ -85,8 +85,8 @@
 <!-- Birth Chart -->
 <section class="birthchart-section" id="birthChartSection" style="display:none;">
     <div class="container">
-        <h2 class="section-title">Natal Dogum Haritasi</h2>
-        <p class="section-desc">Gezegen konumlari ve burclardaki yerlesimleri</p>
+        <h2 class="section-title">Natal Doğum Haritası</h2>
+        <p class="section-desc">Gezegen konumları ve burçlardaki yerleşimleri</p>
 
         <div class="birthchart-wrapper">
             <svg id="birthChartSvg" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
@@ -95,10 +95,10 @@
         <div class="planet-summary" id="planetSummary"></div>
 
         <button class="download-btn" id="downloadChartBtn" onclick="downloadChartAsPNG()" style="display:none;">
-            &#8681; Haritayi PNG Olarak Indir
+            &#8681; Haritayı PNG Olarak İndir
         </button>
 
-        <p class="chart-disclaimer">Bu hesaplamalar yaklasik degerler icerir ve profesyonel astroloji yazilimi yerine gecmez.</p>
+        <p class="chart-disclaimer">Bu hesaplamalar yaklaşık değerler içerir ve profesyonel astroloji yazılımı yerine geçmez.</p>
     </div>
 </section>
 
@@ -107,8 +107,8 @@
 <!-- Matrix Diagram -->
 <section class="matrix-section" id="matrixSection" style="display:none;">
     <div class="container">
-        <h2 class="section-title">Karmik Matris Diyagrami</h2>
-        <p class="section-desc">Dugumlere tiklayarak detayli analizi goruntuleyebilirsiniz</p>
+        <h2 class="section-title">Karmik Matris Diyagramı</h2>
+        <p class="section-desc">Düğümlere tıklayarak detaylı analizi görüntüleyebilirsiniz</p>
 
         <div class="matrix-wrapper">
             <svg id="matrixSvg" viewBox="0 0 600 700" xmlns="http://www.w3.org/2000/svg">
@@ -151,8 +151,8 @@
 <!-- Results Table -->
 <section class="results-section" id="resultsSection" style="display:none;">
     <div class="container">
-        <h2 class="section-title">Hesaplama Sonuclari</h2>
-        <p class="section-desc">Detayli yorum icin kartlara tiklayin</p>
+        <h2 class="section-title">Hesaplama Sonuçları</h2>
+        <p class="section-desc">Detaylı yorum için kartlara tıklayın</p>
 
         <div class="results-grid">
             <div class="result-group">
@@ -161,12 +161,12 @@
             </div>
 
             <div class="result-group">
-                <h3>Basari Sayilari (CD)</h3>
+                <h3>Başarı Sayıları (CD)</h3>
                 <div class="result-cards" id="achievementCards"></div>
             </div>
 
             <div class="result-group">
-                <h3>Karmik Dugumler (KU)</h3>
+                <h3>Karmik Düğümler (KU)</h3>
                 <div class="result-cards" id="karmicCards"></div>
             </div>
         </div>
@@ -178,22 +178,22 @@
 <!-- Info Section -->
 <section class="info-section">
     <div class="container">
-        <h2 class="section-title">Sistem Hakkinda</h2>
+        <h2 class="section-title">Sistem Hakkında</h2>
         <div class="info-grid">
             <div class="info-card" data-animate>
                 <div class="info-icon">&#9733;</div>
                 <h3>Anael Matrisi Nedir?</h3>
-                <p>Anael Karmik Matrisi, dogum tarihine dayali bir numerolojik-ezoterik sistemdir. 22 Buyuk Arkana'ya karsilik gelen sayilar kullanilarak, bir kisinin karmik derslerini, yeteneklerini ve yasam amacini ortaya cikarir.</p>
+                <p>Anael Karmik Matrisi, doğum tarihine dayalı bir numerolojik-ezoterik sistemdir. 22 Büyük Arkana'ya karşılık gelen sayılar kullanılarak, bir kişinin karmik derslerini, yeteneklerini ve yaşam amacını ortaya çıkarır.</p>
             </div>
             <div class="info-card" data-animate>
                 <div class="info-icon">&#9776;</div>
-                <h3>Nasil Hesaplanir?</h3>
-                <p>Dogum tarihinin gun, ay ve yil bilesenleri uzerinden 13 farkli pozisyon hesaplanir. Her pozisyon 1-22 arasi bir sayiya indirgenir ve Tarot'un Buyuk Arkana'larina karsilik gelir.</p>
+                <h3>Nasıl Hesaplanır?</h3>
+                <p>Doğum tarihinin gün, ay ve yıl bileşenleri üzerinden 13 farklı pozisyon hesaplanır. Her pozisyon 1-22 arası bir sayıya indirgenir ve Tarot'un Büyük Arkana'larına karşılık gelir.</p>
             </div>
             <div class="info-card" data-animate>
                 <div class="info-icon">&#8734;</div>
-                <h3>Ne Ise Yarar?</h3>
-                <p>Matris, kisisel gelisim icin bir rehber niteligindedir. Dogussal yetenekleri, karmik engelleri, yasam gorevini ve farkli yas donemlerindeki temalari ortaya koyar.</p>
+                <h3>Ne İşe Yarar?</h3>
+                <p>Matris, kişisel gelişim için bir rehber niteliğindedir. Doğuşsal yetenekleri, karmik engelleri, yaşam görevini ve farklı yaş dönemlerindeki temaları ortaya koyar.</p>
             </div>
         </div>
     </div>
@@ -217,7 +217,7 @@
 <footer class="footer">
     <div class="container">
         <p>Karmik Matris Analizi &mdash; Anael Sistemi</p>
-        <p class="footer-note">Bu hesaplama ezoterik ve numerolojik bir arac olup, bilimsel bir iddia tasimaz.</p>
+        <p class="footer-note">Bu hesaplama ezoterik ve numerolojik bir araç olup, bilimsel bir iddia taşımaz.</p>
     </div>
 </footer>
 

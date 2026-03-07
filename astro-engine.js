@@ -499,18 +499,18 @@ function calcAspects(planets) {
 // ---------------------------------------------------------------------------
 
 var ZODIAC_SIGNS = [
-    { index: 0,  name: "Koc",     symbol: "\u2648", english: "Aries",       element: "Ates"   },
-    { index: 1,  name: "Boga",    symbol: "\u2649", english: "Taurus",      element: "Toprak" },
-    { index: 2,  name: "Ikizler", symbol: "\u264A", english: "Gemini",      element: "Hava"   },
-    { index: 3,  name: "Yengec",  symbol: "\u264B", english: "Cancer",      element: "Su"     },
-    { index: 4,  name: "Aslan",   symbol: "\u264C", english: "Leo",         element: "Ates"   },
-    { index: 5,  name: "Basak",   symbol: "\u264D", english: "Virgo",       element: "Toprak" },
+    { index: 0,  name: "Koç",      symbol: "\u2648", english: "Aries",       element: "Ateş"   },
+    { index: 1,  name: "Boğa",    symbol: "\u2649", english: "Taurus",      element: "Toprak" },
+    { index: 2,  name: "İkizler", symbol: "\u264A", english: "Gemini",      element: "Hava"   },
+    { index: 3,  name: "Yengeç",  symbol: "\u264B", english: "Cancer",      element: "Su"     },
+    { index: 4,  name: "Aslan",   symbol: "\u264C", english: "Leo",         element: "Ateş"   },
+    { index: 5,  name: "Başak",   symbol: "\u264D", english: "Virgo",       element: "Toprak" },
     { index: 6,  name: "Terazi",  symbol: "\u264E", english: "Libra",       element: "Hava"   },
     { index: 7,  name: "Akrep",   symbol: "\u264F", english: "Scorpio",     element: "Su"     },
-    { index: 8,  name: "Yay",     symbol: "\u2650", english: "Sagittarius", element: "Ates"   },
-    { index: 9,  name: "Oglak",   symbol: "\u2651", english: "Capricorn",   element: "Toprak" },
+    { index: 8,  name: "Yay",     symbol: "\u2650", english: "Sagittarius", element: "Ateş"   },
+    { index: 9,  name: "Oğlak",   symbol: "\u2651", english: "Capricorn",   element: "Toprak" },
     { index: 10, name: "Kova",    symbol: "\u2652", english: "Aquarius",    element: "Hava"   },
-    { index: 11, name: "Balik",   symbol: "\u2653", english: "Pisces",      element: "Su"     }
+    { index: 11, name: "Balık",   symbol: "\u2653", english: "Pisces",      element: "Su"     }
 ];
 
 var PLANET_SYMBOLS = {

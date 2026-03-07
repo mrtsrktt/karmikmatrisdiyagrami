@@ -1,18 +1,18 @@
 // ============================================================
-// NATAL DOGUM HARITASI - PREMIUM SVG ZODYAK CARKI
-// Profesyonel cizim, SVG path glyphler, derece olcegi
+// NATAL DOĞUM HARİTASI - PREMIUM SVG ZODYAK ÇARKI
+// Profesyonel çizim, SVG path glyphler, derece ölçeği
 // ============================================================
 
 const ELEMENT_COLORS = {
-    Ates:   { bg: 'rgba(255,107,157,0.05)', stroke: 'rgba(255,107,157,0.25)', text: '#ff9dbf' },
+    Ateş:   { bg: 'rgba(255,107,157,0.05)', stroke: 'rgba(255,107,157,0.25)', text: '#ff9dbf' },
     Toprak: { bg: 'rgba(240,192,64,0.05)',  stroke: 'rgba(240,192,64,0.25)',  text: '#ffe066' },
     Hava:   { bg: 'rgba(77,232,224,0.05)',  stroke: 'rgba(77,232,224,0.25)',  text: '#7af0e8' },
     Su:     { bg: 'rgba(176,106,255,0.05)', stroke: 'rgba(176,106,255,0.25)', text: '#c9a0ff' }
 };
 
 const PLANET_NAMES_TR = {
-    gunes: 'Gunes', ay: 'Ay', merkur: 'Merkur',
-    venus: 'Venus', mars: 'Mars', jupiter: 'Jupiter', saturn: 'Saturn'
+    gunes: 'Güneş', ay: 'Ay', merkur: 'Merkür',
+    venus: 'Venüs', mars: 'Mars', jupiter: 'Jüpiter', saturn: 'Satürn'
 };
 
 // Professional astrological glyphs as short text labels (cleaner than Unicode)
@@ -378,7 +378,7 @@ function renderPlanetSummary(chartData, containerId) {
     const ascDeg = getSignDegree(chartData.ascendant);
     html += `<div class="planet-card" style="animation-delay:${5000 + keys.length * 120}ms;border-color:rgba(240,192,64,0.15);">
         <span class="planet-symbol" style="color:#f0c040">ASC</span>
-        <span class="planet-name">Yukselen</span>
+        <span class="planet-name">Yükselen</span>
         <span class="planet-sign">${ascSign.symbol} ${ascSign.name}</span>
         <span class="planet-degree">${Math.floor(ascDeg)}&deg; ${Math.floor((ascDeg % 1) * 60)}'</span>
     </div>`;
