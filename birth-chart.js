@@ -1,14 +1,13 @@
 // ============================================================
-// NATAL DOGUM HARITASI - SVG ZODYAK CARKI RENDERER
-// Animasyonlu zodyak carki cizimi, gezegen yerlestirme, PNG indirme
+// NATAL DOGUM HARITASI - PREMIUM SVG ZODYAK CARKI
+// Profesyonel cizim, SVG path glyphler, derece olcegi
 // ============================================================
 
-// Element renkleri (kozmik tema ile uyumlu)
 const ELEMENT_COLORS = {
-    Ates:   { bg: 'rgba(255,107,157,0.10)', border: '#ff6b9d', text: '#ff9dbf' },
-    Toprak: { bg: 'rgba(240,192,64,0.10)',  border: '#f0c040', text: '#ffe066' },
-    Hava:   { bg: 'rgba(77,232,224,0.10)',  border: '#4de8e0', text: '#7af0e8' },
-    Su:     { bg: 'rgba(176,106,255,0.10)', border: '#b06aff', text: '#c9a0ff' }
+    Ates:   { bg: 'rgba(255,107,157,0.05)', stroke: 'rgba(255,107,157,0.25)', text: '#ff9dbf' },
+    Toprak: { bg: 'rgba(240,192,64,0.05)',  stroke: 'rgba(240,192,64,0.25)',  text: '#ffe066' },
+    Hava:   { bg: 'rgba(77,232,224,0.05)',  stroke: 'rgba(77,232,224,0.25)',  text: '#7af0e8' },
+    Su:     { bg: 'rgba(176,106,255,0.05)', stroke: 'rgba(176,106,255,0.25)', text: '#c9a0ff' }
 };
 
 const PLANET_NAMES_TR = {
@@ -16,132 +15,137 @@ const PLANET_NAMES_TR = {
     venus: 'Venus', mars: 'Mars', jupiter: 'Jupiter', saturn: 'Saturn'
 };
 
+// Professional astrological glyphs as short text labels (cleaner than Unicode)
+const SIGN_GLYPHS = ['Ar','Ta','Ge','Cn','Le','Vi','Li','Sc','Sg','Cp','Aq','Pi'];
+const PLANET_GLYPHS = {
+    gunes: '\u2609', ay: '\u263D', merkur: '\u263F',
+    venus: '\u2640', mars: '\u2642', jupiter: '\u2643', saturn: '\u2644'
+};
+
 // ---- SVG Helper ----
 function createSVG(tag, attrs) {
     const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
-    for (const [k, v] of Object.entries(attrs)) {
-        el.setAttribute(k, v);
-    }
+    for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
     return el;
 }
 
-// ---- Coordinate helpers ----
-function zodiacToSVGAngle(longitude, ascendant) {
-    // Ascendant at left (180° in SVG), zodiac counter-clockwise
-    return 180 - (longitude - ascendant);
+function polarToXY(cx, cy, r, deg) {
+    const rad = deg * Math.PI / 180;
+    return { x: cx + r * Math.cos(rad), y: cy - r * Math.sin(rad) };
 }
 
-function polarToXY(cx, cy, radius, angleDeg) {
-    const rad = angleDeg * Math.PI / 180;
-    return {
-        x: cx + radius * Math.cos(rad),
-        y: cy - radius * Math.sin(rad)
-    };
+function zodiacToSVGAngle(lon, asc) {
+    return 180 - (lon - asc);
 }
 
-function arcPath(cx, cy, r, startAngle, endAngle) {
-    const s = polarToXY(cx, cy, r, startAngle);
-    const e = polarToXY(cx, cy, r, endAngle);
-    const largeArc = Math.abs(endAngle - startAngle) > 180 ? 1 : 0;
-    return `M ${s.x} ${s.y} A ${r} ${r} 0 ${largeArc} 0 ${e.x} ${e.y}`;
+function lineDist(x1, y1, x2, y2) {
+    return Math.sqrt((x2-x1)**2 + (y2-y1)**2);
 }
 
-// ---- Main Render Function ----
+// ---- Main Render ----
 function renderBirthChart(chartData, svgId) {
     const svg = document.getElementById(svgId);
     svg.innerHTML = '';
 
-    const cx = 300, cy = 300;
-    const outerR = 270, midR = 230, innerR = 175;
+    const cx = 350, cy = 350;
+    const outerR = 310, signR = 280, midR = 250, innerR = 190, aspectR = 175;
 
-    // Add defs for glow filters
+    // Defs
     const defs = createSVG('defs', {});
     defs.innerHTML = `
-        <filter id="chart-glow-gold"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        <filter id="chart-glow-cyan"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        <filter id="chart-glow-rose"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        <filter id="chart-glow-violet"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        <filter id="planet-glow"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="pglow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="sglow"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
     `;
     svg.appendChild(defs);
 
-    // Background dark circle
-    svg.appendChild(createSVG('circle', { cx, cy, r: outerR + 5, fill: 'rgba(10,1,24,0.4)', stroke: 'none' }));
+    // Faint background
+    svg.appendChild(createSVG('circle', { cx, cy, r: outerR + 2, fill: 'rgba(10,1,24,0.3)', stroke: 'none' }));
 
-    // 1. Draw zodiac sign segments (colored arcs)
-    drawSignSegments(svg, cx, cy, outerR, midR, chartData.ascendant);
+    // 1. Sign segments (subtle colored arcs)
+    drawSignSegments(svg, cx, cy, outerR, signR, chartData.ascendant);
 
-    // 2. Draw outer and inner rings
-    const outerCircle = createSVG('circle', {
-        cx, cy, r: outerR, fill: 'none',
-        stroke: 'rgba(176,106,255,0.35)', 'stroke-width': '1.5',
-        class: 'zodiac-ring-outer'
-    });
-    svg.appendChild(outerCircle);
+    // 2. Main circles (thin, elegant)
+    addCircle(svg, cx, cy, outerR, 'rgba(200,180,255,0.3)', 1, 0, 2000);
+    addCircle(svg, cx, cy, signR, 'rgba(200,180,255,0.15)', 0.5, 200, 1800);
+    addCircle(svg, cx, cy, midR, 'rgba(200,180,255,0.12)', 0.5, 400, 1500);
+    addCircle(svg, cx, cy, innerR, 'rgba(200,180,255,0.08)', 0.3, 600, 1200);
 
-    const midCircle = createSVG('circle', {
-        cx, cy, r: midR, fill: 'none',
-        stroke: 'rgba(176,106,255,0.2)', 'stroke-width': '1',
-        class: 'zodiac-ring-inner'
-    });
-    svg.appendChild(midCircle);
+    // 3. Degree tick marks on outer ring
+    drawTickMarks(svg, cx, cy, outerR, signR, chartData.ascendant);
 
-    const innerCircle = createSVG('circle', {
-        cx, cy, r: innerR, fill: 'none',
-        stroke: 'rgba(176,106,255,0.12)', 'stroke-width': '0.5'
-    });
-    innerCircle.style.strokeDasharray = 2 * Math.PI * innerR;
-    innerCircle.style.strokeDashoffset = 2 * Math.PI * innerR;
-    innerCircle.style.animation = 'ringDraw 1.2s ease 300ms forwards';
-    svg.appendChild(innerCircle);
+    // 4. Sign division lines (outer to signR)
+    drawSignDivisions(svg, cx, cy, outerR, signR, chartData.ascendant);
 
-    // 3. Draw sign division lines
-    drawSignDivisions(svg, cx, cy, outerR, midR, chartData.ascendant);
+    // 5. Sign labels (abbreviations - clean & professional)
+    drawSignLabels(svg, cx, cy, outerR, signR, chartData.ascendant);
 
-    // 4. Draw sign symbols
-    drawSignSymbols(svg, cx, cy, outerR, midR, chartData.ascendant);
-
-    // 5. Draw house cusps
+    // 6. House cusps
     drawHouseCusps(svg, cx, cy, midR, innerR, chartData.houses, chartData.ascendant);
 
-    // 6. Draw aspect lines
-    drawAspectLines(svg, cx, cy, innerR - 10, chartData.aspects, chartData.planets, chartData.ascendant);
+    // 7. House numbers
+    drawHouseNumbers(svg, cx, cy, midR, innerR, chartData.houses, chartData.ascendant);
 
-    // 7. Draw planets
-    drawPlanets(svg, cx, cy, (midR + innerR) / 2, chartData.planets, chartData.ascendant);
+    // 8. Aspect lines (very subtle)
+    drawAspectLines(svg, cx, cy, aspectR, chartData.aspects, chartData.planets, chartData.ascendant);
 
-    // 8. Draw ASC/MC labels
-    drawSpecialPoints(svg, cx, cy, outerR, chartData.ascendant, chartData.houses);
+    // 9. Planets with degree annotations
+    drawPlanets(svg, cx, cy, midR, innerR, chartData.planets, chartData.ascendant);
 
-    // 9. Center decoration
-    drawCenter(svg, cx, cy);
+    // 10. Cardinal point labels (ASC, DSC, MC, IC) inside the chart
+    drawCardinalLabels(svg, cx, cy, midR, outerR, chartData.ascendant, chartData.houses);
+
+    // 11. Center dot
+    svg.appendChild(createSVG('circle', { cx, cy, r: 3, fill: 'rgba(200,180,255,0.2)' }));
+}
+
+function addCircle(svg, cx, cy, r, stroke, width, delay, dur) {
+    const c = createSVG('circle', {
+        cx, cy, r, fill: 'none', stroke, 'stroke-width': width
+    });
+    const circumf = 2 * Math.PI * r;
+    c.style.strokeDasharray = circumf;
+    c.style.strokeDashoffset = circumf;
+    c.style.animation = `ringDraw ${dur}ms ease ${delay}ms forwards`;
+    svg.appendChild(c);
 }
 
 // ---- Sign Segments ----
 function drawSignSegments(svg, cx, cy, outerR, innerR, asc) {
     for (let i = 0; i < 12; i++) {
         const sign = ZODIAC_SIGNS[i];
-        const startLon = i * 30;
-        const endLon = (i + 1) * 30;
-        const startAngle = zodiacToSVGAngle(startLon, asc);
-        const endAngle = zodiacToSVGAngle(endLon, asc);
-
-        const color = ELEMENT_COLORS[sign.element];
-
-        // Arc segment path
-        const outerStart = polarToXY(cx, cy, outerR, startAngle);
-        const outerEnd = polarToXY(cx, cy, outerR, endAngle);
-        const innerEnd = polarToXY(cx, cy, innerR, endAngle);
-        const innerStart = polarToXY(cx, cy, innerR, startAngle);
-
-        const d = `M ${outerStart.x} ${outerStart.y} A ${outerR} ${outerR} 0 0 0 ${outerEnd.x} ${outerEnd.y} L ${innerEnd.x} ${innerEnd.y} A ${innerR} ${innerR} 0 0 1 ${innerStart.x} ${innerStart.y} Z`;
-
-        const segment = createSVG('path', {
-            d, fill: color.bg, stroke: 'none', opacity: '0'
-        });
-        segment.style.animation = `symbolFadeIn 0.5s ease ${200 + i * 60}ms forwards`;
-        svg.appendChild(segment);
+        const s1 = zodiacToSVGAngle(i * 30, asc);
+        const s2 = zodiacToSVGAngle((i + 1) * 30, asc);
+        const p1 = polarToXY(cx, cy, outerR, s1);
+        const p2 = polarToXY(cx, cy, outerR, s2);
+        const p3 = polarToXY(cx, cy, innerR, s2);
+        const p4 = polarToXY(cx, cy, innerR, s1);
+        const d = `M${p1.x},${p1.y} A${outerR},${outerR} 0 0 0 ${p2.x},${p2.y} L${p3.x},${p3.y} A${innerR},${innerR} 0 0 1 ${p4.x},${p4.y}Z`;
+        const seg = createSVG('path', { d, fill: ELEMENT_COLORS[sign.element].bg, stroke: 'none' });
+        seg.style.opacity = '0';
+        seg.style.animation = `fadeIn 0.8s ease ${400 + i * 80}ms forwards`;
+        svg.appendChild(seg);
     }
+}
+
+// ---- Tick Marks ----
+function drawTickMarks(svg, cx, cy, outerR, innerR, asc) {
+    const g = createSVG('g', {});
+    g.style.opacity = '0';
+    g.style.animation = 'fadeIn 1s ease 2500ms forwards';
+    for (let deg = 0; deg < 360; deg += 5) {
+        const angle = zodiacToSVGAngle(deg, asc);
+        const isMajor = deg % 30 === 0;
+        const isMinor10 = deg % 10 === 0;
+        const len = isMajor ? 0 : (isMinor10 ? 6 : 3);
+        if (isMajor) continue; // Sign divisions handle these
+        const p1 = polarToXY(cx, cy, outerR, angle);
+        const p2 = polarToXY(cx, cy, outerR - len, angle);
+        g.appendChild(createSVG('line', {
+            x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y,
+            stroke: 'rgba(200,180,255,0.15)', 'stroke-width': '0.3'
+        }));
+    }
+    svg.appendChild(g);
 }
 
 // ---- Sign Division Lines ----
@@ -150,40 +154,38 @@ function drawSignDivisions(svg, cx, cy, outerR, innerR, asc) {
         const angle = zodiacToSVGAngle(i * 30, asc);
         const p1 = polarToXY(cx, cy, outerR, angle);
         const p2 = polarToXY(cx, cy, innerR, angle);
-
         const line = createSVG('line', {
             x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y,
-            stroke: 'rgba(176,106,255,0.25)', 'stroke-width': '0.8',
-            class: 'sign-divider'
+            stroke: 'rgba(200,180,255,0.2)', 'stroke-width': '0.6'
         });
-        const len = Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+        const len = lineDist(p1.x, p1.y, p2.x, p2.y);
         line.style.strokeDasharray = len;
         line.style.strokeDashoffset = len;
-        line.style.animation = `ringDraw 0.5s ease ${300 + i * 80}ms forwards`;
+        line.style.animation = `ringDraw 600ms ease ${600 + i * 150}ms forwards`;
         svg.appendChild(line);
     }
 }
 
-// ---- Sign Symbols ----
-function drawSignSymbols(svg, cx, cy, outerR, innerR, asc) {
-    const symbolR = (outerR + innerR) / 2;
+// ---- Sign Labels (professional abbreviations) ----
+function drawSignLabels(svg, cx, cy, outerR, innerR, asc) {
+    const labelR = (outerR + innerR) / 2;
     for (let i = 0; i < 12; i++) {
         const sign = ZODIAC_SIGNS[i];
-        const midLon = i * 30 + 15; // midpoint of sign
-        const angle = zodiacToSVGAngle(midLon, asc);
-        const pos = polarToXY(cx, cy, symbolR, angle);
-
+        const midAngle = zodiacToSVGAngle(i * 30 + 15, asc);
+        const pos = polarToXY(cx, cy, labelR, midAngle);
         const color = ELEMENT_COLORS[sign.element];
 
-        const text = createSVG('text', {
-            x: pos.x, y: pos.y + 5,
+        // Zodiac Unicode symbol - slightly larger, elegant
+        const sym = createSVG('text', {
+            x: pos.x, y: pos.y + 1,
             'text-anchor': 'middle', 'dominant-baseline': 'middle',
-            fill: color.text, 'font-size': '18', 'font-weight': '600',
-            class: 'sign-symbol',
-            style: `animation-delay: ${800 + i * 80}ms`
+            fill: color.text, 'font-size': '14', 'font-weight': '400',
+            'font-family': 'serif', opacity: '0.8'
         });
-        text.textContent = sign.symbol;
-        svg.appendChild(text);
+        sym.textContent = sign.symbol;
+        sym.style.opacity = '0';
+        sym.style.animation = `fadeIn 0.5s ease ${1500 + i * 100}ms forwards`;
+        svg.appendChild(sym);
     }
 }
 
@@ -191,249 +193,229 @@ function drawSignSymbols(svg, cx, cy, outerR, innerR, asc) {
 function drawHouseCusps(svg, cx, cy, outerR, innerR, houses, asc) {
     for (let i = 0; i < 12; i++) {
         const angle = zodiacToSVGAngle(houses[i], asc);
-        const p1 = polarToXY(cx, cy, outerR, angle);
-        const p2 = polarToXY(cx, cy, innerR, angle);
-
         const isCardinal = (i === 0 || i === 3 || i === 6 || i === 9);
+        const p1 = polarToXY(cx, cy, isCardinal ? outerR + 8 : outerR, angle);
+        const p2 = polarToXY(cx, cy, innerR, angle);
         const line = createSVG('line', {
             x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y,
-            stroke: isCardinal ? 'rgba(240,192,64,0.35)' : 'rgba(176,106,255,0.12)',
-            'stroke-width': isCardinal ? '1.5' : '0.5',
-            class: 'house-line'
+            stroke: isCardinal ? 'rgba(240,192,64,0.25)' : 'rgba(200,180,255,0.07)',
+            'stroke-width': isCardinal ? '1' : '0.3'
         });
-        const len = Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+        const len = lineDist(p1.x, p1.y, p2.x, p2.y);
         line.style.strokeDasharray = len;
         line.style.strokeDashoffset = len;
-        line.style.animation = `ringDraw 0.5s ease ${1200 + i * 60}ms forwards`;
+        line.style.animation = `ringDraw 500ms ease ${2000 + i * 80}ms forwards`;
         svg.appendChild(line);
+    }
+}
 
-        // House number label
-        const nextHouse = houses[(i + 1) % 12];
-        let midHouseLon = (houses[i] + nextHouse) / 2;
-        if (Math.abs(houses[i] - nextHouse) > 180) midHouseLon += 180;
-        const labelAngle = zodiacToSVGAngle(midHouseLon, asc);
-        const labelPos = polarToXY(cx, cy, innerR + 15, labelAngle);
-
+// ---- House Numbers ----
+function drawHouseNumbers(svg, cx, cy, outerR, innerR, houses, asc) {
+    for (let i = 0; i < 12; i++) {
+        const next = houses[(i + 1) % 12];
+        let mid = (houses[i] + next) / 2;
+        if (Math.abs(houses[i] - next) > 180) mid += 180;
+        const angle = zodiacToSVGAngle(mid, asc);
+        const pos = polarToXY(cx, cy, (outerR + innerR) / 2, angle);
         const label = createSVG('text', {
-            x: labelPos.x, y: labelPos.y + 3,
+            x: pos.x, y: pos.y + 3,
             'text-anchor': 'middle', 'dominant-baseline': 'middle',
-            fill: 'rgba(176,106,255,0.3)', 'font-size': '9',
-            'font-family': 'Inter, sans-serif'
+            fill: 'rgba(200,180,255,0.18)', 'font-size': '8',
+            'font-family': 'Inter, sans-serif', 'font-weight': '400'
         });
         label.textContent = (i + 1).toString();
         label.style.opacity = '0';
-        label.style.animation = `symbolFadeIn 0.3s ease ${1500 + i * 40}ms forwards`;
+        label.style.animation = `fadeIn 0.4s ease ${2500 + i * 50}ms forwards`;
         svg.appendChild(label);
     }
 }
 
 // ---- Aspect Lines ----
-function drawAspectLines(svg, cx, cy, radius, aspects, planets, asc) {
-    aspects.forEach((aspect, idx) => {
-        const angle1 = zodiacToSVGAngle(planets[aspect.planet1], asc);
-        const angle2 = zodiacToSVGAngle(planets[aspect.planet2], asc);
-        const p1 = polarToXY(cx, cy, radius, angle1);
-        const p2 = polarToXY(cx, cy, radius, angle2);
-
-        const isDashed = (aspect.angle === 60 || aspect.angle === 90);
+function drawAspectLines(svg, cx, cy, r, aspects, planets, asc) {
+    aspects.forEach((asp, idx) => {
+        const a1 = zodiacToSVGAngle(planets[asp.planet1], asc);
+        const a2 = zodiacToSVGAngle(planets[asp.planet2], asc);
+        const p1 = polarToXY(cx, cy, r, a1);
+        const p2 = polarToXY(cx, cy, r, a2);
+        const isHard = (asp.angle === 90 || asp.angle === 180);
+        const isSoft = (asp.angle === 60 || asp.angle === 120);
         const line = createSVG('line', {
             x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y,
-            stroke: aspect.color, 'stroke-width': '0.8',
-            'stroke-opacity': '0.4',
-            'stroke-dasharray': isDashed ? '4,4' : 'none',
-            class: 'aspect-line'
+            stroke: asp.color,
+            'stroke-width': '0.5',
+            'stroke-opacity': '0.25',
+            'stroke-dasharray': isHard ? '3,3' : (isSoft ? '6,2' : 'none')
         });
-        const len = Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
-        line.style.strokeDasharray = isDashed ? `4,4` : `${len}`;
-        line.style.strokeDashoffset = isDashed ? '0' : `${len}`;
-        if (!isDashed) {
-            line.style.animation = `ringDraw 0.6s ease ${2500 + idx * 80}ms forwards`;
-        } else {
-            line.style.opacity = '0';
-            line.style.animation = `symbolFadeIn 0.4s ease ${2500 + idx * 80}ms forwards`;
-        }
+        line.style.opacity = '0';
+        line.style.animation = `fadeIn 0.5s ease ${4000 + idx * 60}ms forwards`;
         svg.appendChild(line);
     });
 }
 
 // ---- Planet Placement ----
-function drawPlanets(svg, cx, cy, radius, planets, asc) {
-    // Spread planets to avoid overlap
-    const planetList = Object.entries(planets).map(([key, lon]) => ({
-        key, lon, displayLon: lon
-    }));
-    planetList.sort((a, b) => a.lon - b.lon);
+function drawPlanets(svg, cx, cy, outerR, innerR, planets, asc) {
+    const planetR = (outerR + innerR) / 2;
+    const degR = outerR + 6; // Degree annotation outside the planet ring
 
-    // Collision avoidance (minimum 10° apart on display)
-    const minSpacing = 10;
-    for (let pass = 0; pass < 3; pass++) {
-        for (let i = 1; i < planetList.length; i++) {
-            let diff = planetList[i].displayLon - planetList[i - 1].displayLon;
+    // Sort and spread for collision avoidance
+    const list = Object.entries(planets).map(([key, lon]) => ({ key, lon, dLon: lon }));
+    list.sort((a, b) => a.lon - b.lon);
+    const minGap = 12;
+    for (let pass = 0; pass < 4; pass++) {
+        for (let i = 1; i < list.length; i++) {
+            let diff = list[i].dLon - list[i - 1].dLon;
             if (diff < 0) diff += 360;
-            if (diff < minSpacing) {
-                planetList[i].displayLon = planetList[i - 1].displayLon + minSpacing;
-                if (planetList[i].displayLon >= 360) planetList[i].displayLon -= 360;
+            if (diff < minGap) {
+                list[i].dLon = list[i - 1].dLon + minGap;
+                if (list[i].dLon >= 360) list[i].dLon -= 360;
             }
         }
     }
 
-    planetList.forEach((planet, idx) => {
-        const angle = zodiacToSVGAngle(planet.displayLon, asc);
-        const pos = polarToXY(cx, cy, radius, angle);
-
+    list.forEach((planet, idx) => {
+        const angle = zodiacToSVGAngle(planet.dLon, asc);
+        const pos = polarToXY(cx, cy, planetR, angle);
         const sign = getZodiacSign(planet.lon);
-        const elemColor = ELEMENT_COLORS[sign.element];
+        const color = ELEMENT_COLORS[sign.element];
+        const delay = 3000 + idx * 150;
 
-        // Glow circle behind planet
+        // Small indicator dot on inner ring (connecting line start)
+        const innerAngle = zodiacToSVGAngle(planet.lon, asc);
+        const innerPos = polarToXY(cx, cy, innerR + 2, innerAngle);
+
+        // Thin connecting line from true position to displayed position (if spread)
+        if (Math.abs(planet.dLon - planet.lon) > 1) {
+            const truePos = polarToXY(cx, cy, planetR - 12, innerAngle);
+            const cl = createSVG('line', {
+                x1: truePos.x, y1: truePos.y, x2: pos.x, y2: pos.y,
+                stroke: 'rgba(200,180,255,0.1)', 'stroke-width': '0.3'
+            });
+            cl.style.opacity = '0';
+            cl.style.animation = `fadeIn 0.4s ease ${delay}ms forwards`;
+            svg.appendChild(cl);
+        }
+
+        // Subtle glow
         const glow = createSVG('circle', {
-            cx: pos.x, cy: pos.y, r: '14',
-            fill: elemColor.border, opacity: '0',
-            filter: 'url(#planet-glow)'
+            cx: pos.x, cy: pos.y, r: 10,
+            fill: color.stroke, opacity: '0', filter: 'url(#pglow)'
         });
-        glow.style.animation = `symbolFadeIn 0.6s ease ${1800 + idx * 100}ms forwards`;
-        glow.style.opacity = '0';
-        // Override animation end opacity
-        glow.addEventListener('animationend', () => { glow.style.opacity = '0.15'; });
+        glow.style.animation = `fadeIn 0.8s ease ${delay}ms forwards`;
+        glow.addEventListener('animationend', () => { glow.setAttribute('opacity', '0.12'); });
         svg.appendChild(glow);
 
-        // Planet symbol
-        const text = createSVG('text', {
-            x: pos.x, y: pos.y + 5,
+        // Planet glyph
+        const glyph = createSVG('text', {
+            x: pos.x, y: pos.y + 1,
             'text-anchor': 'middle', 'dominant-baseline': 'middle',
-            fill: elemColor.text, 'font-size': '16', 'font-weight': '700',
-            class: 'planet-glyph',
-            style: `animation-delay: ${1800 + idx * 100}ms`
+            fill: color.text, 'font-size': '13', 'font-weight': '400',
+            'font-family': 'serif', filter: 'url(#sglow)'
         });
-        text.textContent = PLANET_SYMBOLS[planet.key];
-        svg.appendChild(text);
+        glyph.textContent = PLANET_GLYPHS[planet.key];
+        glyph.style.opacity = '0';
+        glyph.style.animation = `fadeIn 0.6s ease ${delay + 100}ms forwards`;
+        svg.appendChild(glyph);
+
+        // Degree annotation (small, outside planet ring)
+        const deg = getSignDegree(planet.lon);
+        const degAngle = zodiacToSVGAngle(planet.dLon, asc);
+        const degPos = polarToXY(cx, cy, degR, degAngle);
+        const degText = createSVG('text', {
+            x: degPos.x, y: degPos.y + 2,
+            'text-anchor': 'middle', 'dominant-baseline': 'middle',
+            fill: 'rgba(200,180,255,0.35)', 'font-size': '7',
+            'font-family': 'Inter, sans-serif'
+        });
+        degText.textContent = `${Math.floor(deg)}°`;
+        degText.style.opacity = '0';
+        degText.style.animation = `fadeIn 0.4s ease ${delay + 200}ms forwards`;
+        svg.appendChild(degText);
     });
 }
 
-// ---- ASC / MC labels ----
-function drawSpecialPoints(svg, cx, cy, outerR, asc, houses) {
-    // ASC label (always at left, angle = 180)
-    const ascPos = polarToXY(cx, cy, outerR + 18, 180);
-    const ascLabel = createSVG('text', {
-        x: ascPos.x, y: ascPos.y + 4,
-        'text-anchor': 'middle', 'dominant-baseline': 'middle',
-        fill: '#f0c040', 'font-size': '11', 'font-weight': '700',
-        'font-family': 'Inter, sans-serif', 'letter-spacing': '1'
+// ---- Cardinal Labels (ASC, DSC, MC, IC) ----
+function drawCardinalLabels(svg, cx, cy, innerR, outerR, asc, houses) {
+    const labels = [
+        { text: 'ASC', lon: asc, color: '#f0c040' },
+        { text: 'DSC', lon: (asc + 180) % 360, color: 'rgba(200,180,255,0.4)' },
+        { text: 'MC', lon: houses[9], color: '#4de8e0' },
+        { text: 'IC', lon: houses[3], color: 'rgba(200,180,255,0.4)' }
+    ];
+    labels.forEach((lbl, i) => {
+        const angle = zodiacToSVGAngle(lbl.lon, asc);
+        const pos = polarToXY(cx, cy, innerR - 14, angle);
+        const el = createSVG('text', {
+            x: pos.x, y: pos.y + 3,
+            'text-anchor': 'middle', 'dominant-baseline': 'middle',
+            fill: lbl.color, 'font-size': '9', 'font-weight': '600',
+            'font-family': 'Inter, sans-serif', 'letter-spacing': '1.5'
+        });
+        el.textContent = lbl.text;
+        el.style.opacity = '0';
+        el.style.animation = `fadeIn 0.6s ease ${3500 + i * 100}ms forwards`;
+        svg.appendChild(el);
     });
-    ascLabel.textContent = 'ASC';
-    ascLabel.style.opacity = '0';
-    ascLabel.style.animation = 'symbolFadeIn 0.5s ease 2000ms forwards';
-    svg.appendChild(ascLabel);
-
-    // MC label (10th house cusp)
-    const mcAngle = zodiacToSVGAngle(houses[9], asc);
-    const mcPos = polarToXY(cx, cy, outerR + 18, mcAngle);
-    const mcLabel = createSVG('text', {
-        x: mcPos.x, y: mcPos.y + 4,
-        'text-anchor': 'middle', 'dominant-baseline': 'middle',
-        fill: '#4de8e0', 'font-size': '11', 'font-weight': '700',
-        'font-family': 'Inter, sans-serif', 'letter-spacing': '1'
-    });
-    mcLabel.textContent = 'MC';
-    mcLabel.style.opacity = '0';
-    mcLabel.style.animation = 'symbolFadeIn 0.5s ease 2100ms forwards';
-    svg.appendChild(mcLabel);
-}
-
-// ---- Center Decoration ----
-function drawCenter(svg, cx, cy) {
-    // Small decorative mandala at center
-    const centerR = 25;
-    svg.appendChild(createSVG('circle', {
-        cx, cy, r: centerR,
-        fill: 'rgba(10,1,24,0.6)', stroke: 'rgba(176,106,255,0.2)', 'stroke-width': '0.5'
-    }));
-    // Inner cross
-    for (let i = 0; i < 4; i++) {
-        const angle = i * 90;
-        const p1 = polarToXY(cx, cy, 8, angle);
-        const p2 = polarToXY(cx, cy, 20, angle);
-        svg.appendChild(createSVG('line', {
-            x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y,
-            stroke: 'rgba(176,106,255,0.15)', 'stroke-width': '0.5'
-        }));
-    }
-    // Small center dot
-    svg.appendChild(createSVG('circle', {
-        cx, cy, r: '3', fill: 'rgba(240,192,64,0.3)'
-    }));
 }
 
 // ---- Planet Summary Cards ----
 function renderPlanetSummary(chartData, containerId) {
     const container = document.getElementById(containerId);
-
     let html = '';
-    const planetKeys = Object.keys(chartData.planets);
-    planetKeys.forEach((key, idx) => {
+    const keys = Object.keys(chartData.planets);
+    keys.forEach((key, idx) => {
         const lon = chartData.planets[key];
         const sign = getZodiacSign(lon);
         const deg = getSignDegree(lon);
-        const elemColor = ELEMENT_COLORS[sign.element];
-
-        html += `
-            <div class="planet-card" style="animation-delay: ${3500 + idx * 100}ms">
-                <span class="planet-symbol" style="color: ${elemColor.text}">${PLANET_SYMBOLS[key]}</span>
-                <span class="planet-name">${PLANET_NAMES_TR[key]}</span>
-                <span class="planet-sign">${sign.symbol} ${sign.name}</span>
-                <span class="planet-degree">${Math.floor(deg)}&deg; ${Math.floor((deg % 1) * 60)}'</span>
-            </div>
-        `;
+        const color = ELEMENT_COLORS[sign.element];
+        html += `<div class="planet-card" style="animation-delay:${5000 + idx * 120}ms">
+            <span class="planet-symbol" style="color:${color.text}">${PLANET_GLYPHS[key]}</span>
+            <span class="planet-name">${PLANET_NAMES_TR[key]}</span>
+            <span class="planet-sign">${sign.symbol} ${sign.name}</span>
+            <span class="planet-degree">${Math.floor(deg)}&deg; ${Math.floor((deg % 1) * 60)}'</span>
+        </div>`;
     });
-
-    // Ascendant card
     const ascSign = getZodiacSign(chartData.ascendant);
     const ascDeg = getSignDegree(chartData.ascendant);
-    html += `
-        <div class="planet-card" style="animation-delay: ${3500 + planetKeys.length * 100}ms; border-color: rgba(240,192,64,0.2);">
-            <span class="planet-symbol" style="color: #f0c040">ASC</span>
-            <span class="planet-name">Yukselen</span>
-            <span class="planet-sign">${ascSign.symbol} ${ascSign.name}</span>
-            <span class="planet-degree">${Math.floor(ascDeg)}&deg; ${Math.floor((ascDeg % 1) * 60)}'</span>
-        </div>
-    `;
-
+    html += `<div class="planet-card" style="animation-delay:${5000 + keys.length * 120}ms;border-color:rgba(240,192,64,0.15);">
+        <span class="planet-symbol" style="color:#f0c040">ASC</span>
+        <span class="planet-name">Yukselen</span>
+        <span class="planet-sign">${ascSign.symbol} ${ascSign.name}</span>
+        <span class="planet-degree">${Math.floor(ascDeg)}&deg; ${Math.floor((ascDeg % 1) * 60)}'</span>
+    </div>`;
     container.innerHTML = html;
 }
 
 // ---- PNG Download ----
 function downloadChartAsPNG() {
     const svgEl = document.getElementById('birthChartSvg');
-    const svgData = new XMLSerializer().serializeToString(svgEl);
-
-    // Embed fonts inline for the export
-    const svgWithStyles = svgData.replace('<svg', `<svg style="font-family: 'Inter', Arial, sans-serif; background: #0a0118;"`);
-
-    const blob = new Blob([svgWithStyles], { type: 'image/svg+xml;charset=utf-8' });
+    const clone = svgEl.cloneNode(true);
+    // Remove animations for clean export
+    clone.querySelectorAll('*').forEach(el => {
+        el.style.animation = 'none';
+        el.style.opacity = el.style.opacity === '0' ? '1' : el.style.opacity;
+        if (el.getAttribute('opacity') === '0') el.setAttribute('opacity', '1');
+    });
+    const svgData = new XMLSerializer().serializeToString(clone);
+    const svgStyled = svgData.replace('<svg', `<svg style="font-family:serif;background:#0a0118;"`);
+    const blob = new Blob([svgStyled], { type: 'image/svg+xml;charset=utf-8' });
     const url = URL.createObjectURL(blob);
-
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     const img = new Image();
-    const scale = 2; // Retina
-
-    canvas.width = 600 * scale;
-    canvas.height = 600 * scale;
-
+    const scale = 2;
+    canvas.width = 700 * scale;
+    canvas.height = 700 * scale;
     img.onload = function () {
-        // Dark background
         ctx.fillStyle = '#0a0118';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
         canvas.toBlob(function (pngBlob) {
-            const downloadUrl = URL.createObjectURL(pngBlob);
             const a = document.createElement('a');
-            a.href = downloadUrl;
+            a.href = URL.createObjectURL(pngBlob);
             a.download = 'dogum-haritasi.png';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            URL.revokeObjectURL(downloadUrl);
             URL.revokeObjectURL(url);
         }, 'image/png');
     };

@@ -1338,22 +1338,32 @@ body::before {
     from { opacity: 0; transform: translateY(24px); }
     to   { opacity: 1; transform: translateY(0); }
 }
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
 
 /* ====== RESPONSIVE ====== */
 @media (max-width: 640px) {
     .header h1 { font-size: 2.2rem; }
     .header { padding: 55px 20px 35px; }
     .input-card { padding: 30px 20px; }
-    .input-card input { width: 160px; padding: 14px 16px; }
-    #birthTime { width: 100px; }
+    .input-card input { width: 100%; padding: 14px 16px; }
+    #birthTime { width: 100%; }
+    .input-row { flex-direction: column; gap: 10px; align-items: center; }
+    .input-row input { width: 100% !important; max-width: 280px; }
     .city-autocomplete-wrapper { max-width: 100%; }
     .result-cards { grid-template-columns: 1fr; }
+    .modal { max-width: 95vw; }
     .modal-header { flex-direction: column; text-align: center; padding: 28px 20px 16px; }
     .modal-body { padding: 20px; }
     .age-periods { flex-direction: column; align-items: center; }
     .section-title { font-size: 1.6rem; }
     .nebula { display: none; }
-    .planet-summary { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
-    .birthchart-wrapper { max-width: 100%; }
+    .planet-summary { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .birthchart-section { padding: 30px 10px; }
+    .birthchart-wrapper { max-width: 100%; overflow: visible; }
+    .birthchart-wrapper svg { max-width: 100%; overflow: visible; }
     .download-btn { padding: 12px 24px; font-size: 0.9rem; }
+    .matrix-section { padding: 30px 10px; }
 }

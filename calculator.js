@@ -238,6 +238,9 @@ function calculateAll() {
     const scrollTarget = hasBirthChart ? 'birthChartSection' : 'matrixSection';
     document.getElementById(scrollTarget).scrollIntoView({ behavior: 'smooth', block: 'start' });
 
+    // Init scroll-triggered matrix animation
+    initMatrixScrollTrigger();
+
     requestAnimationFrame(() => initScrollAnimations());
 }
 
@@ -262,7 +265,7 @@ function renderMatrix(results) {
         J: "J", Z: "Z", I: "I", K: "K", L: "L", M: "M", N: "N"
     };
 
-    // Draw lines with staggered animation
+    // Draw lines (initially paused - will animate on scroll)
     NODE_LINES.forEach(([from, to], idx) => {
         const p1 = NODE_POSITIONS[from];
         const p2 = NODE_POSITIONS[to];
@@ -276,14 +279,15 @@ function renderMatrix(results) {
         const len = Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
         line.style.strokeDasharray = len;
         line.style.strokeDashoffset = len;
-        line.style.animation = `drawLine 1s ease ${idx * 25}ms forwards`;
+        line.style.animation = 'none';
+        line.setAttribute("data-anim", `drawLine 1.2s ease ${idx * 60}ms forwards`);
         line.setAttribute("data-from", from);
         line.setAttribute("data-to", to);
 
         svg.appendChild(line);
     });
 
-    // Draw nodes with staggered entrance
+    // Draw nodes (initially paused - will animate on scroll)
     const nodeOrder = ["B", "D", "J", "Z", "I", "L", "G", "M", "N", "A", "K", "V", "E"];
 
     nodeOrder.forEach((key, idx) => {
@@ -291,7 +295,9 @@ function renderMatrix(results) {
         const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
         g.setAttribute("class", "node-circle");
         g.setAttribute("data-key", key);
-        g.style.animationDelay = `${500 + idx * 70}ms`;
+        g.style.animation = 'none';
+        g.style.opacity = '0';
+        g.setAttribute("data-anim-delay", `${800 + idx * 150}ms`);
 
         // Outer pulse ring
         const pulseCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -408,7 +414,7 @@ function renderAgePeriods(periods) {
         { label: "4. Donem", range: `${periods.p3}+ yas` },
     ];
     container.innerHTML = data.map((d, i) =>
-        `<div class="age-period" style="animation-delay: ${1000 + i * 120}ms">
+        `<div class="age-period" style="opacity:0; animation: none;">
             <div class="period-label">${d.label}</div>
             <div class="period-range">${d.range}</div>
         </div>`
@@ -623,9 +629,15 @@ document.getElementById('birthDate').addEventListener('keypress', function(e) {
     const timeEl = document.getElementById('birthTime');
     if (!timeEl) return;
     timeEl.addEventListener('input', function() {
-        let val = this.value.replace(/[^0-9:]/g, '');
-        if (val.length === 2 && !val.includes(':')) val += ':';
-        this.value = val;
+        let raw = this.value.replace(/[^0-9]/g, '');
+        if (raw.length > 4) raw = raw.slice(0, 4);
+        if (raw.length >= 3) {
+            this.value = raw.slice(0, 2) + ':' + raw.slice(2);
+        } else if (raw.length === 2) {
+            this.value = raw + ':';
+        } else {
+            this.value = raw;
+        }
     });
     timeEl.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') calculateAll();
@@ -672,6 +684,44 @@ document.getElementById('birthDate').addEventListener('keypress', function(e) {
         }
     });
 })();
+
+// Scroll-triggered matrix animation
+function initMatrixScrollTrigger() {
+    const matrixSection = document.getElementById('matrixSection');
+    if (!matrixSection) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                triggerMatrixAnimations();
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
+
+    observer.observe(matrixSection);
+}
+
+function triggerMatrixAnimations() {
+    const svg = document.getElementById('matrixSvg');
+    if (!svg) return;
+
+    // Animate lines
+    svg.querySelectorAll('.matrix-line[data-anim]').forEach(line => {
+        line.style.animation = line.getAttribute('data-anim');
+    });
+
+    // Animate nodes
+    svg.querySelectorAll('.node-circle[data-anim-delay]').forEach(g => {
+        const delay = g.getAttribute('data-anim-delay');
+        g.style.animation = `nodeAppear 1s cubic-bezier(0.16, 1, 0.3, 1) ${delay} forwards`;
+    });
+
+    // Animate age periods
+    document.querySelectorAll('.age-period').forEach((el, i) => {
+        el.style.animation = `slideInUp 0.6s ease ${2500 + i * 150}ms forwards`;
+    });
+}
 
 // Init scroll animations for info cards on page load
 document.addEventListener('DOMContentLoaded', () => {
