@@ -6,10 +6,10 @@
 
 // --- Element Colors (Mistik Luks palette) ---
 const ELEMENT_COLORS = {
-    Ates:   { bg: 'rgba(139,26,46,0.06)',  stroke: 'rgba(178,60,80,0.25)',  text: '#D45A6F' },
-    Toprak: { bg: 'rgba(212,175,55,0.06)', stroke: 'rgba(212,175,55,0.25)', text: '#D4AF37' },
-    Hava:   { bg: 'rgba(74,144,217,0.06)', stroke: 'rgba(74,144,217,0.25)', text: '#6DB3D4' },
-    Su:     { bg: 'rgba(155,89,182,0.06)', stroke: 'rgba(155,89,182,0.25)', text: '#B67FD4' }
+    Ates:   { bg: 'rgba(212,80,122,0.08)',  stroke: 'rgba(232,112,138,0.30)', text: '#E8708A' },
+    Toprak: { bg: 'rgba(212,175,55,0.08)',  stroke: 'rgba(212,175,55,0.30)',  text: '#D4AF37' },
+    Hava:   { bg: 'rgba(126,184,218,0.08)', stroke: 'rgba(140,203,232,0.30)', text: '#8CCBE8' },
+    Su:     { bg: 'rgba(199,125,186,0.08)', stroke: 'rgba(208,154,232,0.30)', text: '#D09AE8' }
 };
 
 // Turkish element name normalization (handle both accented and unaccented)
@@ -206,16 +206,16 @@ function renderBirthChart(chartData, svgId) {
     svg.appendChild(defs);
 
     // --- Background circle ---
-    svg.appendChild(createSVG('circle', { cx, cy, r: outerR + 3, fill: 'rgba(5,3,8,0.35)', stroke: 'none' }));
+    svg.appendChild(createSVG('circle', { cx, cy, r: outerR + 3, fill: 'rgba(26,10,18,0.5)', stroke: 'none' }));
 
     // 1. Sign segments (subtle colored arcs)
     drawSignSegments(svg, cx, cy, outerR, signR, chartData.ascendant);
 
-    // 2. Main structural circles (thin, elegant, gold-tinted)
-    addCircle(svg, cx, cy, outerR, 'rgba(212,175,55,0.22)', 0.8, 0, 2000);
-    addCircle(svg, cx, cy, signR, 'rgba(240,230,211,0.10)', 0.4, 200, 1800);
-    addCircle(svg, cx, cy, midR, 'rgba(240,230,211,0.07)', 0.3, 400, 1500);
-    addCircle(svg, cx, cy, innerR, 'rgba(240,230,211,0.05)', 0.3, 600, 1200);
+    // 2. Main structural circles (increased opacity for visibility)
+    addCircle(svg, cx, cy, outerR, 'rgba(212,175,55,0.40)', 0.8, 0, 2000);
+    addCircle(svg, cx, cy, signR, 'rgba(245,230,233,0.18)', 0.4, 200, 1800);
+    addCircle(svg, cx, cy, midR, 'rgba(245,230,233,0.12)', 0.3, 400, 1500);
+    addCircle(svg, cx, cy, innerR, 'rgba(245,230,233,0.10)', 0.3, 600, 1200);
 
     // 3. Degree tick marks on outer ring
     drawTickMarks(svg, cx, cy, outerR, signR, chartData.ascendant);
@@ -242,7 +242,7 @@ function renderBirthChart(chartData, svgId) {
     drawCardinalLabels(svg, cx, cy, innerR, outerR, chartData.ascendant, chartData.houses);
 
     // 11. Center decorative dot
-    const centerDot = createSVG('circle', { cx, cy, r: 2.5, fill: 'rgba(212,175,55,0.12)' });
+    const centerDot = createSVG('circle', { cx, cy, r: 2.5, fill: 'rgba(212,175,55,0.18)' });
     centerDot.style.opacity = '0';
     centerDot.style.animation = 'fadeIn 1s ease 3000ms forwards';
     svg.appendChild(centerDot);
@@ -307,7 +307,7 @@ function drawTickMarks(svg, cx, cy, outerR, innerR, asc) {
         const p2 = polarToXY(cx, cy, outerR - len, angle);
         g.appendChild(createSVG('line', {
             x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y,
-            stroke: 'rgba(212,175,55,0.12)', 'stroke-width': '0.3'
+            stroke: 'rgba(212,175,55,0.22)', 'stroke-width': '0.3'
         }));
     }
     svg.appendChild(g);
@@ -322,7 +322,7 @@ function drawSignDivisions(svg, cx, cy, outerR, innerR, asc) {
         const p2 = polarToXY(cx, cy, innerR, angle);
         const line = createSVG('line', {
             x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y,
-            stroke: 'rgba(212,175,55,0.18)', 'stroke-width': '0.5'
+            stroke: 'rgba(212,175,55,0.30)', 'stroke-width': '0.5'
         });
         const len = lineDist(p1.x, p1.y, p2.x, p2.y);
         line.style.strokeDasharray = len;
@@ -356,8 +356,8 @@ function drawHouseCusps(svg, cx, cy, outerR, innerR, houses, asc) {
         const p2 = polarToXY(cx, cy, innerR, angle);
         const line = createSVG('line', {
             x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y,
-            stroke: isCardinal ? 'rgba(212,175,55,0.25)' : 'rgba(240,230,211,0.06)',
-            'stroke-width': isCardinal ? '0.8' : '0.3'
+            stroke: isCardinal ? 'rgba(212,175,55,0.40)' : 'rgba(245,230,233,0.12)',
+            'stroke-width': isCardinal ? '1' : '0.4'
         });
         const len = lineDist(p1.x, p1.y, p2.x, p2.y);
         line.style.strokeDasharray = len;
@@ -379,7 +379,7 @@ function drawHouseNumbers(svg, cx, cy, outerR, innerR, houses, asc) {
         const label = createSVG('text', {
             x: pos.x, y: pos.y + 3,
             'text-anchor': 'middle', 'dominant-baseline': 'middle',
-            fill: 'rgba(240,230,211,0.15)', 'font-size': '8',
+            fill: 'rgba(245,230,233,0.25)', 'font-size': '8',
             'font-family': "'IM Fell English', Georgia, serif",
             'font-style': 'italic'
         });
@@ -403,9 +403,9 @@ function drawAspectLines(svg, cx, cy, r, aspects, planets, asc) {
         const isSoft = (asp.angle === 60 || asp.angle === 120);
         // Color based on aspect type
         let strokeColor;
-        if (isHard) strokeColor = 'rgba(178,60,80,0.20)';     // crimson for tension
-        else if (isSoft) strokeColor = 'rgba(74,144,217,0.20)'; // celestial for harmony
-        else strokeColor = 'rgba(155,89,182,0.15)';             // amethyst for others
+        if (isHard) strokeColor = 'rgba(232,112,138,0.25)';     // rose-pink for tension
+        else if (isSoft) strokeColor = 'rgba(140,203,232,0.25)'; // celestial for harmony
+        else strokeColor = 'rgba(208,154,232,0.20)';             // lavender for others
         const line = createSVG('line', {
             x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y,
             stroke: strokeColor,
@@ -452,7 +452,7 @@ function drawPlanets(svg, cx, cy, outerR, innerR, planets, asc) {
             const truePos = polarToXY(cx, cy, planetR - 14, innerAngle);
             const cl = createSVG('line', {
                 x1: truePos.x, y1: truePos.y, x2: pos.x, y2: pos.y,
-                stroke: 'rgba(240,230,211,0.07)', 'stroke-width': '0.3'
+                stroke: 'rgba(245,230,233,0.14)', 'stroke-width': '0.3'
             });
             cl.style.opacity = '0';
             cl.style.animation = `fadeIn 0.4s ease ${delay}ms forwards`;
@@ -465,7 +465,7 @@ function drawPlanets(svg, cx, cy, outerR, innerR, planets, asc) {
             fill: color.stroke, opacity: '0', filter: 'url(#pglow)'
         });
         glow.style.animation = `fadeIn 0.8s ease ${delay}ms forwards`;
-        glow.addEventListener('animationend', () => { glow.setAttribute('opacity', '0.08'); });
+        glow.addEventListener('animationend', () => { glow.setAttribute('opacity', '0.15'); });
         svg.appendChild(glow);
 
         // Planet glyph (SVG path)
@@ -478,7 +478,7 @@ function drawPlanets(svg, cx, cy, outerR, innerR, planets, asc) {
         const degText = createSVG('text', {
             x: degPos.x, y: degPos.y + 2,
             'text-anchor': 'middle', 'dominant-baseline': 'middle',
-            fill: 'rgba(240,230,211,0.28)', 'font-size': '6.5',
+            fill: 'rgba(245,230,233,0.40)', 'font-size': '6.5',
             'font-family': "'IM Fell English', Georgia, serif",
             'font-style': 'italic'
         });
@@ -494,9 +494,9 @@ function drawPlanets(svg, cx, cy, outerR, innerR, planets, asc) {
 function drawCardinalLabels(svg, cx, cy, innerR, outerR, asc, houses) {
     const labels = [
         { text: 'ASC', lon: asc, color: '#D4AF37' },
-        { text: 'DSC', lon: (asc + 180) % 360, color: 'rgba(240,230,211,0.35)' },
-        { text: 'MC',  lon: houses[9], color: '#6DB3D4' },
-        { text: 'IC',  lon: houses[3], color: 'rgba(240,230,211,0.35)' }
+        { text: 'DSC', lon: (asc + 180) % 360, color: 'rgba(245,230,233,0.45)' },
+        { text: 'MC',  lon: houses[9], color: '#8CCBE8' },
+        { text: 'IC',  lon: houses[3], color: 'rgba(245,230,233,0.45)' }
     ];
     labels.forEach((lbl, i) => {
         const angle = zodiacToSVGAngle(lbl.lon, asc);
@@ -505,7 +505,7 @@ function drawCardinalLabels(svg, cx, cy, innerR, outerR, asc, houses) {
         const el = createSVG('text', {
             x: pos.x, y: pos.y + 3,
             'text-anchor': 'middle', 'dominant-baseline': 'middle',
-            fill: lbl.color, 'font-size': '9', 'font-weight': '600',
+            fill: lbl.color, 'font-size': '10', 'font-weight': '600',
             'font-family': "'Cinzel Decorative', 'Cinzel', Georgia, serif",
             'letter-spacing': '1.5'
         });
@@ -557,7 +557,7 @@ function downloadChartAsPNG() {
         if (el.getAttribute('opacity') === '0') el.setAttribute('opacity', '1');
     });
     const svgData = new XMLSerializer().serializeToString(clone);
-    const svgStyled = svgData.replace('<svg', `<svg style="font-family:'IM Fell English',Georgia,serif;background:#050308;"`);
+    const svgStyled = svgData.replace('<svg', `<svg style="font-family:'IM Fell English',Georgia,serif;background:#1A0A12;"`);
     const blob = new Blob([svgStyled], { type: 'image/svg+xml;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const canvas = document.createElement('canvas');
@@ -567,7 +567,7 @@ function downloadChartAsPNG() {
     canvas.width = 700 * scale;
     canvas.height = 700 * scale;
     img.onload = function () {
-        ctx.fillStyle = '#050308';
+        ctx.fillStyle = '#1A0A12';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         canvas.toBlob(function (pngBlob) {

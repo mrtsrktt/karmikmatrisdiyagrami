@@ -52,10 +52,10 @@
     function getStarColor() {
         const r = Math.random();
         if (r < 0.06) return 'rgba(212, 175, 55, 0.8)';       // gold
-        if (r < 0.12) return 'rgba(155, 89, 182, 0.7)';        // amethyst
-        if (r < 0.16) return 'rgba(74, 144, 217, 0.7)';        // celestial
-        if (r < 0.19) return 'rgba(139, 26, 46, 0.5)';         // crimson
-        return 'rgba(240, 230, 211, 0.85)';                     // cream white
+        if (r < 0.12) return 'rgba(199, 125, 186, 0.7)';       // pink-amethyst
+        if (r < 0.16) return 'rgba(126, 184, 218, 0.6)';       // celestial
+        if (r < 0.19) return 'rgba(212, 80, 122, 0.5)';        // rose-pink
+        return 'rgba(245, 230, 233, 0.85)';                     // pink-cream
     }
 
     function animate(time) {
@@ -116,10 +116,10 @@
     stars.forEach(star => {
         const r = Math.random();
         if (r < 0.06) star.style.background = 'rgba(212, 175, 55, 0.8)';
-        else if (r < 0.12) star.style.background = 'rgba(155, 89, 182, 0.7)';
-        else if (r < 0.16) star.style.background = 'rgba(74, 144, 217, 0.7)';
-        else if (r < 0.19) star.style.background = 'rgba(139, 26, 46, 0.5)';
-        else star.style.background = 'rgba(240, 230, 211, 0.85)';
+        else if (r < 0.12) star.style.background = 'rgba(199, 125, 186, 0.7)';
+        else if (r < 0.16) star.style.background = 'rgba(126, 184, 218, 0.6)';
+        else if (r < 0.19) star.style.background = 'rgba(212, 80, 122, 0.5)';
+        else star.style.background = 'rgba(245, 230, 233, 0.85)';
     });
 })();
 

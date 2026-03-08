@@ -2,54 +2,57 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-    /* Arka plan katmanları */
-    --bg-deep:        #050308;
-    --bg-base:        #0A0612;
-    --bg-surface:     #110D1A;
-    --bg-elevated:    #1A1428;
+    /* Arka plan katmanları — Pembe tonları */
+    --bg-deep:        #1A0A12;
+    --bg-base:        #200E18;
+    --bg-surface:     #2A1420;
+    --bg-elevated:    #3A1E30;
 
     /* Ana accent renkleri */
     --gold-bright:    #D4AF37;
     --gold-muted:     #8B7536;
     --gold-glow:      rgba(212, 175, 55, 0.15);
 
-    /* Mistik accent */
-    --amethyst:       #9B59B6;
-    --amethyst-glow:  rgba(155, 89, 182, 0.2);
-    --crimson:        #8B1A2E;
-    --celestial:      #4A90D9;
+    /* Mistik accent — pembe uyumlu */
+    --amethyst:       #C77DBA;
+    --amethyst-glow:  rgba(199, 125, 186, 0.2);
+    --crimson:        #D4507A;
+    --celestial:      #7EB8DA;
 
-    /* Metin renkleri */
-    --text-primary:   #F0E6D3;
-    --text-secondary: #A89070;
-    --text-muted:     #5C4A3A;
+    /* Metin renkleri — pembe-krem */
+    --text-primary:   #F5E6E9;
+    --text-secondary: #B89098;
+    --text-muted:     #6E4A55;
 
     /* Kenarlık */
     --border-gold:    rgba(212, 175, 55, 0.3);
-    --border-subtle:  rgba(240, 230, 211, 0.08);
+    --border-subtle:  rgba(245, 230, 233, 0.08);
 
     /* Legacy aliases for JS references */
-    --bg-cosmos:      #050308;
+    --bg-cosmos:      #1A0A12;
     --accent-gold:    #D4AF37;
     --accent-warm:    #C49A2A;
-    --accent-rose:    #8B1A2E;
-    --accent-cyan:    #4A90D9;
-    --accent-violet:  #9B59B6;
-    --violet-deep:    #6A2D8E;
-    --violet-glow:    rgba(155, 89, 182, 0.25);
-    --cyan-glow:      rgba(74, 144, 217, 0.2);
-    --rose-glow:      rgba(139, 26, 46, 0.2);
-    --text:           #F0E6D3;
-    --text-soft:      #A89070;
-    --text-dim:       #5C4A3A;
-    --bg-card:        rgba(17, 13, 26, 0.7);
-    --bg-glass:       rgba(26, 20, 40, 0.45);
+    --accent-rose:    #D4507A;
+    --accent-cyan:    #7EB8DA;
+    --accent-violet:  #C77DBA;
+    --violet-deep:    #8A3D7E;
+    --violet-glow:    rgba(199, 125, 186, 0.25);
+    --cyan-glow:      rgba(126, 184, 218, 0.2);
+    --rose-glow:      rgba(212, 80, 122, 0.2);
+    --text:           #F5E6E9;
+    --text-soft:      #B89098;
+    --text-dim:       #6E4A55;
+    --bg-card:        rgba(42, 20, 32, 0.7);
+    --bg-glass:       rgba(58, 30, 48, 0.45);
     --glass-blur:     blur(20px);
     --glass-border:   1px solid var(--border-gold);
 }
 
 /* scroll-behavior: smooth removed - causes scroll-back issues on mobile */
 
+html {
+    overflow-x: hidden;
+}
 body {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 300;
@@ -67,9 +70,9 @@ body::before {
     position: fixed;
     inset: 0;
     background:
-        radial-gradient(ellipse at 20% 50%, #1a0a2e 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 20%, #0d0520 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 80%, rgba(139, 26, 46, 0.08) 0%, transparent 40%),
+        radial-gradient(ellipse at 20% 50%, #2E0A1E 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, #1E0515 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(212, 80, 122, 0.10) 0%, transparent 40%),
         radial-gradient(ellipse at 30% 30%, rgba(212, 175, 55, 0.04) 0%, transparent 50%);
     animation: cosmicShift 25s ease-in-out infinite alternate;
     z-index: 0;
@@ -154,20 +157,20 @@ body::after {
 }
 .nebula:nth-child(1) {
     width: 500px; height: 400px;
-    background: radial-gradient(circle, rgba(155,89,182,0.12), transparent 70%);
+    background: radial-gradient(circle, rgba(199,125,186,0.14), transparent 70%);
     top: -10%; left: -5%;
     animation-duration: 30s;
 }
 .nebula:nth-child(2) {
     width: 400px; height: 500px;
-    background: radial-gradient(circle, rgba(212,175,55,0.08), transparent 70%);
+    background: radial-gradient(circle, rgba(212,80,122,0.10), transparent 70%);
     bottom: -15%; right: -10%;
     animation-duration: 25s;
     animation-delay: 5s;
 }
 .nebula:nth-child(3) {
     width: 350px; height: 350px;
-    background: radial-gradient(circle, rgba(139,26,46,0.06), transparent 70%);
+    background: radial-gradient(circle, rgba(212,175,55,0.06), transparent 70%);
     top: 40%; right: 10%;
     animation-duration: 35s;
     animation-delay: 10s;
@@ -878,7 +881,7 @@ body::after {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(5,3,8,0.75);
+    background: rgba(26,10,18,0.80);
     z-index: 1000;
     justify-content: center;
     align-items: center;
@@ -896,7 +899,7 @@ body::after {
     to   { opacity: 1; backdrop-filter: blur(12px); }
 }
 .modal {
-    background: linear-gradient(160deg, rgba(26, 20, 40, 0.97), rgba(10, 6, 18, 0.99));
+    background: linear-gradient(160deg, rgba(42, 20, 32, 0.97), rgba(26, 10, 18, 0.99));
     backdrop-filter: blur(20px);
     border-radius: 2px;
     max-width: 720px;
@@ -1003,8 +1006,11 @@ body::after {
 .modal-body {
     padding: 24px 34px 34px;
     overflow-y: auto;
+    overflow-x: hidden;
     flex: 1;
     min-height: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 .modal-body h3 {
     font-family: 'Cinzel Decorative', cursive;
