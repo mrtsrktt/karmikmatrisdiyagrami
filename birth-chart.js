@@ -206,7 +206,7 @@ function renderBirthChart(chartData, svgId) {
     svg.appendChild(defs);
 
     // --- Background circle ---
-    svg.appendChild(createSVG('circle', { cx, cy, r: outerR + 3, fill: 'rgba(26,10,18,0.5)', stroke: 'none' }));
+    svg.appendChild(createSVG('circle', { cx, cy, r: outerR + 3, fill: 'rgba(61,16,40,0.5)', stroke: 'none' }));
 
     // 1. Sign segments (subtle colored arcs)
     drawSignSegments(svg, cx, cy, outerR, signR, chartData.ascendant);
@@ -557,7 +557,7 @@ function downloadChartAsPNG() {
         if (el.getAttribute('opacity') === '0') el.setAttribute('opacity', '1');
     });
     const svgData = new XMLSerializer().serializeToString(clone);
-    const svgStyled = svgData.replace('<svg', `<svg style="font-family:'IM Fell English',Georgia,serif;background:#1A0A12;"`);
+    const svgStyled = svgData.replace('<svg', `<svg style="font-family:'IM Fell English',Georgia,serif;background:#3D1028;"`);
     const blob = new Blob([svgStyled], { type: 'image/svg+xml;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const canvas = document.createElement('canvas');
@@ -567,7 +567,7 @@ function downloadChartAsPNG() {
     canvas.width = 700 * scale;
     canvas.height = 700 * scale;
     img.onload = function () {
-        ctx.fillStyle = '#1A0A12';
+        ctx.fillStyle = '#3D1028';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         canvas.toBlob(function (pngBlob) {

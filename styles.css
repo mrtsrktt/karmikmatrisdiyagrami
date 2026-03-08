@@ -3,10 +3,10 @@
 
 :root {
     /* Arka plan katmanları — Pembe tonları */
-    --bg-deep:        #1A0A12;
-    --bg-base:        #200E18;
-    --bg-surface:     #2A1420;
-    --bg-elevated:    #3A1E30;
+    --bg-deep:        #3D1028;
+    --bg-base:        #4A1832;
+    --bg-surface:     #5A2240;
+    --bg-elevated:    #6E2E52;
 
     /* Ana accent renkleri */
     --gold-bright:    #D4AF37;
@@ -29,7 +29,7 @@
     --border-subtle:  rgba(245, 230, 233, 0.08);
 
     /* Legacy aliases for JS references */
-    --bg-cosmos:      #1A0A12;
+    --bg-cosmos:      #3D1028;
     --accent-gold:    #D4AF37;
     --accent-warm:    #C49A2A;
     --accent-rose:    #D4507A;
@@ -42,8 +42,8 @@
     --text:           #F5E6E9;
     --text-soft:      #B89098;
     --text-dim:       #6E4A55;
-    --bg-card:        rgba(42, 20, 32, 0.7);
-    --bg-glass:       rgba(58, 30, 48, 0.45);
+    --bg-card:        rgba(74, 24, 50, 0.75);
+    --bg-glass:       rgba(90, 34, 64, 0.50);
     --glass-blur:     blur(20px);
     --glass-border:   1px solid var(--border-gold);
 }
@@ -70,10 +70,10 @@ body::before {
     position: fixed;
     inset: 0;
     background:
-        radial-gradient(ellipse at 20% 50%, #2E0A1E 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 20%, #1E0515 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 80%, rgba(212, 80, 122, 0.10) 0%, transparent 40%),
-        radial-gradient(ellipse at 30% 30%, rgba(212, 175, 55, 0.04) 0%, transparent 50%);
+        radial-gradient(ellipse at 20% 50%, #5A1838 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, #4A1230 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(212, 80, 122, 0.25) 0%, transparent 40%),
+        radial-gradient(ellipse at 30% 30%, rgba(212, 175, 55, 0.06) 0%, transparent 50%);
     animation: cosmicShift 25s ease-in-out infinite alternate;
     z-index: 0;
     pointer-events: none;
@@ -157,20 +157,20 @@ body::after {
 }
 .nebula:nth-child(1) {
     width: 500px; height: 400px;
-    background: radial-gradient(circle, rgba(199,125,186,0.14), transparent 70%);
+    background: radial-gradient(circle, rgba(199,125,186,0.28), transparent 70%);
     top: -10%; left: -5%;
     animation-duration: 30s;
 }
 .nebula:nth-child(2) {
     width: 400px; height: 500px;
-    background: radial-gradient(circle, rgba(212,80,122,0.10), transparent 70%);
+    background: radial-gradient(circle, rgba(212,80,122,0.22), transparent 70%);
     bottom: -15%; right: -10%;
     animation-duration: 25s;
     animation-delay: 5s;
 }
 .nebula:nth-child(3) {
     width: 350px; height: 350px;
-    background: radial-gradient(circle, rgba(212,175,55,0.06), transparent 70%);
+    background: radial-gradient(circle, rgba(212,175,55,0.10), transparent 70%);
     top: 40%; right: 10%;
     animation-duration: 35s;
     animation-delay: 10s;
@@ -881,7 +881,7 @@ body::after {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(26,10,18,0.80);
+    background: rgba(61,16,40,0.82);
     z-index: 1000;
     justify-content: center;
     align-items: center;
@@ -899,7 +899,7 @@ body::after {
     to   { opacity: 1; backdrop-filter: blur(12px); }
 }
 .modal {
-    background: linear-gradient(160deg, rgba(42, 20, 32, 0.97), rgba(26, 10, 18, 0.99));
+    background: linear-gradient(160deg, rgba(74, 24, 50, 0.97), rgba(61, 16, 40, 0.99));
     backdrop-filter: blur(20px);
     border-radius: 2px;
     max-width: 720px;
