@@ -482,63 +482,14 @@ window.scrollToForm = function () {
 
 // --- Footer quick-access links: delegated smooth-scroll via data-scroll="<selector>" ---
 document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.footer-link[data-scroll], .nav-link[data-scroll]').forEach(link => {
+    document.querySelectorAll('.footer-link[data-scroll]').forEach(link => {
         link.addEventListener('click', function (e) {
             e.preventDefault();
             const selector = link.dataset.scroll;
             if (!selector) return;
             const target = document.querySelector(selector);
             if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            // Close mobile menu after navigating
-            const nav = document.getElementById('siteNav');
-            if (nav) nav.classList.remove('menu-open');
-            const tgl = document.getElementById('navToggle');
-            if (tgl) tgl.setAttribute('aria-expanded', 'false');
         });
-    });
-});
-
-// --- Sticky nav: scroll detection + mobile hamburger toggle ---
-document.addEventListener('DOMContentLoaded', function () {
-    const nav = document.getElementById('siteNav');
-    if (!nav) return;
-
-    // Scroll-based glassmorphism activation
-    const updateScrollState = () => {
-        if (window.scrollY > 40) {
-            nav.classList.add('scrolled');
-        } else {
-            nav.classList.remove('scrolled');
-        }
-    };
-    updateScrollState();
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-        if (!ticking) {
-            requestAnimationFrame(() => {
-                updateScrollState();
-                ticking = false;
-            });
-            ticking = true;
-        }
-    }, { passive: true });
-
-    // Mobile hamburger toggle
-    const toggle = document.getElementById('navToggle');
-    if (toggle) {
-        toggle.addEventListener('click', () => {
-            const isOpen = nav.classList.toggle('menu-open');
-            toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-        });
-    }
-
-    // Close menu on outside click
-    document.addEventListener('click', (e) => {
-        if (!nav.classList.contains('menu-open')) return;
-        if (!nav.contains(e.target)) {
-            nav.classList.remove('menu-open');
-            if (toggle) toggle.setAttribute('aria-expanded', 'false');
-        }
     });
 });
 
