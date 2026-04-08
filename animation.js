@@ -158,9 +158,9 @@ function initGSAPAnimations() {
         pageLoadCeremony();
 
         // ====================
-        // 2. Info cards scroll reveal
+        // 2. Section scroll animations
         // ====================
-        initInfoCardAnimations();
+        initSectionScrollAnimations();
     });
 }
 
@@ -437,30 +437,210 @@ function pageLoadCeremony() {
 }
 
 
-// --- 2. Info card scroll animations with GSAP ---
-function initInfoCardAnimations() {
-    if (typeof ScrollTrigger === 'undefined') return;
+// --- 2. Section scroll animations (GSAP ScrollTrigger) ---
+// Handles all sections that exist on initial page load.
+// Dynamic sections (birthchart/matrix/results) are wired up later
+// in initDynamicSectionAnimations() after calculateAll reveals them.
+function initSectionScrollAnimations() {
+    if (typeof ScrollTrigger === 'undefined' || typeof gsap === 'undefined') return;
 
-    const infoCards = document.querySelectorAll('.info-card[data-animate]');
-    infoCards.forEach((card, i) => {
-        gsap.fromTo(card,
-            { opacity: 0, y: 40, scale: 0.95 },
-            {
-                opacity: 1,
-                y: 0,
-                scale: 1,
+    // Honor reduced-motion preference: skip all entrance animations,
+    // make sure anything that would have been hidden is fully visible.
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) {
+        gsap.set([
+            '.input-section', '.info-section',
+            '.info-card', '.result-card', '.node-circle',
+            '.birthchart-section', '.matrix-section', '.results-section'
+        ], { opacity: 1, x: 0, y: 0, scale: 1, clearProps: 'transform' });
+        return;
+    }
+
+    const isMobile = window.innerWidth <= 640;
+    const yDist = isMobile ? 30 : 60;
+
+    // ----- Input section: simple fade + slide up -----
+    const inputSection = document.querySelector('.input-section');
+    if (inputSection) {
+        gsap.from(inputSection, {
+            y: yDist,
+            opacity: 0,
+            duration: 0.8,
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: inputSection,
+                start: 'top 85%',
+                once: true
+            }
+        });
+    }
+
+    // ----- Info section: title + description + cards stagger -----
+    const infoSection = document.querySelector('.info-section');
+    if (infoSection) {
+        const heading = infoSection.querySelectorAll('.section-title, .section-desc');
+        if (heading.length) {
+            gsap.from(heading, {
+                y: yDist,
+                opacity: 0,
                 duration: 0.8,
-                delay: i * 0.15,
-                ease: 'power3.out',
+                stagger: 0.1,
+                ease: 'power2.out',
                 scrollTrigger: {
-                    trigger: card,
+                    trigger: infoSection,
                     start: 'top 85%',
                     once: true
-                },
-                onComplete: () => card.classList.add('visible')
+                }
+            });
+        }
+
+        const infoCards = infoSection.querySelectorAll('.info-card');
+        if (infoCards.length) {
+            gsap.fromTo(infoCards,
+                { opacity: 0, y: yDist, scale: 0.95 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    duration: 0.8,
+                    stagger: 0.2,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: infoSection,
+                        start: 'top 80%',
+                        once: true
+                    },
+                    onComplete: function () {
+                        infoCards.forEach(c => c.classList.add('visible'));
+                    }
+                }
+            );
+        }
+    }
+}
+
+// --- 2b. Dynamic section animations (run after calculateAll) ---
+// Birthchart, matrix, and results sections start with display:none
+// and become visible only after the user calculates. This function
+// wires up GSAP ScrollTriggers for them at that moment.
+function initDynamicSectionAnimations() {
+    if (typeof ScrollTrigger === 'undefined' || typeof gsap === 'undefined') return;
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) {
+        // Make sure everything is fully visible without any motion
+        gsap.set([
+            '.birthchart-section', '.matrix-section', '.results-section',
+            '.node-circle', '.result-card'
+        ], { opacity: 1, x: 0, y: 0, scale: 1, clearProps: 'transform' });
+        return;
+    }
+
+    const isMobile = window.innerWidth <= 640;
+    const yDist = isMobile ? 30 : 60;
+
+    // ----- Birth chart: scale + fade + slide -----
+    const birthChart = document.querySelector('.birthchart-section');
+    if (birthChart && birthChart.style.display !== 'none' && !birthChart.dataset.scrollAnimated) {
+        birthChart.dataset.scrollAnimated = '1';
+        gsap.fromTo(birthChart,
+            { opacity: 0, scale: 0.95, y: yDist },
+            {
+                opacity: 1,
+                scale: 1,
+                y: 0,
+                duration: 0.9,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: birthChart,
+                    start: 'top 85%',
+                    once: true
+                }
             }
         );
-    });
+    }
+
+    // ----- Matrix section: section fade + nodes stagger -----
+    const matrixSection = document.querySelector('.matrix-section');
+    if (matrixSection && matrixSection.style.display !== 'none' && !matrixSection.dataset.scrollAnimated) {
+        matrixSection.dataset.scrollAnimated = '1';
+
+        // Section heading + container fade
+        gsap.from(matrixSection, {
+            y: yDist,
+            opacity: 0,
+            duration: 0.8,
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: matrixSection,
+                start: 'top 85%',
+                once: true
+            }
+        });
+
+        // Nodes appear one by one
+        const nodes = matrixSection.querySelectorAll('.node-circle');
+        if (nodes.length) {
+            gsap.fromTo(nodes,
+                { opacity: 0, scale: 0 },
+                {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.55,
+                    stagger: 0.08,
+                    ease: 'back.out(1.6)',
+                    scrollTrigger: {
+                        trigger: matrixSection,
+                        start: 'top 78%',
+                        once: true
+                    }
+                }
+            );
+        }
+    }
+
+    // ----- Results section: section fade + cards from left -----
+    const resultsSection = document.querySelector('.results-section');
+    if (resultsSection && resultsSection.style.display !== 'none' && !resultsSection.dataset.scrollAnimated) {
+        resultsSection.dataset.scrollAnimated = '1';
+
+        gsap.from(resultsSection, {
+            y: yDist,
+            opacity: 0,
+            duration: 0.8,
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: resultsSection,
+                start: 'top 85%',
+                once: true
+            }
+        });
+
+        const resultCards = resultsSection.querySelectorAll('.result-card');
+        if (resultCards.length) {
+            gsap.fromTo(resultCards,
+                { opacity: 0, x: -60 },
+                {
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.7,
+                    stagger: 0.08,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: resultsSection,
+                        start: 'top 80%',
+                        once: true
+                    },
+                    onComplete: function () {
+                        resultCards.forEach(c => c.classList.add('visible'));
+                    }
+                }
+            );
+        }
+    }
+
+    // Recalculate trigger positions now that sections are visible
+    ScrollTrigger.refresh();
 }
 
 
@@ -486,6 +666,10 @@ function initInfoCardAnimations() {
             // Start ritual animation, then run original
             startFormRitual(function() {
                 originalCalculateAll();
+                // After dynamic sections become visible, wire up their scroll triggers
+                requestAnimationFrame(function () {
+                    initDynamicSectionAnimations();
+                });
             });
         };
     });

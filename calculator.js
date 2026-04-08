@@ -466,26 +466,16 @@ function cardHTML(item, type) {
 }
 
 // --- Scroll-triggered Animations ---
+// Counter-only IntersectionObserver. The visual entrance animations
+// (fade/slide/scale) for these elements are handled by GSAP ScrollTrigger
+// in animation.js (initSectionScrollAnimations / initDynamicSectionAnimations).
 function initScrollAnimations() {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                const el = entry.target;
-
-                const parent = el.parentElement;
-                const siblings = parent ? Array.from(parent.querySelectorAll('[data-animate]')) : [];
-                const idx = siblings.indexOf(el);
-                const delay = idx * 120;
-
-                setTimeout(() => {
-                    el.classList.add('visible');
-                    el.style.transition = `opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)`;
-
-                    const numEl = el.querySelector('.card-num[data-count]');
-                    if (numEl) animateCounter(numEl);
-                }, delay);
-
-                observer.unobserve(el);
+                const numEl = entry.target.querySelector('.card-num[data-count]');
+                if (numEl) animateCounter(numEl);
+                observer.unobserve(entry.target);
             }
         });
     }, { threshold: 0.12 });
@@ -708,16 +698,13 @@ function triggerMatrixAnimations() {
     const svg = document.getElementById('matrixSvg');
     if (!svg) return;
 
-    // Animate lines
+    // Animate lines (CSS-driven stroke draw)
     svg.querySelectorAll('.matrix-line[data-anim]').forEach(line => {
         line.style.animation = line.getAttribute('data-anim');
     });
 
-    // Animate nodes
-    svg.querySelectorAll('.node-circle[data-anim-delay]').forEach(g => {
-        const delay = g.getAttribute('data-anim-delay');
-        g.style.animation = `nodeAppear 1s cubic-bezier(0.16, 1, 0.3, 1) ${delay} forwards`;
-    });
+    // Nodes are animated by GSAP ScrollTrigger in animation.js
+    // (initDynamicSectionAnimations) — no CSS animation here.
 
     // Animate age periods
     document.querySelectorAll('.age-period').forEach((el, i) => {
