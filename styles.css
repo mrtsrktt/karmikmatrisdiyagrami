@@ -2114,3 +2114,78 @@ body.is-loading > *:not(.intro-loader) {
     .intro-tagline-text { font-size: 0.6rem; letter-spacing: 0.22em; }
     .intro-tagline-line { width: 28px; }
 }
+
+/* ====== CURSOR GLOW EFFECT ====== */
+/* Sits above everything; main cursor is unchanged. */
+.cursor-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 100001;
+    background: radial-gradient(circle,
+        rgba(212, 175, 55, 0.5) 0%,
+        rgba(212, 175, 55, 0.18) 35%,
+        transparent 70%);
+    mix-blend-mode: screen;
+    filter: blur(4px);
+    /* JS sets --x and --y; CSS handles scale via classes */
+    transform: translate(var(--x, -100px), var(--y, -100px)) scale(var(--scale, 0.5));
+    will-change: transform;
+    transition:
+        transform-origin 0.2s,
+        background 0.25s ease;
+    /* Make sure transform changes from class don't transition (would lag the lerp) */
+    /* Only the scale part of transform should transition: use a separate scale prop */
+}
+/* Hover over interactive elements: grow + extra glow */
+.cursor-glow.cursor-glow--hover {
+    --scale: 1;
+    background: radial-gradient(circle,
+        rgba(212, 175, 55, 0.6) 0%,
+        rgba(212, 175, 55, 0.25) 40%,
+        transparent 75%);
+}
+/* Hover over matrix nodes: amethyst tint */
+.cursor-glow.cursor-glow--matrix {
+    --scale: 1;
+    background: radial-gradient(circle,
+        rgba(147, 112, 219, 0.55) 0%,
+        rgba(147, 112, 219, 0.22) 40%,
+        transparent 75%);
+}
+
+/* Trail dots — small fading sparks left behind cursor */
+.cursor-trail-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--gold-bright);
+    box-shadow:
+        0 0 6px rgba(212, 175, 55, 0.9),
+        0 0 12px rgba(212, 175, 55, 0.4);
+    pointer-events: none;
+    z-index: 100000;
+    will-change: transform, opacity;
+    animation: cursorTrailFade 0.4s ease-out forwards;
+}
+@keyframes cursorTrailFade {
+    0%   { opacity: 0.85; transform: translate(var(--tx), var(--ty)) scale(1); }
+    100% { opacity: 0;    transform: translate(var(--tx), var(--ty)) scale(0.25); }
+}
+
+/* Disable cursor effect on touch devices and reduced-motion */
+@media (pointer: coarse) {
+    .cursor-glow,
+    .cursor-trail-dot { display: none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .cursor-glow,
+    .cursor-trail-dot { display: none !important; }
+}

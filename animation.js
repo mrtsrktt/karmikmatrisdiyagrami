@@ -166,6 +166,11 @@ function initGSAPAnimations() {
         // 3. Button effects (particles + ripple)
         // ====================
         initButtonEffects();
+
+        // ====================
+        // 4. Cursor glow + trail
+        // ====================
+        initCursorEffect();
     });
 }
 
@@ -729,7 +734,115 @@ function spawnRipple(btn, x, y) {
 }
 
 
-// --- 4. Form Submit Ritual Animation ---
+// --- 4. Mystic cursor glow + trail ---
+function initCursorEffect() {
+    // Skip on touch / coarse-pointer devices and reduced-motion
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Create the glow follower element
+    const glow = document.createElement('div');
+    glow.className = 'cursor-glow';
+    glow.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(glow);
+
+    // Mouse target position (updated on every mousemove)
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    // Lerped follower position
+    let glowX = mouseX;
+    let glowY = mouseY;
+    const LERP = 0.18; // ~10-12% per frame for smooth ~100ms trailing
+
+    // Trail spawn tracking
+    let lastTrailX = mouseX;
+    let lastTrailY = mouseY;
+    const TRAIL_DISTANCE = 22; // px between dots — faster movement = more dots
+
+    // Throttled hover-target detection (every ~60ms)
+    let lastTargetCheck = 0;
+    const TARGET_CHECK_MS = 60;
+
+    function updateHoverState(target) {
+        if (!target || !target.closest) return;
+
+        // Matrix node — special amethyst tint
+        if (target.closest('.node-circle')) {
+            glow.classList.add('cursor-glow--matrix');
+            glow.classList.remove('cursor-glow--hover');
+            return;
+        }
+
+        // General interactive element — gold + bigger
+        const interactive = target.closest(
+            'button, a, input, textarea, select, ' +
+            '.result-card, .city-option, ' +
+            '[onclick], [role="button"]'
+        );
+        if (interactive) {
+            glow.classList.add('cursor-glow--hover');
+            glow.classList.remove('cursor-glow--matrix');
+        } else {
+            glow.classList.remove('cursor-glow--hover', 'cursor-glow--matrix');
+        }
+    }
+
+    document.addEventListener('mousemove', function (e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+
+        // Spawn trail dots based on distance covered
+        const dx = mouseX - lastTrailX;
+        const dy = mouseY - lastTrailY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist >= TRAIL_DISTANCE) {
+            spawnTrailDot(mouseX, mouseY);
+            lastTrailX = mouseX;
+            lastTrailY = mouseY;
+        }
+
+        // Throttled hover detection
+        const now = performance.now();
+        if (now - lastTargetCheck > TARGET_CHECK_MS) {
+            lastTargetCheck = now;
+            updateHoverState(e.target);
+        }
+    }, { passive: true });
+
+    // Hide cursor glow when mouse leaves the window
+    document.addEventListener('mouseleave', function () {
+        glow.style.opacity = '0';
+    });
+    document.addEventListener('mouseenter', function () {
+        glow.style.opacity = '';
+    });
+
+    // Smooth lerp loop with rAF
+    function animate() {
+        glowX += (mouseX - glowX) * LERP;
+        glowY += (mouseY - glowY) * LERP;
+        // 40px wide div: offset by half so center sits on cursor
+        glow.style.setProperty('--x', (glowX - 20) + 'px');
+        glow.style.setProperty('--y', (glowY - 20) + 'px');
+        requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+}
+
+function spawnTrailDot(x, y) {
+    const dot = document.createElement('span');
+    dot.className = 'cursor-trail-dot';
+    // Center dot on cursor: 5px wide → offset 2.5px
+    dot.style.setProperty('--tx', (x - 2.5) + 'px');
+    dot.style.setProperty('--ty', (y - 2.5) + 'px');
+    document.body.appendChild(dot);
+    setTimeout(function () {
+        if (dot.parentNode) dot.parentNode.removeChild(dot);
+    }, 420);
+}
+
+
+// --- 5. Form Submit Ritual Animation ---
 // Wrap the existing calculateAll() with a ritual overlay
 // We monkey-patch calculateAll to add the ritual before it runs
 (function() {
