@@ -607,14 +607,16 @@ body::after {
 .input-card-title {
     display: block;
     font-family: 'Cinzel', serif;
-    font-size: 1.2rem;
-    font-weight: 400;
+    font-size: 1.3rem;
+    font-weight: 600;
     margin-bottom: 36px;
-    background: linear-gradient(135deg, var(--gold-muted), var(--gold-bright));
+    background: linear-gradient(135deg, #FFE9A8 0%, #D4AF37 50%, #FFE9A8 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
+    text-align: center;
+    filter: drop-shadow(0 0 16px rgba(212, 175, 55, 0.45));
 }
 
 .input-row {
@@ -671,14 +673,16 @@ body::after {
     top: 50%;
     transform: translateY(-50%);
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1rem;
-    color: rgba(212, 175, 55, 0.65);
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #F0D99C;
     letter-spacing: 0.05em;
     pointer-events: none;
     transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     background: transparent;
     padding: 0 6px;
     z-index: 2;
+    text-shadow: 0 1px 8px rgba(10, 4, 20, 0.5);
 }
 /* Float the label up when input is focused or has value */
 .input-field input:focus + label,
@@ -820,9 +824,13 @@ body::after {
 }
 .input-hint {
     margin-top: 20px;
-    color: var(--text-muted);
-    font-size: 0.85rem;
+    color: #E8D4A8;
+    font-size: 0.92rem;
+    font-weight: 500;
     font-family: 'Cormorant Garamond', serif;
+    letter-spacing: 0.02em;
+    text-shadow: 0 1px 6px rgba(10, 4, 20, 0.5);
+    text-align: center;
 }
 
 /* ====== SECTION TITLES ====== */
@@ -2332,11 +2340,19 @@ body::after {
 
 /* Input hint sub */
 .input-hint-sub {
-    margin-top: 6px;
-    color: var(--text-muted);
+    margin-top: 8px;
+    color: #D8C2C8;
     font-family: 'Cormorant Garamond', serif;
-    font-size: 0.8rem;
-    opacity: 0.5;
+    font-size: 0.88rem;
+    font-weight: 400;
+    opacity: 0.92;
+    line-height: 1.55;
+    letter-spacing: 0.01em;
+    text-shadow: 0 1px 6px rgba(10, 4, 20, 0.5);
+    text-align: center;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* ====== FOOTER — Redesigned 3-column layout ====== */
