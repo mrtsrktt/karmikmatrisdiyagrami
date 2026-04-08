@@ -10,6 +10,7 @@ node_modules/
 # Screenshots (Playwright veya manuel)
 screenshots/
 hero-*.png
+loader-*.png
 
 # Project guidelines (local-only)
 CLAUDE.md
