@@ -160,6 +160,10 @@ function pageLoadCeremony() {
     const subtitle = document.querySelector('.header .subtitle');
     const mandala = document.querySelector('.mandala');
     const symbols = document.querySelectorAll('.floating-symbols .sym');
+    const eyebrow = document.querySelector('.hero-eyebrow');
+    const ornaments = document.querySelectorAll('.hero-ornament');
+    const divider = document.querySelector('.hero-divider');
+    const sparkles = document.querySelectorAll('.hero-sparkles .sparkle');
 
     if (!h1) return;
 
@@ -193,6 +197,26 @@ function pageLoadCeremony() {
         );
     }
 
+    // Eyebrow badge drops in first
+    if (eyebrow) {
+        tl.to(eyebrow, {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            ease: 'power3.out'
+        }, 0.15);
+    }
+
+    // Ornament lines stretch outward from center
+    if (ornaments.length > 0) {
+        tl.to(ornaments, {
+            opacity: 1,
+            scaleX: 1,
+            duration: 1,
+            ease: 'expo.out'
+        }, 0.45);
+    }
+
     // Letters appear one by one
     tl.to(chars, {
         opacity: 1,
@@ -201,7 +225,7 @@ function pageLoadCeremony() {
         duration: 0.6,
         stagger: 0.05,
         ease: 'back.out(1.2)'
-    }, 0.3);
+    }, 0.6);
 
     // Subtitle rises in
     if (subtitle) {
@@ -212,7 +236,32 @@ function pageLoadCeremony() {
             y: 0,
             duration: 1,
             ease: 'power2.out'
-        }, 1.2);
+        }, 1.4);
+    }
+
+    // Decorative diamond divider
+    if (divider) {
+        tl.to(divider, {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            ease: 'power2.out'
+        }, 1.7);
+    }
+
+    // Sparkles fade in
+    if (sparkles.length > 0) {
+        tl.fromTo(sparkles,
+            { opacity: 0, scale: 0 },
+            {
+                opacity: 1,
+                scale: 1,
+                duration: 0.6,
+                stagger: 0.08,
+                ease: 'back.out(2)'
+            },
+            1.9
+        );
     }
 
     // Floating symbols fade in with stagger
