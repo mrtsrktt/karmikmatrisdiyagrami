@@ -1257,6 +1257,57 @@ body::after {
     .features-section { padding: 40px 16px 20px; }
     .feature-card { padding: 28px 24px; }
 }
+
+/* ====== PROFESSIONS SECTION — Kimler İçin? ====== */
+.professions-section {
+    padding: 80px 20px 40px;
+    position: relative;
+    z-index: 1;
+}
+/* 6-column grid so 5 cards can flow as 3+2 with the bottom row centered */
+.professions-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 24px;
+    margin-top: 30px;
+    max-width: 1150px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.profession-card {
+    grid-column: span 2;
+    padding: 36px 32px;
+}
+/* Center the last two cards in the bottom row on desktop */
+.profession-card:nth-child(4) { grid-column: 2 / span 2; }
+.profession-card:nth-child(5) { grid-column: 4 / span 2; }
+
+/* Larger, more prominent icon per spec (2.5rem) */
+.profession-card .info-icon {
+    font-size: 2.5rem;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 900px) {
+    .professions-grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 600px;
+        gap: 20px;
+    }
+    .profession-card,
+    .profession-card:nth-child(4),
+    .profession-card:nth-child(5) {
+        grid-column: auto;
+    }
+}
+@media (max-width: 640px) {
+    .professions-section { padding: 40px 16px 20px; }
+    .professions-grid {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+    }
+    .profession-card { padding: 28px 24px; }
+}
 /* Info Card — Premium glassmorphism */
 .info-card {
     background: rgba(255, 255, 255, 0.03);

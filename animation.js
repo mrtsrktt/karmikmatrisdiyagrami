@@ -459,8 +459,8 @@ function initSectionScrollAnimations() {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduce) {
         gsap.set([
-            '.input-section', '.info-section', '.features-section',
-            '.info-card', '.feature-card', '.result-card', '.node-circle',
+            '.input-section', '.info-section', '.features-section', '.professions-section',
+            '.info-card', '.feature-card', '.profession-card', '.result-card', '.node-circle',
             '.birthchart-section', '.matrix-section', '.results-section'
         ], { opacity: 1, x: 0, y: 0, scale: 1, clearProps: 'transform' });
         return;
@@ -562,6 +562,49 @@ function initSectionScrollAnimations() {
                     },
                     onComplete: function () {
                         featureCards.forEach(c => c.classList.add('visible'));
+                    }
+                }
+            );
+        }
+    }
+
+    // ----- Professions section: title + desc + 5 profession cards stagger -----
+    const professionsSection = document.querySelector('.professions-section');
+    if (professionsSection) {
+        const professionsHead = professionsSection.querySelectorAll('.section-title, .section-desc');
+        if (professionsHead.length) {
+            gsap.from(professionsHead, {
+                y: yDist,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: professionsSection,
+                    start: 'top 85%',
+                    once: true
+                }
+            });
+        }
+        const professionCards = professionsSection.querySelectorAll('.profession-card');
+        if (professionCards.length) {
+            gsap.fromTo(professionCards,
+                { opacity: 0, y: yDist, scale: 0.95 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    duration: 0.8,
+                    stagger: 0.15,
+                    ease: 'power2.out',
+                    clearProps: 'transform,scale',
+                    scrollTrigger: {
+                        trigger: professionsSection,
+                        start: 'top 80%',
+                        once: true
+                    },
+                    onComplete: function () {
+                        professionCards.forEach(c => c.classList.add('visible'));
                     }
                 }
             );
