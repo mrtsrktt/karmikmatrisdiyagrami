@@ -447,6 +447,39 @@ function pageLoadCeremony() {
 }
 
 
+// --- CountUp helper: animate integer from 0 → target with easeOut cubic ---
+function animateCountUp(el, target, duration) {
+    if (!el) return;
+    duration = duration || 1500;
+    const startTime = performance.now();
+    function tick(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // easeOutCubic
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(target * eased);
+        el.textContent = current;
+        if (progress < 1) {
+            requestAnimationFrame(tick);
+        } else {
+            el.textContent = target;
+        }
+    }
+    requestAnimationFrame(tick);
+}
+
+// --- Global: smooth-scroll CTA button handler — jumps user to the form ---
+window.scrollToForm = function () {
+    const target = document.querySelector('.input-section');
+    if (!target) return;
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Focus the first input shortly after scroll starts, for a ritualistic feel
+    const firstInput = target.querySelector('#birthDate');
+    if (firstInput) {
+        setTimeout(() => { try { firstInput.focus({ preventScroll: true }); } catch (e) {} }, 600);
+    }
+};
+
 // --- 2. Section scroll animations (GSAP ScrollTrigger) ---
 // Handles all sections that exist on initial page load.
 // Dynamic sections (birthchart/matrix/results) are wired up later
@@ -460,9 +493,14 @@ function initSectionScrollAnimations() {
     if (reduce) {
         gsap.set([
             '.input-section', '.info-section', '.features-section', '.professions-section',
+            '.stats-bar', '.cta-banner-section', '.cta-banner',
             '.info-card', '.feature-card', '.profession-card', '.result-card', '.node-circle',
             '.birthchart-section', '.matrix-section', '.results-section'
         ], { opacity: 1, x: 0, y: 0, scale: 1, clearProps: 'transform' });
+        // Final values for stat numbers (skip count-up in reduced-motion mode)
+        document.querySelectorAll('.stat-number[data-target]').forEach(el => {
+            el.textContent = el.dataset.target;
+        });
         return;
     }
 
@@ -565,6 +603,55 @@ function initSectionScrollAnimations() {
                     }
                 }
             );
+        }
+    }
+
+    // ----- Stats bar: entrance fade + count-up numbers -----
+    const statsBar = document.querySelector('.stats-bar');
+    if (statsBar) {
+        gsap.from(statsBar, {
+            y: yDist,
+            opacity: 0,
+            duration: 0.8,
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: statsBar,
+                start: 'top 85%',
+                once: true
+            }
+        });
+        const statNumbers = statsBar.querySelectorAll('.stat-number[data-target]');
+        if (statNumbers.length) {
+            ScrollTrigger.create({
+                trigger: statsBar,
+                start: 'top 80%',
+                once: true,
+                onEnter: () => {
+                    statNumbers.forEach(el => {
+                        const target = parseInt(el.dataset.target, 10);
+                        if (!isNaN(target)) animateCountUp(el, target, 1500);
+                    });
+                }
+            });
+        }
+    }
+
+    // ----- CTA banner: entrance fade + slide -----
+    const ctaBannerSection = document.querySelector('.cta-banner-section');
+    if (ctaBannerSection) {
+        const ctaBanner = ctaBannerSection.querySelector('.cta-banner');
+        if (ctaBanner) {
+            gsap.from(ctaBanner, {
+                y: yDist,
+                opacity: 0,
+                duration: 0.9,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: ctaBannerSection,
+                    start: 'top 85%',
+                    once: true
+                }
+            });
         }
     }
 
