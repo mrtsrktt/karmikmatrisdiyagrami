@@ -556,84 +556,160 @@ body::after {
     position: relative;
     z-index: 1;
 }
+/* ====== INPUT FORM — Premium glassmorphism ====== */
 .input-card {
-    background: linear-gradient(135deg, rgba(26, 20, 40, 0.9), rgba(17, 13, 26, 0.95));
+    background: rgba(255, 255, 255, 0.04);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-radius: 2px;
+    border-radius: 16px;
     padding: 52px 44px;
     text-align: center;
     box-shadow:
-        0 10px 50px rgba(0,0,0,0.4),
-        inset 0 1px 0 rgba(212,175,55,0.08);
-    border: 1px solid var(--border-gold);
+        0 10px 50px rgba(0, 0, 0, 0.4),
+        inset 0 0 60px rgba(212, 175, 55, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.25);
     position: relative;
     overflow: hidden;
-    transition: border-color 0.5s, box-shadow 0.5s;
+    transition:
+        border-color 0.5s ease,
+        box-shadow 0.5s ease,
+        background 0.5s ease;
 }
-/* Corner ornaments — top-left & bottom-right */
-.input-card::before,
-.input-card::after {
+/* Top edge sweep light — same pattern as info-card */
+.input-card::before {
     content: '';
     position: absolute;
-    width: 24px; height: 24px;
-    border-color: var(--gold-bright);
-    border-style: solid;
-    opacity: 0.6;
-    transition: opacity 0.4s;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(212, 175, 55, 0.65),
+        transparent);
+    pointer-events: none;
+    animation: inputCardSweep 6s ease-in-out infinite;
 }
-.input-card::before { top: 10px; left: 10px; border-width: 1px 0 0 1px; }
-.input-card::after  { bottom: 10px; right: 10px; border-width: 0 1px 1px 0; }
+@keyframes inputCardSweep {
+    0%, 100% { left: -100%; }
+    50%      { left: 100%; }
+}
 .input-card:hover {
-    border-color: rgba(212,175,55,0.5);
-    box-shadow: 0 10px 50px rgba(0,0,0,0.4), 0 0 40px var(--gold-glow);
+    border-color: rgba(212, 175, 55, 0.45);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow:
+        0 10px 50px rgba(0, 0, 0, 0.45),
+        inset 0 0 80px rgba(212, 175, 55, 0.07),
+        0 0 30px rgba(212, 175, 55, 0.15);
 }
-.input-card:hover::before,
-.input-card:hover::after {
-    opacity: 1;
-}
-.input-card label {
+
+.input-card-title {
     display: block;
     font-family: 'Cinzel Decorative', cursive;
     font-size: 1.2rem;
     font-weight: 400;
-    margin-bottom: 30px;
+    margin-bottom: 36px;
     background: linear-gradient(135deg, var(--gold-muted), var(--gold-bright));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     letter-spacing: 0.1em;
 }
+
 .input-row {
     display: flex;
-    gap: 14px;
+    gap: 16px;
     justify-content: center;
     flex-wrap: wrap;
+    margin-bottom: 18px;
 }
-.input-card input {
-    padding: 14px 24px;
-    font-size: 1.1rem;
-    border: 1px solid var(--border-gold);
-    border-radius: 2px;
-    background: rgba(10, 6, 18, 0.8);
-    color: var(--text-primary);
-    outline: none;
-    transition: border-color 0.3s, box-shadow 0.3s;
+.input-row:last-of-type { margin-bottom: 0; }
+
+/* Floating-label input field */
+.input-field {
+    position: relative;
     width: 220px;
-    text-align: center;
+}
+.input-field input {
+    width: 100%;
+    padding: 22px 20px 14px 20px;
+    font-size: 1.05rem;
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #f5f0e8;
+    outline: none;
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        background 0.3s ease;
+    text-align: left;
     font-family: 'Cormorant Garamond', serif;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
+    position: relative;
+    z-index: 1;
 }
-.input-card input:focus {
+.input-field input::placeholder {
+    color: rgba(212, 175, 55, 0.5);
+    font-style: italic;
+    letter-spacing: 1px;
+    opacity: 0;
+    transition: opacity 0.25s ease 0.1s;
+}
+/* Show placeholder hint only when input is focused (and label has floated up) */
+.input-field input:focus::placeholder {
+    opacity: 1;
+}
+
+/* Floating label */
+.input-field label {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: rgba(212, 175, 55, 0.65);
+    letter-spacing: 0.05em;
+    pointer-events: none;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    background: transparent;
+    padding: 0 6px;
+    z-index: 2;
+}
+/* Float the label up when input is focused or has value */
+.input-field input:focus + label,
+.input-field input:not(:placeholder-shown) + label {
+    top: 0;
+    transform: translateY(-50%) scale(0.78);
+    color: var(--gold-bright);
+    letter-spacing: 0.1em;
+    /* Carve a notch in the border */
+    background: linear-gradient(180deg,
+        transparent 0%, transparent 35%,
+        var(--bg-base) 35%, var(--bg-base) 65%,
+        transparent 65%, transparent 100%);
+}
+
+/* Focus state — gold glow + left vertical accent */
+.input-field input:focus {
     border-color: var(--gold-bright);
-    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1),
-                inset 0 0 20px rgba(212, 175, 55, 0.05);
-    background: rgba(17, 13, 26, 0.9);
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow:
+        0 0 0 2px rgba(212, 175, 55, 0.4),
+        inset 4px 0 0 -2px var(--gold-bright),
+        inset 0 0 24px rgba(212, 175, 55, 0.08);
 }
-.input-card input.error {
+
+.input-field input.error {
     border-color: var(--crimson);
-    box-shadow: 0 0 25px rgba(139, 26, 46, 0.3);
+    box-shadow: 0 0 0 2px rgba(212, 80, 122, 0.35);
     animation: shake 0.4s ease;
+}
+.input-field input.error + label {
+    color: var(--crimson);
 }
 @keyframes shake {
     0%, 100% { transform: translateX(0); }
@@ -641,47 +717,105 @@ body::after {
     75%      { transform: translateX(8px); }
 }
 
-/* CTA Button — Gold gradient with shimmer */
+/* ====== CTA BUTTON — Gold gradient with particle/ripple/spinner ====== */
 .input-card button {
-    padding: 1rem 3rem;
-    font-size: 0.85rem;
+    padding: 1.05rem 3.2rem;
+    font-size: 0.9rem;
     font-weight: 400;
-    background: linear-gradient(135deg, #8B7536, #D4AF37, #8B7536);
+    background: linear-gradient(135deg, #c8a84b 0%, #f0d080 50%, #c8a84b 100%);
     background-size: 200% 100%;
-    color: var(--bg-deep);
+    background-position: 0% 50%;
+    color: #2A1018;
     border: none;
-    border-radius: 2px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition:
+        background-position 0.6s ease,
+        box-shadow 0.4s ease,
+        letter-spacing 0.4s ease,
+        transform 0.2s ease;
     font-family: 'Cinzel Decorative', cursive;
     position: relative;
-    overflow: hidden;
+    overflow: visible; /* particles need to escape */
     letter-spacing: 0.2em;
     text-transform: uppercase;
+    margin-top: 8px;
+    box-shadow:
+        0 4px 18px rgba(212, 175, 55, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
-/* Shimmer sweep effect */
-.input-card button::after {
-    content: '';
+.input-card button .btn-text {
+    position: relative;
+    z-index: 2;
+    transition: opacity 0.25s ease;
+}
+.input-card button .btn-spinner {
     position: absolute;
-    top: -50%;
-    left: -60%;
-    width: 40%;
-    height: 200%;
-    background: rgba(255,255,255,0.2);
-    transform: skewX(-20deg);
-    transition: left 0.5s ease;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2A1018;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
 }
+.input-card button .btn-spinner svg {
+    animation: btnSpin 1s linear infinite;
+}
+@keyframes btnSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* Hover: gradient reverses + glow + slight lift */
 .input-card button:hover {
-    background-position: right center;
-    box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
-    letter-spacing: 0.25em;
+    background-position: 100% 50%;
+    box-shadow:
+        0 6px 28px rgba(212, 175, 55, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.24em;
     transform: translateY(-2px);
-}
-.input-card button:hover::after {
-    left: 120%;
 }
 .input-card button:active {
     transform: translateY(0) scale(0.98);
+}
+
+/* Loading state */
+.input-card button.loading {
+    pointer-events: none;
+}
+.input-card button.loading .btn-text  { opacity: 0; }
+.input-card button.loading .btn-spinner { opacity: 1; }
+
+/* Particle dots spawned by JS on hover */
+.btn-particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold-bright);
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.9), 0 0 16px rgba(212, 175, 55, 0.5);
+    pointer-events: none;
+    z-index: 3;
+    animation: particleBurst 0.9s ease-out forwards;
+}
+@keyframes particleBurst {
+    0%   { opacity: 1; transform: translate(0, 0) scale(1); }
+    100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.4); }
+}
+
+/* Click ripple */
+.btn-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(0);
+    pointer-events: none;
+    z-index: 3;
+    animation: rippleExpand 0.7s ease-out forwards;
+}
+@keyframes rippleExpand {
+    to { transform: scale(2.5); opacity: 0; }
 }
 .input-hint {
     margin-top: 20px;
@@ -1675,37 +1809,35 @@ body::after {
 }
 
 /* City autocomplete */
-#birthTime {
-    width: 110px;
-    letter-spacing: 4px;
-    text-align: center;
-}
+.input-field:has(> #birthTime) { width: 150px; }
+#birthTime { letter-spacing: 4px; }
+
 .city-row {
     justify-content: center;
 }
 .city-autocomplete-wrapper {
     position: relative;
     width: 100%;
-    max-width: 300px;
+    max-width: 320px;
 }
-.city-autocomplete-wrapper input {
+.city-autocomplete-wrapper .input-field {
     width: 100%;
-    letter-spacing: 1px;
 }
 .city-dropdown {
     display: none;
     position: absolute;
-    top: 100%;
+    top: calc(100% + 4px);
     left: 0;
     right: 0;
-    background: rgba(10, 6, 18, 0.97);
-    border: 1px solid var(--border-gold);
-    border-top: none;
-    border-radius: 0 0 2px 2px;
+    background: rgba(10, 6, 18, 0.92);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 8px;
     max-height: 200px;
     overflow-y: auto;
     z-index: 100;
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 .city-option {
     padding: 12px 20px;
@@ -1952,12 +2084,12 @@ body.is-loading > *:not(.intro-loader) {
     .aurora-blob.aurora-1 { width: 220px; height: 220px; }
     .aurora-blob.aurora-2 { width: 200px; height: 200px; }
     .aurora-blob.aurora-3 { width: 180px; height: 180px; }
-    .input-card { padding: 30px 20px; }
-    .input-card label { font-size: 1rem; }
-    .input-card input { width: 100%; padding: 12px 16px; font-size: 1rem; }
-    #birthTime { width: 100%; }
-    .input-row { flex-direction: column; gap: 10px; align-items: center; }
-    .input-row input { width: 100% !important; max-width: 280px; }
+    .input-card { padding: 30px 20px; border-radius: 12px; }
+    .input-card-title { font-size: 1rem; margin-bottom: 26px; }
+    .input-row { flex-direction: column; gap: 14px; align-items: center; }
+    .input-field { width: 100%; max-width: 280px; }
+    .input-field:has(> #birthTime) { width: 100%; max-width: 280px; }
+    .input-field input { padding: 20px 18px 12px 18px; font-size: 1rem; }
     .city-autocomplete-wrapper { max-width: 100%; }
     .result-cards { grid-template-columns: 1fr; }
     .modal { max-width: 95vw; }

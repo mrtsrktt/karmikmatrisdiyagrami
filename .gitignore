@@ -13,6 +13,7 @@ hero-*.png
 loader-*.png
 cards-*.png
 scroll-*.png
+form-*.png
 
 # Project guidelines (local-only)
 CLAUDE.md

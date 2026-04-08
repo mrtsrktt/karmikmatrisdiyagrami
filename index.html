@@ -135,19 +135,36 @@
 <section class="input-section">
     <div class="container">
         <div class="input-card">
-            <label>Do&#287;um Bilgilerinizi Girin</label>
+            <label class="input-card-title">Do&#287;um Bilgilerinizi Girin</label>
             <div class="input-row">
-                <input type="text" id="birthDate" placeholder="GG.AA.YYYY" maxlength="10" autocomplete="off">
-                <input type="text" id="birthTime" placeholder="SS:DD" maxlength="5" autocomplete="off">
+                <div class="input-field">
+                    <input type="text" id="birthDate" placeholder="GG.AA.YYYY" maxlength="10" autocomplete="off">
+                    <label for="birthDate">Do&#287;um Tarihi</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="birthTime" placeholder="SS:DD" maxlength="5" autocomplete="off">
+                    <label for="birthTime">Do&#287;um Saati</label>
+                </div>
             </div>
             <div class="input-row city-row">
                 <div class="city-autocomplete-wrapper">
-                    <input type="text" id="birthCity" placeholder="Do&#287;um &#350;ehri" autocomplete="off">
+                    <div class="input-field">
+                        <input type="text" id="birthCity" placeholder="&#350;ehir ad&#305; yaz&#305;n..." autocomplete="off">
+                        <label for="birthCity">Do&#287;um &#350;ehri</label>
+                    </div>
                     <div class="city-dropdown" id="cityDropdown"></div>
                 </div>
             </div>
             <div class="input-row">
-                <button id="calcBtn" onclick="calculateAll()">Haritay&#305; Hesapla</button>
+                <button id="calcBtn" onclick="calculateAll()">
+                    <span class="btn-text">Haritay&#305; Hesapla</span>
+                    <span class="btn-spinner" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="20" height="20">
+                            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-dasharray="42 14"/>
+                        </svg>
+                    </span>
+                </button>
             </div>
             <p class="input-hint">&#214;rnek: 15.03.1990 &mdash; 14:30 &mdash; &#304;stanbul</p>
             <p class="input-hint-sub">Saat ve &#351;ehir bilgisi Do&#287;um Haritas&#305; i&#231;in gereklidir. Sadece tarih girerseniz yaln&#305;zca Karmik Matris hesaplan&#305;r.</p>

@@ -161,6 +161,11 @@ function initGSAPAnimations() {
         // 2. Section scroll animations
         // ====================
         initSectionScrollAnimations();
+
+        // ====================
+        // 3. Button effects (particles + ripple)
+        // ====================
+        initButtonEffects();
     });
 }
 
@@ -648,7 +653,83 @@ function initDynamicSectionAnimations() {
 }
 
 
-// --- 3. Form Submit Ritual Animation ---
+// --- 3. CTA Button Effects: hover particles + click ripple ---
+function initButtonEffects() {
+    const btn = document.getElementById('calcBtn');
+    if (!btn) return;
+
+    // Throttle particle bursts so rapid mouse re-enters don't spam DOM
+    let lastBurst = 0;
+    btn.addEventListener('mouseenter', function () {
+        const now = Date.now();
+        if (now - lastBurst < 350) return;
+        lastBurst = now;
+        spawnParticles(btn);
+    });
+
+    btn.addEventListener('click', function (e) {
+        // Ripple at click coordinates
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        spawnRipple(btn, x, y);
+    });
+}
+
+function spawnParticles(btn) {
+    const count = 7;
+    for (let i = 0; i < count; i++) {
+        const p = document.createElement('span');
+        p.className = 'btn-particle';
+
+        // Spawn point: random position along button edges
+        const edge = Math.floor(Math.random() * 4); // 0=top 1=right 2=bottom 3=left
+        const rect = btn.getBoundingClientRect();
+        let sx, sy;
+        if (edge === 0)      { sx = Math.random() * rect.width; sy = 0; }
+        else if (edge === 1) { sx = rect.width;                  sy = Math.random() * rect.height; }
+        else if (edge === 2) { sx = Math.random() * rect.width; sy = rect.height; }
+        else                 { sx = 0;                            sy = Math.random() * rect.height; }
+
+        // Outward burst direction
+        const cx = rect.width / 2;
+        const cy = rect.height / 2;
+        const ang = Math.atan2(sy - cy, sx - cx);
+        const dist = 30 + Math.random() * 20;
+        const dx = Math.cos(ang) * dist;
+        const dy = Math.sin(ang) * dist;
+
+        p.style.left = sx + 'px';
+        p.style.top = sy + 'px';
+        p.style.setProperty('--dx', dx + 'px');
+        p.style.setProperty('--dy', dy + 'px');
+
+        btn.appendChild(p);
+
+        // Cleanup after animation
+        setTimeout(() => {
+            if (p.parentNode) p.parentNode.removeChild(p);
+        }, 950);
+    }
+}
+
+function spawnRipple(btn, x, y) {
+    const ripple = document.createElement('span');
+    ripple.className = 'btn-ripple';
+    const rect = btn.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.width = size + 'px';
+    ripple.style.height = size + 'px';
+    ripple.style.left = (x - size / 2) + 'px';
+    ripple.style.top = (y - size / 2) + 'px';
+    btn.appendChild(ripple);
+    setTimeout(() => {
+        if (ripple.parentNode) ripple.parentNode.removeChild(ripple);
+    }, 750);
+}
+
+
+// --- 4. Form Submit Ritual Animation ---
 // Wrap the existing calculateAll() with a ritual overlay
 // We monkey-patch calculateAll to add the ritual before it runs
 (function() {
@@ -667,9 +748,14 @@ function initDynamicSectionAnimations() {
                 return;
             }
 
+            // Loading state on button
+            const calcBtn = document.getElementById('calcBtn');
+            if (calcBtn) calcBtn.classList.add('loading');
+
             // Start ritual animation, then run original
             startFormRitual(function() {
                 originalCalculateAll();
+                if (calcBtn) calcBtn.classList.remove('loading');
                 // After dynamic sections become visible, wire up their scroll triggers
                 requestAnimationFrame(function () {
                     initDynamicSectionAnimations();
