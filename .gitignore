@@ -1,0 +1,15 @@
+# Claude Code local settings
+.claude/
+
+# Playwright MCP artifacts (snapshots, console logs)
+.playwright-mcp/
+
+# Node dependencies
+node_modules/
+
+# Screenshots (Playwright veya manuel)
+screenshots/
+hero-*.png
+
+# Project guidelines (local-only)
+CLAUDE.md
