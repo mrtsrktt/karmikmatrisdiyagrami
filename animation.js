@@ -459,8 +459,8 @@ function initSectionScrollAnimations() {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduce) {
         gsap.set([
-            '.input-section', '.info-section',
-            '.info-card', '.result-card', '.node-circle',
+            '.input-section', '.info-section', '.features-section',
+            '.info-card', '.feature-card', '.result-card', '.node-circle',
             '.birthchart-section', '.matrix-section', '.results-section'
         ], { opacity: 1, x: 0, y: 0, scale: 1, clearProps: 'transform' });
         return;
@@ -483,6 +483,89 @@ function initSectionScrollAnimations() {
                 once: true
             }
         });
+    }
+
+    // ----- How-it-works section: title + desc + 3 step cards stagger -----
+    const howtoSection = document.querySelector('.howto-section');
+    if (howtoSection) {
+        const howtoHead = howtoSection.querySelectorAll('.section-title, .section-desc');
+        if (howtoHead.length) {
+            gsap.from(howtoHead, {
+                y: yDist,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: howtoSection,
+                    start: 'top 85%',
+                    once: true
+                }
+            });
+        }
+        const howtoSteps = howtoSection.querySelectorAll('.howto-step');
+        if (howtoSteps.length) {
+            gsap.fromTo(howtoSteps,
+                { opacity: 0, y: yDist, scale: 0.95 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    duration: 0.8,
+                    stagger: 0.2,
+                    ease: 'power2.out',
+                    clearProps: 'transform,scale',
+                    scrollTrigger: {
+                        trigger: howtoSection,
+                        start: 'top 80%',
+                        once: true
+                    }
+                }
+            );
+        }
+    }
+
+    // ----- Features section: title + desc + 6 feature cards stagger -----
+    const featuresSection = document.querySelector('.features-section');
+    if (featuresSection) {
+        const featuresHead = featuresSection.querySelectorAll('.section-title, .section-desc');
+        if (featuresHead.length) {
+            gsap.from(featuresHead, {
+                y: yDist,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: featuresSection,
+                    start: 'top 85%',
+                    once: true
+                }
+            });
+        }
+        const featureCards = featuresSection.querySelectorAll('.feature-card');
+        if (featureCards.length) {
+            gsap.fromTo(featureCards,
+                { opacity: 0, y: yDist, scale: 0.95 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    duration: 0.8,
+                    stagger: 0.15,
+                    ease: 'power2.out',
+                    clearProps: 'transform,scale',
+                    scrollTrigger: {
+                        trigger: featuresSection,
+                        start: 'top 80%',
+                        once: true
+                    },
+                    onComplete: function () {
+                        featureCards.forEach(c => c.classList.add('visible'));
+                    }
+                }
+            );
+        }
     }
 
     // ----- Info section: title + description + cards stagger -----

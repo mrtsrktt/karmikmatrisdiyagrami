@@ -1225,6 +1225,38 @@ body::after {
     gap: 20px;
     margin-top: 30px;
 }
+
+/* ====== FEATURES SECTION — Neden Karmik Matris Aracı? ====== */
+.features-section {
+    padding: 80px 20px 40px;
+    position: relative;
+    z-index: 1;
+}
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 30px;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+/* feature-card reuses .info-card glassmorphism; keep structural tweaks here */
+.feature-card {
+    padding: 36px 32px;
+}
+
+@media (max-width: 900px) {
+    .features-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+        gap: 20px;
+    }
+}
+@media (max-width: 640px) {
+    .features-section { padding: 40px 16px 20px; }
+    .feature-card { padding: 28px 24px; }
+}
 /* Info Card — Premium glassmorphism */
 .info-card {
     background: rgba(255, 255, 255, 0.03);
@@ -1334,6 +1366,150 @@ body::after {
     font-size: 1.05rem;
     line-height: 1.85;
     font-weight: 400;
+}
+
+/* ====== HOW IT WORKS SECTION ====== */
+.howto-section {
+    padding: 80px 20px 40px;
+    position: relative;
+    z-index: 1;
+}
+.howto-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 56px;
+    margin-top: 30px;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+}
+
+/* Step card — same glassmorphism as info-card */
+.howto-step {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 16px;
+    padding: 44px 32px 38px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    transition:
+        transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        border-color 0.3s ease,
+        background 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+/* Watermark step number — large, faded gold, top-right */
+.howto-step::before {
+    content: attr(data-step);
+    position: absolute;
+    top: 14px;
+    right: 22px;
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 5rem;
+    line-height: 1;
+    font-weight: 400;
+    color: rgba(212, 175, 55, 0.08);
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Arrow connector to next step — desktop only */
+.howto-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -46px;
+    width: 36px;
+    height: 14px;
+    transform: translateY(-50%);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 14'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1'%3E%3Cstop offset='0' stop-color='%23D4AF37' stop-opacity='0.2'/%3E%3Cstop offset='1' stop-color='%23D4AF37' stop-opacity='1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cline x1='0' y1='7' x2='28' y2='7' stroke='url(%23g)' stroke-width='1.2' stroke-linecap='round'/%3E%3Cpath d='M26 2 L34 7 L26 12' fill='none' stroke='%23D4AF37' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    pointer-events: none;
+    opacity: 0.85;
+    filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.3));
+}
+
+.howto-step:hover {
+    transform: translateY(-6px);
+    border-color: rgba(212, 175, 55, 0.45);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 24px rgba(212, 175, 55, 0.25);
+}
+.howto-step:hover::before {
+    color: rgba(212, 175, 55, 0.16);
+    transform: scale(1.05);
+}
+
+.howto-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 22px;
+    color: var(--gold-bright);
+    filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.35));
+    transition: filter 0.4s ease;
+    position: relative;
+    z-index: 1;
+}
+.howto-icon svg {
+    overflow: visible;
+}
+.howto-step:hover .howto-icon {
+    animation: howtoIconPulse 1.6s ease-in-out infinite;
+    filter: drop-shadow(0 0 18px rgba(212, 175, 55, 0.7));
+}
+@keyframes howtoIconPulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.1); }
+}
+
+.howto-step h3 {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: var(--gold-bright);
+    letter-spacing: 0.04em;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 1;
+}
+.howto-step p {
+    color: #E0CDD2;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    font-weight: 400;
+    position: relative;
+    z-index: 1;
+    margin: 0;
+}
+
+/* Mobile: stack vertically, hide arrow connectors */
+@media (max-width: 900px) {
+    .howto-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        max-width: 500px;
+    }
+    .howto-step:not(:last-child)::after {
+        display: none;
+    }
+}
+@media (max-width: 640px) {
+    .howto-section { padding: 40px 16px 20px; }
+    .howto-step { padding: 36px 24px 30px; }
+    .howto-step::before { font-size: 4rem; top: 10px; right: 18px; }
+    .howto-icon svg { width: 48px; height: 48px; }
 }
 
 /* ====== MODAL ====== */
