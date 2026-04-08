@@ -480,6 +480,19 @@ window.scrollToForm = function () {
     }
 };
 
+// --- Footer quick-access links: delegated smooth-scroll via data-scroll="<selector>" ---
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.footer-link[data-scroll]').forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const selector = link.dataset.scroll;
+            if (!selector) return;
+            const target = document.querySelector(selector);
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+});
+
 // --- 2. Section scroll animations (GSAP ScrollTrigger) ---
 // Handles all sections that exist on initial page load.
 // Dynamic sections (birthchart/matrix/results) are wired up later

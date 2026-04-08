@@ -2339,32 +2339,253 @@ body::after {
     opacity: 0.5;
 }
 
-/* ====== FOOTER ====== */
+/* ====== FOOTER — Redesigned 3-column layout ====== */
 .footer {
-    text-align: center;
-    padding: 70px 20px 60px;
-    border-top: 1px solid rgba(212, 175, 55, 0.18);
-    color: #F5F0E8;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1rem; /* 16px */
-    font-weight: 400;
     position: relative;
     z-index: 1;
-    opacity: 1;
-}
-.footer p {
+    padding: 80px 24px 32px;
+    margin-top: 48px;
+    /* Slightly darker overlay on top of the mystic cosmic background */
+    background: rgba(0, 0, 0, 0.3);
     color: #F5F0E8;
-    opacity: 1;
-    font-size: 1rem;
-    letter-spacing: 0.05em;
-}
-.footer p.footer-note {
-    margin-top: 12px;
-    font-size: 0.85rem; /* ~13.5px */
-    color: #D8C2C8;
-    opacity: 1;
+    font-family: 'Cormorant Garamond', serif;
     font-weight: 400;
-    letter-spacing: 0.03em;
+    opacity: 1;
+}
+/* Thin gold gradient line at the very top edge */
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(212, 175, 55, 0.15) 20%,
+        rgba(212, 175, 55, 0.6) 50%,
+        rgba(212, 175, 55, 0.15) 80%,
+        transparent 100%);
+    pointer-events: none;
+}
+
+.footer-container {
+    max-width: 1150px;
+    margin: 0 auto;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr;
+    gap: 56px;
+    padding-bottom: 48px;
+}
+.footer-col {
+    text-align: left;
+}
+
+/* ---- LEFT: Brand ---- */
+.footer-brand-title {
+    font-family: 'Cinzel Decorative', Georgia, serif;
+    font-weight: 900;
+    font-size: 1.3rem;
+    line-height: 1.3;
+    letter-spacing: 0.08em;
+    margin: 0 0 8px 0;
+    background: linear-gradient(135deg,
+        #8B7536 0%,
+        #D4AF37 30%,
+        #FFE9A8 50%,
+        #D4AF37 70%,
+        #8B7536 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+.footer-brand-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #D8C2C8;
+    letter-spacing: 0.18em;
+    margin: 0 0 20px 0;
+    opacity: 1;
+}
+.footer-brand-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #F5F0E8;
+    line-height: 1.75;
+    margin: 0;
+    max-width: 440px;
+    opacity: 1;
+}
+
+/* ---- Column titles (H4) — shared by nav and contact ---- */
+.footer-col-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.14em;
+    color: var(--gold-bright);
+    margin: 0 0 22px 0;
+    padding-bottom: 12px;
+    position: relative;
+}
+.footer-col-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg,
+        rgba(212, 175, 55, 0.75),
+        transparent);
+}
+
+/* ---- MIDDLE: Quick-access nav links ---- */
+.footer-link-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.footer-link-list li {
+    margin: 0 0 11px 0;
+}
+.footer-link {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: #F5F0E8;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    display: inline-block;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 4px;
+    transition: color 0.3s ease, text-decoration-color 0.3s ease;
+    opacity: 1;
+}
+.footer-link:hover,
+.footer-link:focus-visible {
+    color: var(--gold-bright);
+    text-decoration-color: var(--gold-bright);
+    outline: none;
+}
+
+/* ---- RIGHT: Contact block ---- */
+.footer-contact-brand {
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #F5F0E8;
+    letter-spacing: 0.08em;
+    margin: 0 0 12px 0;
+    opacity: 1;
+}
+.footer-sparkle-divider {
+    display: block;
+    color: var(--gold-bright);
+    opacity: 0.85;
+    margin: 0 0 16px 0;
+    line-height: 0;
+}
+.footer-social {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #F5F0E8;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    letter-spacing: 0.06em;
+    padding: 6px 0;
+    transition: color 0.3s ease;
+    opacity: 1;
+}
+.footer-social-icon {
+    color: var(--gold-bright);
+    transition: transform 0.3s ease, filter 0.3s ease;
+    flex-shrink: 0;
+}
+.footer-social:hover,
+.footer-social:focus-visible {
+    color: var(--gold-bright);
+    outline: none;
+}
+.footer-social:hover .footer-social-icon,
+.footer-social:focus-visible .footer-social-icon {
+    transform: scale(1.12);
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6));
+}
+
+/* ---- Bottom copyright bar ---- */
+.footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px 24px;
+    padding-top: 26px;
+    position: relative;
+}
+.footer-bottom::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 5%;
+    right: 5%;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(212, 175, 55, 0.35) 25%,
+        rgba(212, 175, 55, 0.55) 50%,
+        rgba(212, 175, 55, 0.35) 75%,
+        transparent);
+    pointer-events: none;
+}
+.footer-copyright,
+.footer-legal {
+    margin: 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.88rem;
+    letter-spacing: 0.04em;
+    opacity: 1;
+}
+.footer-copyright {
+    color: #D8C2C8;
+}
+.footer-legal {
+    color: #A89888;
+    font-style: italic;
+}
+
+/* ---- Mobile: stack columns ---- */
+@media (max-width: 900px) {
+    .footer { padding: 60px 20px 28px; margin-top: 32px; }
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding-bottom: 36px;
+    }
+    .footer-brand-desc { max-width: 100%; }
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    .footer-bottom::before { left: 15%; right: 15%; }
+}
+@media (max-width: 640px) {
+    .footer { padding: 48px 16px 24px; }
+    .footer-brand-title { font-size: 1.2rem; }
+    .footer-col-title { font-size: 0.9rem; }
+    .footer-link { font-size: 0.95rem; }
+    .footer-copyright,
+    .footer-legal { font-size: 0.82rem; }
 }
 
 /* ====== UTILITY ANIMATIONS ====== */
