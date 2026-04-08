@@ -505,6 +505,8 @@ function initSectionScrollAnimations() {
                     duration: 0.8,
                     stagger: 0.2,
                     ease: 'power2.out',
+                    // Clear inline transform so CSS :hover transform can take over
+                    clearProps: 'transform,scale',
                     scrollTrigger: {
                         trigger: infoSection,
                         start: 'top 80%',
@@ -626,6 +628,8 @@ function initDynamicSectionAnimations() {
                     duration: 0.7,
                     stagger: 0.08,
                     ease: 'power2.out',
+                    // Clear inline transform so CSS :hover translateX can take over
+                    clearProps: 'transform',
                     scrollTrigger: {
                         trigger: resultsSection,
                         start: 'top 80%',

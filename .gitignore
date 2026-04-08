@@ -11,6 +11,8 @@ node_modules/
 screenshots/
 hero-*.png
 loader-*.png
+cards-*.png
+scroll-*.png
 
 # Project guidelines (local-only)
 CLAUDE.md

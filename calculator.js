@@ -453,7 +453,7 @@ function renderResultCards(results) {
 function cardHTML(item, type) {
     const arcana = ARCANA_NAMES[item.val] || '';
     return `
-        <div class="result-card" data-animate onclick="openNodeDetail('${item.key}', ${item.val})">
+        <div class="result-card" data-animate data-num="${item.val}" onclick="openNodeDetail('${item.key}', ${item.val})">
             <div class="card-num ${type}" data-count="${item.val}">0</div>
             <div class="card-info">
                 <div class="card-label">${item.label} - ${item.name}</div>
