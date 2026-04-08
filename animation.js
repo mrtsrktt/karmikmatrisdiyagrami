@@ -132,7 +132,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function initGSAPAnimations() {
     if (typeof gsap === 'undefined') {
-        // Retry if GSAP not loaded yet
+        // Retry if GSAP not loaded yet (max ~3s)
+        initGSAPAnimations._tries = (initGSAPAnimations._tries || 0) + 1;
+        if (initGSAPAnimations._tries > 15) {
+            // Give up — drop loader so user isn't stuck on a black screen
+            document.body.classList.remove('is-loading');
+            return;
+        }
         setTimeout(initGSAPAnimations, 200);
         return;
     }
@@ -143,14 +149,164 @@ function initGSAPAnimations() {
     }
 
     // ========================
-    // 1. Page Load Ceremony
+    // 0. Mystic intro loader (gates everything else)
     // ========================
-    pageLoadCeremony();
+    runIntroLoader(function () {
+        // ====================
+        // 1. Page Load Ceremony
+        // ====================
+        pageLoadCeremony();
 
-    // ========================
-    // 2. Info cards scroll reveal
-    // ========================
-    initInfoCardAnimations();
+        // ====================
+        // 2. Info cards scroll reveal
+        // ====================
+        initInfoCardAnimations();
+    });
+}
+
+
+// --- 0. Mystic Intro Loader ---
+function runIntroLoader(onDone) {
+    // Build loader DOM
+    const loader = document.createElement('div');
+    loader.className = 'intro-loader';
+    loader.setAttribute('aria-hidden', 'true');
+    loader.innerHTML = `
+        <div class="intro-symbol-wrap">
+            <span class="intro-ring ring-1"></span>
+            <span class="intro-ring ring-2"></span>
+            <span class="intro-ring ring-3"></span>
+            <div class="intro-symbol">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="introSymbolGrad" cx="50%" cy="40%" r="60%">
+                            <stop offset="0%"  stop-color="#FFE9A8"/>
+                            <stop offset="55%" stop-color="#D4AF37"/>
+                            <stop offset="100%" stop-color="#8B7536"/>
+                        </radialGradient>
+                    </defs>
+                    <!-- Outer 4-point sparkle -->
+                    <path d="M50 2 L58 42 L98 50 L58 58 L50 98 L42 58 L2 50 L42 42 Z"
+                          fill="url(#introSymbolGrad)"/>
+                    <!-- Inner small sparkle -->
+                    <path d="M50 28 L54 46 L72 50 L54 54 L50 72 L46 54 L28 50 L46 46 Z"
+                          fill="rgba(255,255,255,0.55)"/>
+                    <circle cx="50" cy="50" r="2" fill="rgba(10,6,18,0.6)"/>
+                </svg>
+            </div>
+        </div>
+        <div class="intro-text"></div>
+        <div class="intro-tagline">
+            <span class="intro-tagline-line"></span>
+            <span class="intro-tagline-text">Astro\u015fu\u015fu Sistemi</span>
+            <span class="intro-tagline-line"></span>
+        </div>
+    `;
+    document.body.insertBefore(loader, document.body.firstChild);
+
+    // Split title text into letter spans
+    const textEl = loader.querySelector('.intro-text');
+    const title = 'KARMIK MATRIS';
+    title.split('').forEach(function (ch) {
+        const s = document.createElement('span');
+        s.className = 'intro-letter';
+        s.textContent = ch === ' ' ? '\u00a0' : ch;
+        textEl.appendChild(s);
+    });
+
+    const rings    = loader.querySelectorAll('.intro-ring');
+    const symbol   = loader.querySelector('.intro-symbol');
+    const letters  = loader.querySelectorAll('.intro-letter');
+    const tagline  = loader.querySelector('.intro-tagline');
+
+    let cleanedUp = false;
+    function cleanup() {
+        if (cleanedUp) return;
+        cleanedUp = true;
+        if (loader.parentNode) loader.parentNode.removeChild(loader);
+        if (typeof onDone === 'function') onDone();
+    }
+
+    // Master timeline
+    const tl = gsap.timeline({
+        defaults: { ease: 'power3.out' },
+        onComplete: cleanup
+    });
+
+    // Phase 1 — Rings expand from center (0.0 - 0.8)
+    tl.to(rings, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        stagger: 0.12,
+        ease: 'power2.out'
+    }, 0);
+
+    // Phase 2 — Symbol fades in, scales up, rotates into place (0.3 - 1.1)
+    tl.to(symbol, {
+        opacity: 1,
+        scale: 1,
+        rotation: 0,
+        duration: 0.9,
+        ease: 'back.out(1.5)'
+    }, 0.3);
+
+    // Phase 3 — Solar plexus breath: rings pulse outward, repeat
+    tl.to(rings, {
+        scale: 1.12,
+        duration: 1.4,
+        repeat: 1,
+        yoyo: true,
+        stagger: { each: 0.08, from: 'center' },
+        ease: 'sine.inOut'
+    }, 1.0);
+
+    // Symbol gentle pulse in sync
+    tl.to(symbol, {
+        scale: 1.08,
+        duration: 1.4,
+        repeat: 1,
+        yoyo: true,
+        ease: 'sine.inOut'
+    }, 1.0);
+
+    // Phase 4 — Title letters appear one by one (1.0 - 1.7)
+    tl.to(letters, {
+        opacity: 1,
+        y: 0,
+        duration: 0.55,
+        stagger: 0.05,
+        ease: 'power2.out'
+    }, 1.0);
+
+    // Phase 5 — Tagline rises in (1.6)
+    tl.to(tagline, {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        ease: 'power2.out'
+    }, 1.6);
+
+    // Phase 6 — At t=2.5s, prepare hero state and reveal main page
+    tl.add(function () {
+        // Remove the body class so opacity:0 rule no longer applies
+        document.body.classList.remove('is-loading');
+    }, 2.5);
+
+    // Slide loader up & fade out (2.5 - 3.3)
+    tl.to(loader, {
+        yPercent: -100,
+        opacity: 0,
+        duration: 0.85,
+        ease: 'power3.inOut'
+    }, 2.5);
+
+    // Fade in main page content during the slide
+    tl.fromTo('body > *:not(.intro-loader)',
+        { opacity: 0 },
+        { opacity: 1, duration: 0.7, ease: 'power2.out' },
+        2.55
+    );
 }
 
 
