@@ -214,19 +214,27 @@
       await loadFonts();
 
       // Stage 4: build doc and download
-      updateLoadingMessage('PDF oluşturuluyor...');
+      updateLoadingMessage('Sayfalar düzenleniyor (1-2 dakika sürebilir)...');
       const docDefinition = window.buildPDFDocument(birthDate, matrixResults, summaryText);
       const fileName = `karmik-matris-${birthDate.replace(/\./g, '-')}.pdf`;
 
-      // Safety timeout — if pdfmake hangs, surface the error after 60s
-      const hangTimeout = setTimeout(() => {
-        showError('PDF oluşturma 60 saniyeden fazla sürdü ve sonlandırıldı. Lütfen tarayıcı konsolunu (F12) açıp hata mesajını paylaşın.');
-      }, 60000);
+      // Reassuring message updates while pdfmake renders
+      // (browser pdfmake is single-threaded, 17+ sayfalı doküman 30-90s sürebilir)
+      const messageRotation = [
+        { at: 30000, msg: 'Pozisyon kartları yerleştiriliyor...' },
+        { at: 60000, msg: 'Sağlık yatkınlıkları işleniyor...' },
+        { at: 90000, msg: 'Son düzenlemeler yapılıyor, neredeyse bitti...' },
+        { at: 150000, msg: 'Hâlâ çalışıyor, lütfen bekleyin...' },
+      ];
+      const rotationTimers = messageRotation.map(({ at, msg }) =>
+        setTimeout(() => updateLoadingMessage(msg), at)
+      );
+      const clearRotation = () => rotationTimers.forEach(clearTimeout);
 
       try {
         const pdf = window.pdfMake.createPdf(docDefinition);
         pdf.download(fileName, function (err) {
-          clearTimeout(hangTimeout);
+          clearRotation();
           if (err) {
             console.error('pdfmake download callback error:', err);
             showError('PDF render hatası: ' + (err.message || String(err)));
@@ -235,7 +243,7 @@
           hideLoadingOverlay();
         });
       } catch (renderErr) {
-        clearTimeout(hangTimeout);
+        clearRotation();
         console.error('pdfmake createPdf error:', renderErr);
         showError('PDF oluşturma hatası: ' + (renderErr.message || String(renderErr)));
       }
