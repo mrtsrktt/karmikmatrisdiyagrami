@@ -78,8 +78,8 @@ export default async function handler(req, res) {
     const userMessage = buildUserPrompt(birthDate, matrixResults);
 
     const message = await client.messages.create({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 16000,
+      model: 'claude-haiku-4-5',
+      max_tokens: 3300,
       system: SYSTEM_PROMPT,
       messages: [
         ...fewShotMessages,
