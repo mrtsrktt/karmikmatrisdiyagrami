@@ -4,6 +4,12 @@
 // 13 karmik pozisyonun her biri için: kısa ad, formül, ve "siz" diliyle
 // yazılmış kısa bir anlam açıklaması.
 // Bu metinler PDF'in teknik bölümünde, her pozisyon kartının altında yer alır.
+//
+// IIFE ile sarıldı çünkü arcana-data.js'de aynı isimde POSITION_INFO
+// const'ı global scope'da var. Çakışmayı önlemek için scope izolasyonu.
+
+(function () {
+'use strict';
 
 const POSITION_INFO = {
   A: {
@@ -101,3 +107,5 @@ const ARCANA_NAMES = {
 // Browser global
 window.PDF_POSITION_INFO = POSITION_INFO;
 window.PDF_ARCANA_NAMES = ARCANA_NAMES;
+
+})();
