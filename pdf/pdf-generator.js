@@ -231,20 +231,30 @@
       );
       const clearRotation = () => rotationTimers.forEach(clearTimeout);
 
+      // pdfmake v0.3.x'te download() callback'i guvenilir degil. Promise tabanli
+      // getBuffer() kullanip manuel olarak blob download tetikliyoruz — boylece
+      // overlay'i biz kontrol ediyoruz, callback'e bagimli degiliz.
       try {
         const pdf = window.pdfMake.createPdf(docDefinition);
-        pdf.download(fileName, function (err) {
-          clearRotation();
-          if (err) {
-            console.error('pdfmake download callback error:', err);
-            showError('PDF render hatası: ' + (err.message || String(err)));
-            return;
-          }
-          hideLoadingOverlay();
-        });
+        const buffer = await pdf.getBuffer();
+        clearRotation();
+
+        const blob = new Blob([buffer], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        // Cleanup URL after a short delay (some browsers need this)
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+        hideLoadingOverlay();
       } catch (renderErr) {
         clearRotation();
-        console.error('pdfmake createPdf error:', renderErr);
+        console.error('pdfmake render error:', renderErr);
         showError('PDF oluşturma hatası: ' + (renderErr.message || String(renderErr)));
       }
     } catch (err) {
