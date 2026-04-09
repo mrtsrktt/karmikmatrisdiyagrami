@@ -29,6 +29,10 @@ howto-desktop.png
 
 # Reference material (raw, local-only — clean version is in lib/examples.js)
 ornek-analizler.txt
+enerjilervesebepolduklarihastaliklar.pdf
+
+# PDF preview screenshots (test/dev only)
+pdf-*.png
 
 # Font duplicates in root (only fonts/ should be committed)
 /Cinzel-*.ttf

@@ -161,6 +161,113 @@
     return cards;
   }
 
+  // ----- Build "Sağlık Yatkınlıklarınız" section -----
+  // Tekrarlayan sayılar konsolide edilir, "N kez tekrar ediyor" rozeti eklenir,
+  // baskınlık (tekrar sayısı) sırasına göre dizilir.
+  function buildHealthSection(matrixResults) {
+    const HEALTH_BY_ENERGY = window.HEALTH_BY_ENERGY;
+    const ARCANA_NAMES = window.PDF_ARCANA_NAMES;
+    if (!HEALTH_BY_ENERGY) return [];
+
+    const m = matrixResults;
+    const POSITION_KEYS = ['A','B','V','G','D','E','J','Z','I','K','L','M','N'];
+
+    // Count occurrences of each unique number
+    const counts = new Map();
+    const positionsBy = new Map();
+    for (const key of POSITION_KEYS) {
+      const value = m[key];
+      counts.set(value, (counts.get(value) || 0) + 1);
+      if (!positionsBy.has(value)) positionsBy.set(value, []);
+      positionsBy.get(value).push(key);
+    }
+
+    // Sort by count descending, then by number ascending
+    const sortedNumbers = [...counts.keys()].sort((a, b) => {
+      const c = counts.get(b) - counts.get(a);
+      if (c !== 0) return c;
+      return a - b;
+    });
+
+    // Build cards
+    const cards = [];
+    for (const num of sortedNumbers) {
+      const data = HEALTH_BY_ENERGY[num];
+      if (!data) continue;
+      const count = counts.get(num);
+      const positions = positionsBy.get(num).join(', ');
+      const arcanaName = ARCANA_NAMES[num] || data.name;
+
+      // Build category content as a stack
+      const categoryStacks = [];
+      for (const [catName, items] of Object.entries(data.categories)) {
+        categoryStacks.push({
+          text: [
+            { text: catName + ': ', style: 'healthCatLabel' },
+            { text: items.join(', '), style: 'healthCatItems' },
+          ],
+          margin: [0, 0, 0, 4],
+        });
+      }
+
+      // Header row: number + name + badge
+      const badgeText = count > 1
+        ? `Haritada ${count} kez tekrar ediyor (${positions})`
+        : `Haritada 1 kez (${positions})`;
+
+      const cardContent = {
+        stack: [
+          // Header: big number + arcana name
+          {
+            columns: [
+              { text: String(num), font: 'IMFell', fontSize: 28, color: COLORS.goldBright, width: 'auto' },
+              {
+                stack: [
+                  { text: arcanaName, font: 'Cinzel', fontSize: 13, color: COLORS.goldBright, characterSpacing: 1, margin: [10, 4, 0, 0] },
+                  { text: badgeText, font: 'Cormorant', italics: true, fontSize: 9, color: COLORS.textSecondary, margin: [10, 2, 0, 0] },
+                ],
+                width: '*',
+              },
+            ],
+            margin: [0, 0, 0, 10],
+          },
+          // Categories
+          ...categoryStacks,
+          // Interpretation (gizem-tone paragraph)
+          ...(data.interpretation ? [{
+            text: data.interpretation,
+            style: 'healthInterpretation',
+            margin: [0, 8, 0, 0],
+          }] : []),
+        ],
+      };
+
+      cards.push({
+        table: {
+          widths: ['*'],
+          body: [[{
+            ...cardContent,
+            fillColor: COLORS.bgSurface,
+            margin: [14, 14, 14, 14],
+          }]],
+        },
+        layout: {
+          hLineColor: () => COLORS.goldMuted,
+          vLineColor: () => COLORS.goldMuted,
+          hLineWidth: () => 0.5,
+          vLineWidth: () => 0.5,
+          paddingTop: () => 0,
+          paddingBottom: () => 0,
+          paddingLeft: () => 0,
+          paddingRight: () => 0,
+        },
+        margin: [0, 0, 0, 12],
+        unbreakable: false,
+      });
+    }
+    return cards;
+  }
+
   // Format current date as DD Month YYYY (Turkish)
   function formatDateTR(d) {
     const months = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
@@ -175,6 +282,7 @@
 
     const matrixSvg = buildMatrixSVG(matrixResults);
     const positionCards = buildPositionCards(matrixResults);
+    const healthCards = buildHealthSection(matrixResults);
     const narrativeBlocks = summaryToContent(summaryText);
 
     return {
@@ -189,8 +297,7 @@
       },
 
       info: {
-        title: 'Karmik Matris Analizi — Astroşuşu',
-        author: 'Astroşuşu',
+        title: 'Karmik Matris Analizi',
         subject: 'Karmik Matris Analizi',
       },
 
@@ -228,22 +335,13 @@
           ],
         },
         {
-          text: 'Astroşuşu Sistemi',
-          font: 'Cormorant',
-          italics: true,
-          fontSize: 14,
-          alignment: 'center',
-          color: COLORS.textSecondary,
-          margin: [0, 14, 0, 60],
-        },
-        {
           text: 'Doğum Tarihi',
           font: 'Cinzel',
           fontSize: 12,
           alignment: 'center',
           color: COLORS.textSecondary,
           characterSpacing: 2,
-          margin: [0, 0, 0, 6],
+          margin: [0, 60, 0, 6],
         },
         {
           text: birthDate,
@@ -261,15 +359,6 @@
           alignment: 'center',
           color: COLORS.textMuted,
           margin: [0, 0, 0, 0],
-        },
-        {
-          text: 'astrosusu',
-          font: 'Cormorant',
-          italics: true,
-          fontSize: 9,
-          alignment: 'center',
-          color: COLORS.textMuted,
-          margin: [0, 8, 0, 0],
         },
 
         // ============================ SAYFA 2: MATRİS DİYAGRAMI ============================
@@ -332,6 +421,21 @@
         },
         ...positionCards,
 
+        // ============================ SAĞLIK YATKINLIKLARI ============================
+        {
+          text: 'SAĞLIK YATKINLIKLARINIZ',
+          style: 'sectionTitle',
+          pageBreak: 'before',
+          margin: [0, 0, 0, 8],
+        },
+        {
+          text: 'Karmik enerjileriniz beden sağlığınıza da yansır. Aşağıdaki bilgiler tıbbi tavsiye değildir; profesyonel doktor görüşünün yerini tutmaz. Yalnızca sembolik farkındalık amacıyla sunulmuştur.',
+          style: 'sectionDesc',
+          alignment: 'center',
+          margin: [20, 0, 20, 16],
+        },
+        ...healthCards,
+
         // ============================ KİŞİSEL ÖZET ============================
         {
           text: 'KİŞİSEL KARMİK ÖZET',
@@ -363,7 +467,7 @@
           margin: [0, 80, 0, 16],
         },
         {
-          text: 'Karmik Matris analizi, Astroşuşu sistemine dayanan numerolojik-ezoterik bir araçtır. ' +
+          text: 'Karmik Matris analizi, numerolojik-ezoterik bir araçtır. ' +
                 'Bu rapor, 22 Büyük Arkana sistemine dayalı olarak doğum tarihinizden hesaplanan ' +
                 '13 karmik pozisyonun yorumlanmasıyla hazırlanmıştır.',
           style: 'narrative',
@@ -373,32 +477,11 @@
         {
           text: 'Bu çalışma kişisel farkındalık, içsel keşif ve ruhsal gelişim için bir rehberdir. ' +
                 'Profesyonel psikolojik, tıbbi veya finansal danışmanlık yerine geçmez. ' +
+                'Sağlıkla ilgili bölümler tıbbi tavsiye değildir; profesyonel doktor görüşü alınız. ' +
                 'Bilimsel iddia taşımaz.',
           style: 'narrativeMuted',
           alignment: 'center',
           margin: [40, 0, 40, 30],
-        },
-        {
-          canvas: [
-            { type: 'line', x1: 200, y1: 0, x2: 285, y2: 0, lineWidth: 0.5, lineColor: COLORS.goldMuted },
-          ],
-        },
-        {
-          text: 'Astroşuşu',
-          font: 'Cinzel',
-          fontSize: 14,
-          alignment: 'center',
-          color: COLORS.goldBright,
-          characterSpacing: 3,
-          margin: [0, 16, 0, 4],
-        },
-        {
-          text: '@astrosusu',
-          font: 'Cormorant',
-          italics: true,
-          fontSize: 10,
-          alignment: 'center',
-          color: COLORS.textMuted,
         },
       ],
 
@@ -445,6 +528,25 @@
           fontSize: 10.5,
           color: COLORS.textPrimary,
           lineHeight: 1.4,
+        },
+        healthCatLabel: {
+          font: 'Cinzel',
+          fontSize: 9.5,
+          color: COLORS.goldBright,
+        },
+        healthCatItems: {
+          font: 'Cormorant',
+          fontSize: 10,
+          color: COLORS.textPrimary,
+          lineHeight: 1.35,
+        },
+        healthInterpretation: {
+          font: 'Cormorant',
+          italics: true,
+          fontSize: 10.5,
+          color: COLORS.textPrimary,
+          lineHeight: 1.5,
+          alignment: 'justify',
         },
         narrative: {
           font: 'Cormorant',
