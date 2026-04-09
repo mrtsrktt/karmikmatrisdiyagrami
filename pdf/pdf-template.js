@@ -86,9 +86,9 @@
       const color = nodeColor(pos.type);
       const value = values[key];
       svg += `<circle cx="${pos.x}" cy="${pos.y}" r="28" fill="${color}" stroke="#F0E6D3" stroke-width="2"/>`;
-      // Use Helvetica (PDF standard font, no TTF needed) for SVG text
-      svg += `<text x="${pos.x}" y="${pos.y + 7}" text-anchor="middle" font-family="Helvetica" font-size="22" font-weight="bold" fill="#0A0612">${value}</text>`;
-      svg += `<text x="${pos.x}" y="${pos.y + 50}" text-anchor="middle" font-family="Helvetica" font-size="14" fill="#A89070">${key}</text>`;
+      // Use registered fonts (Helvetica is NOT available since we override pdfMake.fonts)
+      svg += `<text x="${pos.x}" y="${pos.y + 7}" text-anchor="middle" font-family="IMFell" font-size="22" font-weight="bold" fill="#0A0612">${value}</text>`;
+      svg += `<text x="${pos.x}" y="${pos.y + 50}" text-anchor="middle" font-family="Cinzel" font-size="14" fill="#A89070">${key}</text>`;
     }
 
     svg += '</svg>';
