@@ -364,7 +364,8 @@
         },
         {
           text: 'Karmik Matris analizi, Astroşuşu sistemine dayanan numerolojik-ezoterik bir araçtır. ' +
-                'Bu rapor doğum tarihinizden hesaplanan 13 Büyük Arkana sayısının yorumlanmasıyla hazırlanmıştır.',
+                'Bu rapor, 22 Büyük Arkana sistemine dayalı olarak doğum tarihinizden hesaplanan ' +
+                '13 karmik pozisyonun yorumlanmasıyla hazırlanmıştır.',
           style: 'narrative',
           alignment: 'center',
           margin: [40, 0, 40, 16],
