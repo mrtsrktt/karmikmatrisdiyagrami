@@ -520,16 +520,16 @@ function openNodeDetail(posKey, arcanaNum) {
         posInterpretation = arcanaDetail.inKarmic;
     }
 
-    // Build consultant sections if available
+    // Build deeper-reading sections if available (rewritten in 2nd person tone)
     let consultantHTML = '';
     if (arcanaDetail.consultantNote) {
         consultantHTML += `
             <div class="consultant-divider">
-                <span>Danışman Rehberi</span>
+                <span>Size Özel Yorum</span>
             </div>
 
             <div class="consultant-section">
-                <h3>Danışmana Not</h3>
+                <h3>Bu Sayının İçten Yorumu</h3>
                 <div class="consultant-note">${arcanaDetail.consultantNote}</div>
             </div>
         `;
@@ -537,7 +537,7 @@ function openNodeDetail(posKey, arcanaNum) {
     if (arcanaDetail.practicalSolutions && arcanaDetail.practicalSolutions.length) {
         consultantHTML += `
             <div class="consultant-section">
-                <h3>Pratik Çözümler ve Öneriler</h3>
+                <h3>Pratik Öneriler</h3>
                 <ol class="practical-solutions">${arcanaDetail.practicalSolutions.map(s => `<li>${s}</li>`).join('')}</ol>
             </div>
         `;
@@ -546,7 +546,7 @@ function openNodeDetail(posKey, arcanaNum) {
         const paragraphs = arcanaDetail.detailedReading.split('\n\n').filter(p => p.trim());
         consultantHTML += `
             <div class="consultant-section">
-                <h3>Detaylı Yorum (Sade Anlatım)</h3>
+                <h3>Detaylı Yorum</h3>
                 <div class="detailed-reading">${paragraphs.map(p => `<p>${p.trim()}</p>`).join('')}</div>
             </div>
         `;
@@ -574,17 +574,11 @@ function openNodeDetail(posKey, arcanaNum) {
         <h3>Element & Gezegen</h3>
         <p>Element: <strong>${arcanaDetail.element}</strong> | Gezegen: <strong>${arcanaDetail.planet}</strong></p>
 
-        <h3>Pozitif Yönler</h3>
+        <h3>Güçlü Yönleriniz</h3>
         <ul>${arcanaDetail.positive.map(p => `<li>${p}</li>`).join('')}</ul>
 
-        <h3>Dikkat Edilmesi Gerekenler (Gölge Yön)</h3>
+        <h3>Dikkat Etmeniz Gerekenler</h3>
         <ul>${arcanaDetail.negative.map(n => `<li>${n}</li>`).join('')}</ul>
-
-        <h3>Farklı Pozisyonlardaki Anlamları</h3>
-        <p><strong>Yol Pozisyonunda (A/B/V/G):</strong> ${arcanaDetail.inPath}</p>
-        <p><strong>Başarı Pozisyonunda (D/E/J/Z):</strong> ${arcanaDetail.inAchievement}</p>
-        <p><strong>Karmik Düğüm Pozisyonunda (I/K/L/M):</strong> ${arcanaDetail.inKarmic}</p>
-        <p><strong>Merkez Pozisyonunda (N):</strong> ${arcanaDetail.inCenter}</p>
 
         ${consultantHTML}
     `;
