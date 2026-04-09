@@ -89,23 +89,26 @@
     });
   }
 
-  // Lazy-load fonts (fetch + base64) and inject into pdfMake.vfs
+  // Lazy-load fonts (fetch + base64) and inject into pdfMake VFS.
+  // pdfmake v0.3.x'te API değişti: eski "pdfMake.vfs = {...}" artık
+  // çalışmıyor. Yeni yöntem: pdfMake.virtualfs.writeFileSync(name, base64, 'base64')
   async function loadFonts() {
     if (fontsLoaded) return;
     if (!window.pdfMake) throw new Error('pdfMake henüz yüklenmedi');
+    if (!window.pdfMake.virtualfs) throw new Error('pdfMake.virtualfs bulunamadı (v0.3.x bekleniyor)');
 
-    const vfs = window.pdfMake.vfs || {};
     const entries = Object.entries(FONT_FILES);
 
     await Promise.all(entries.map(async ([vfsName, url]) => {
-      if (vfs[vfsName]) return; // already loaded
+      if (window.pdfMake.virtualfs.existsSync(vfsName)) return; // already loaded
       const res = await fetch(url);
       if (!res.ok) throw new Error(`Font yüklenemedi: ${url} (${res.status})`);
       const buffer = await res.arrayBuffer();
-      vfs[vfsName] = arrayBufferToBase64(buffer);
+      const base64 = arrayBufferToBase64(buffer);
+      // v0.3.x API: writeFileSync ile base64 string + encoding parametresi
+      window.pdfMake.virtualfs.writeFileSync(vfsName, base64, 'base64');
     }));
 
-    window.pdfMake.vfs = vfs;
     window.pdfMake.fonts = FONT_FAMILIES;
     fontsLoaded = true;
   }
