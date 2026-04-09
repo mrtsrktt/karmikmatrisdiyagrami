@@ -48,8 +48,8 @@
     },
   };
 
-  // pdfmake CDN
-  const PDFMAKE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.3.7/pdfmake.min.js';
+  // pdfmake CDN — jsdelivr (cdnjs'de 0.3.x yok, sadece 0.2.x var)
+  const PDFMAKE_URL = 'https://cdn.jsdelivr.net/npm/pdfmake@0.3.7/build/pdfmake.min.js';
 
   // ----- State -----
   let pdfMakeLoaded = false;
