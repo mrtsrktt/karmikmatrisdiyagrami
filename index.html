@@ -260,6 +260,19 @@
                 <div class="result-cards" id="karmicCards"></div>
             </div>
         </div>
+
+        <!-- PDF Download CTA -->
+        <div class="pdf-download-cta">
+            <button class="btn-pdf-download" id="pdfDownloadBtn" type="button" onclick="generateAndDownloadPDF()">
+                <svg class="pdf-download-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                <span>Detayl&#305; PDF Raporu &#304;ndir</span>
+            </button>
+            <p class="pdf-download-hint">Ki&#351;isel karmik &#246;zetiniz, t&#252;m pozisyon analizleri ve uzun yorum bir PDF olarak haz&#305;rlan&#305;r. Bu i&#351;lem 1-3 dakika s&#252;rer.</p>
+        </div>
     </div>
 </section>
 
@@ -678,6 +691,10 @@
 <script src="astro-engine.js"></script>
 <script src="birth-chart.js"></script>
 <script src="calculator.js"></script>
+<!-- PDF generation -->
+<script src="pdf/positions.js"></script>
+<script src="pdf/pdf-template.js"></script>
+<script src="pdf/pdf-generator.js"></script>
 <!-- GSAP for timeline animations -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>

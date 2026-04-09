@@ -7,6 +7,37 @@
 # Node dependencies
 node_modules/
 
+# Environment variables (API keys, secrets)
+.env
+.env.local
+.env*.local
+
+# Vercel
+.vercel/
+
+# Test artifacts (local-only verification scripts and outputs)
+test-prompt.js
+test-pdf-full.js
+test-pdf-extract.js
+test-model.js
+test-output*.pdf
+test-output*.txt
+pdf-page*.png
+pdf-overview*.png
+pdf-fullview.png
+howto-desktop.png
+
+# Reference material (raw, local-only — clean version is in lib/examples.js)
+ornek-analizler.txt
+
+# Font duplicates in root (only fonts/ should be committed)
+/Cinzel-*.ttf
+/CormorantGaramond-*.ttf
+/IMFellEnglish-*.ttf
+
+# Playwright screenshots
+.playwright-mcp/
+
 # Screenshots (Playwright veya manuel)
 screenshots/
 hero-*.png

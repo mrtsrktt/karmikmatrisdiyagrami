@@ -1,4 +1,17 @@
 {
+  "name": "ruskarmasi",
+  "version": "1.0.0",
+  "description": "Karmik Matris Analizi - Astrosusu Sistemi",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "http-server -p 8080"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "pdfmake": "^0.3.7"
+  },
   "devDependencies": {
     "http-server": "^14.1.1"
   }
