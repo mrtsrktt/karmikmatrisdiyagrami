@@ -19,10 +19,10 @@
     --crimson:        #D4507A;
     --celestial:      #7EB8DA;
 
-    /* Metin renkleri — pembe-krem */
-    --text-primary:   #F5E6E9;
-    --text-secondary: #B89098;
-    --text-muted:     #6E4A55;
+    /* Metin renkleri — pembe-krem (kontrast için parlatildi) */
+    --text-primary:   #F5E6E9;  /* Lum 232 — yuksek kontrast */
+    --text-secondary: #D4AAB2;  /* Lum 175 — okunabilir muted */
+    --text-muted:     #B08D95;  /* Lum 144 — hala muted ama okunur */
 
     /* Kenarlık */
     --border-gold:    rgba(212, 175, 55, 0.3);
@@ -1101,14 +1101,15 @@ body::after {
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.7));
 }
 .node-sublabel {
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 300;
-    font-size: 10px;
-    fill: var(--text-secondary);
+    font-family: 'Cinzel', 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 14px;
+    fill: var(--text-primary);
     text-anchor: middle;
     pointer-events: none;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     text-transform: uppercase;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.7));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1154,11 +1155,11 @@ body::after {
 }
 .age-period .period-label {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 0.7rem;
-    color: var(--text-muted);
+    font-size: 0.92rem;
+    color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 2px;
-    font-weight: 300;
+    font-weight: 500;
 }
 .age-period .period-range {
     font-family: 'IM Fell English', serif;
@@ -1330,24 +1331,25 @@ body::after {
 }
 .result-card .card-label {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 0.78rem;
-    color: var(--text-muted);
+    font-size: 0.95rem;
+    color: var(--text-secondary);
     letter-spacing: 0.5px;
+    font-weight: 500;
 }
 .result-card .card-name {
     font-family: 'Cormorant Garamond', serif;
-    font-weight: 400;
-    font-size: 0.95rem;
+    font-weight: 500;
+    font-size: 1.1rem;
     color: var(--text-primary);
-    margin-top: 3px;
+    margin-top: 4px;
 }
 .result-card .card-arcana {
     font-family: 'IM Fell English', serif;
     font-style: italic;
-    font-size: 0.78rem;
+    font-size: 0.95rem;
     color: var(--gold-bright);
-    margin-top: 3px;
-    opacity: 0.85;
+    margin-top: 4px;
+    opacity: 1;
 }
 .result-card .card-arrow {
     color: var(--text-muted);
@@ -2138,30 +2140,30 @@ body::after {
 }
 .modal-body .tag-positive {
     display: inline-block;
-    background: rgba(74,144,217,0.08);
+    background: rgba(126,184,218,0.12);
     color: var(--celestial);
-    padding: 4px 14px;
+    padding: 5px 16px;
     border-radius: 2px;
     font-family: 'Cormorant Garamond', serif;
-    font-size: 0.82rem;
+    font-size: 0.95rem;
     margin: 3px;
-    border: 1px solid rgba(74,144,217,0.15);
+    border: 1px solid rgba(126,184,218,0.25);
     transition: all 0.3s;
 }
 .modal-body .tag-positive:hover {
-    background: rgba(74,144,217,0.15);
+    background: rgba(126,184,218,0.20);
     transform: translateY(-1px);
 }
 .modal-body .tag-negative {
     display: inline-block;
-    background: rgba(139,26,46,0.08);
-    color: #D45A6F;
-    padding: 4px 14px;
+    background: rgba(212,80,122,0.12);
+    color: #E87095;
+    padding: 5px 16px;
     border-radius: 2px;
     font-family: 'Cormorant Garamond', serif;
-    font-size: 0.82rem;
+    font-size: 0.95rem;
     margin: 3px;
-    border: 1px solid rgba(139,26,46,0.2);
+    border: 1px solid rgba(212,80,122,0.30);
     transition: all 0.3s;
 }
 .modal-body .tag-negative:hover {
@@ -2197,12 +2199,12 @@ body::after {
     background: linear-gradient(90deg, transparent, rgba(212,175,55,0.3), rgba(155,89,182,0.2), rgba(212,175,55,0.3), transparent);
 }
 .consultant-divider span {
-    background: linear-gradient(135deg, rgba(26,20,40,0.97), rgba(10,6,18,0.99));
+    background: linear-gradient(135deg, rgba(58,16,40,0.97), rgba(45,12,32,0.99));
     padding: 4px 20px;
     position: relative;
     font-family: 'Cinzel', serif;
-    font-size: 0.75rem;
-    font-weight: 400;
+    font-size: 0.95rem;
+    font-weight: 500;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     background: linear-gradient(135deg, var(--gold-muted), var(--gold-bright));
@@ -2380,23 +2382,23 @@ body::after {
 }
 .planet-card .planet-name {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 0.7rem;
-    color: var(--text-muted);
+    font-size: 0.92rem;
+    color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    font-weight: 300;
+    font-weight: 500;
 }
 .planet-card .planet-sign {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 0.95rem;
-    font-weight: 400;
+    font-size: 1.05rem;
+    font-weight: 500;
     color: var(--text-primary);
     margin-top: 4px;
 }
 .planet-card .planet-degree {
     font-family: 'IM Fell English', serif;
     font-style: italic;
-    font-size: 0.78rem;
+    font-size: 0.95rem;
     color: var(--gold-bright);
     margin-top: 2px;
 }
@@ -2428,11 +2430,11 @@ body::after {
     text-align: center;
     margin-top: 20px;
     font-family: 'Cormorant Garamond', serif;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    opacity: 0.5;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    opacity: 0.85;
     font-style: italic;
-    font-weight: 300;
+    font-weight: 400;
 }
 
 /* City autocomplete */
@@ -2563,9 +2565,9 @@ body::after {
 }
 .footer-brand-sub {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 0.85rem;
-    font-weight: 400;
-    color: #D8C2C8;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #E8D2D8;
     letter-spacing: 0.18em;
     margin: 0 0 20px 0;
     opacity: 1;
@@ -2708,16 +2710,18 @@ body::after {
 .footer-legal {
     margin: 0;
     font-family: 'Cormorant Garamond', serif;
-    font-size: 0.88rem;
+    font-size: 0.98rem;
     letter-spacing: 0.04em;
     opacity: 1;
 }
 .footer-copyright {
-    color: #D8C2C8;
+    color: #E8D2D8;
+    font-weight: 500;
 }
 .footer-legal {
-    color: #A89888;
+    color: #C9B0A0;
     font-style: italic;
+    font-weight: 500;
 }
 
 /* ---- Mobile: stack columns ---- */
@@ -2929,7 +2933,7 @@ body.is-loading > *:not(.intro-loader) {
 }
 .intro-tagline-text {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 0.7rem;
+    font-size: 0.85rem;
     font-style: italic;
     letter-spacing: 0.3em;
     text-transform: uppercase;
