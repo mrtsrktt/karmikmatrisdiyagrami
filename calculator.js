@@ -164,6 +164,17 @@ function calculateMatrixValues(day, month, yearStr) {
 
 // --- Main entry: handles both birth chart + karma matrix ---
 function calculateAll() {
+    // Auth gate: kullanıcı giriş yapmamışsa modal aç ve dur.
+    // window.km_auth_token, index.html'deki Supabase oturumu varsa ayarlanıyor.
+    if (!window.km_auth_token) {
+        if (typeof window.showLoginModal === 'function') {
+            window.showLoginModal();
+        } else {
+            window.location.href = '/auth/giris.html?redirect=/';
+        }
+        return;
+    }
+
     const dateInput = document.getElementById('birthDate');
     const timeInput = document.getElementById('birthTime');
     const cityInput = document.getElementById('birthCity');

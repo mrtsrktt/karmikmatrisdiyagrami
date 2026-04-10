@@ -3755,3 +3755,221 @@ body.is-loading > *:not(.intro-loader) {
         font-size: 0.65rem;
     }
 }
+
+/* ============================================================================
+   LOGIN REQUIRED MODAL — Hesapla butonuna basıldığında, anonim kullanıcılar
+   ============================================================================ */
+.login-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(10, 6, 18, 0.85), rgba(5, 3, 8, 0.95));
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.login-modal-overlay.show {
+    display: flex;
+    opacity: 1;
+}
+
+.login-modal {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    background: linear-gradient(135deg,
+        rgba(26, 20, 40, 0.92) 0%,
+        rgba(17, 13, 26, 0.97) 100%);
+    border: 1px solid var(--gold-bright, #D4AF37);
+    border-radius: 2px;
+    padding: 3rem 2.5rem 2.5rem;
+    text-align: center;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6),
+                0 0 80px rgba(212, 175, 55, 0.12);
+    backdrop-filter: blur(20px);
+    transform: scale(0.94) translateY(20px);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.login-modal-overlay.show .login-modal {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+/* Köşe süsleri */
+.login-modal::before,
+.login-modal::after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-color: var(--gold-bright, #D4AF37);
+    border-style: solid;
+}
+
+.login-modal::before {
+    top: 10px;
+    left: 10px;
+    border-width: 1px 0 0 1px;
+}
+
+.login-modal::after {
+    bottom: 10px;
+    right: 10px;
+    border-width: 0 1px 1px 0;
+}
+
+.login-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: transparent;
+    border: 1px solid rgba(240, 230, 211, 0.15);
+    color: rgba(240, 230, 211, 0.6);
+    width: 32px;
+    height: 32px;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 1.4rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.login-modal-close:hover {
+    border-color: var(--gold-bright, #D4AF37);
+    color: var(--gold-bright, #D4AF37);
+    box-shadow: 0 0 16px rgba(212, 175, 55, 0.25);
+}
+
+.login-modal-symbol {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.5rem;
+    color: var(--gold-bright, #D4AF37);
+    opacity: 0.85;
+    animation: loginSymbolPulse 4s ease-in-out infinite;
+}
+
+@keyframes loginSymbolPulse {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.3)); }
+    50%      { transform: scale(1.05); filter: drop-shadow(0 0 24px rgba(212, 175, 55, 0.5)); }
+}
+
+.login-modal-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: #F0E6D3;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+}
+
+.login-modal-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: #D4AAB2;
+    margin-bottom: 2rem;
+    font-weight: 400;
+}
+
+.login-modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-bottom: 1.25rem;
+}
+
+.login-modal-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 1rem 1.5rem;
+    text-decoration: none;
+    border-radius: 2px;
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-modal-btn-primary {
+    background: linear-gradient(135deg, #8B7536, #D4AF37, #8B7536);
+    background-size: 200% 100%;
+    color: #050308;
+    border: none;
+}
+
+.login-modal-btn-primary:hover {
+    background-position: right center;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+    letter-spacing: 0.2em;
+}
+
+.login-modal-btn-primary::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 40%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: skewX(-20deg);
+    transition: left 0.5s ease;
+}
+
+.login-modal-btn-primary:hover::after {
+    left: 120%;
+}
+
+.login-modal-btn-secondary {
+    background: transparent;
+    color: var(--gold-bright, #D4AF37);
+    border: 1px solid var(--gold-bright, #D4AF37);
+}
+
+.login-modal-btn-secondary:hover {
+    background: rgba(212, 175, 55, 0.1);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.25);
+    letter-spacing: 0.2em;
+}
+
+.login-modal-hint {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    color: #B08D95;
+    font-style: italic;
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    .login-modal {
+        padding: 2.5rem 1.75rem 2rem;
+    }
+    .login-modal-title {
+        font-size: 1.3rem;
+    }
+    .login-modal-text {
+        font-size: 1.05rem;
+    }
+    .login-modal-symbol {
+        width: 52px;
+        height: 52px;
+    }
+}

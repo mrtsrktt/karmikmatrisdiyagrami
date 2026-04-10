@@ -18,6 +18,36 @@
     </a>
 </div>
 
+<!-- Login Required Modal -->
+<div class="login-modal-overlay" id="loginModal" aria-hidden="true">
+    <div class="login-modal" role="dialog" aria-labelledby="loginModalTitle">
+        <button class="login-modal-close" type="button" id="loginModalClose" aria-label="Kapat">&times;</button>
+        <div class="login-modal-symbol" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="32" cy="32" r="28"/>
+                <circle cx="32" cy="32" r="20"/>
+                <path d="M32 4 L32 60 M4 32 L60 32 M12 12 L52 52 M52 12 L12 52"/>
+                <circle cx="32" cy="32" r="6" fill="currentColor"/>
+            </svg>
+        </div>
+        <h3 id="loginModalTitle" class="login-modal-title">Karmik Yolculuğa Davet</h3>
+        <p class="login-modal-text">
+            Karmik Matris analizinizi görüntülemek ve detaylı PDF raporunuzu indirmek için bir hesabınızın olması gerekir. Hesap oluşturmak ücretsizdir.
+        </p>
+        <div class="login-modal-actions">
+            <a href="/auth/giris.html?redirect=/" class="login-modal-btn login-modal-btn-primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21 a8 8 0 0 1 16 0"/></svg>
+                Giriş Yap
+            </a>
+            <a href="/auth/kayit.html?redirect=/" class="login-modal-btn login-modal-btn-secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21 v-2 a4 4 0 0 0 -4 -4 H6 a4 4 0 0 0 -4 4 v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                Hesap Oluştur
+            </a>
+        </div>
+        <p class="login-modal-hint">Hesap açmak ücretsizdir. Sadece analiz yaparken kredi düşer.</p>
+    </div>
+</div>
+
 <!-- Nebula blobs -->
 <div class="nebula"></div>
 <div class="nebula"></div>
@@ -902,6 +932,31 @@
         const creditEl = document.getElementById('authWidgetCredit');
         if (creditEl) creditEl.textContent = `${newCredits} kredi`;
     };
+
+    // Login modal — calculator.js anonim kullanıcı yakaladığında çağırır
+    const loginModal = document.getElementById('loginModal');
+    window.showLoginModal = function () {
+        if (!loginModal) return;
+        loginModal.classList.add('show');
+        loginModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    };
+    window.hideLoginModal = function () {
+        if (!loginModal) return;
+        loginModal.classList.remove('show');
+        loginModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    };
+
+    document.getElementById('loginModalClose')?.addEventListener('click', window.hideLoginModal);
+    loginModal?.addEventListener('click', (e) => {
+        if (e.target === loginModal) window.hideLoginModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && loginModal?.classList.contains('show')) {
+            window.hideLoginModal();
+        }
+    });
 
     async function refreshWidget() {
         const session = await getCurrentSession();
