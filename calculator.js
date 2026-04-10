@@ -262,16 +262,38 @@ function renderMatrix(results) {
         I: results.I, K: results.K, L: results.L, M: results.M, N: results.N
     };
 
-    const letterMap = {
-        A: "A", B: "B", V: "V", G: "G", D: "D", E: "E",
-        J: "J", Z: "Z", I: "I", K: "K", L: "L", M: "M", N: "N"
-    };
+    const SVG_NS = "http://www.w3.org/2000/svg";
 
-    // Draw lines (initially paused - will animate on scroll)
+    // ============ LAYER 1 PREP: center burst (cinematic entrance) ============
+    // This is the "primordial light point" that expands at the start of the ritual.
+    const centerX = 300, centerY = 350;
+    const centerBurst = document.createElementNS(SVG_NS, "circle");
+    centerBurst.setAttribute("cx", centerX);
+    centerBurst.setAttribute("cy", centerY);
+    centerBurst.setAttribute("r", 8);
+    centerBurst.setAttribute("fill", "url(#centerBurst)");
+    centerBurst.setAttribute("class", "matrix-center-burst");
+    centerBurst.style.opacity = '0';
+    svg.appendChild(centerBurst);
+
+    // Center expanding ring (energy wave)
+    const centerWave = document.createElementNS(SVG_NS, "circle");
+    centerWave.setAttribute("cx", centerX);
+    centerWave.setAttribute("cy", centerY);
+    centerWave.setAttribute("r", 10);
+    centerWave.setAttribute("fill", "none");
+    centerWave.setAttribute("stroke", "#FFE9A8");
+    centerWave.setAttribute("stroke-width", "1.5");
+    centerWave.setAttribute("class", "matrix-center-wave");
+    centerWave.style.opacity = '0';
+    svg.appendChild(centerWave);
+
+    // ============ DRAW LINES ============
+    // Initially invisible (opacity 0), entrance sequence will draw them
     NODE_LINES.forEach(([from, to], idx) => {
         const p1 = NODE_POSITIONS[from];
         const p2 = NODE_POSITIONS[to];
-        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        const line = document.createElementNS(SVG_NS, "line");
         line.setAttribute("x1", p1.x);
         line.setAttribute("y1", p1.y);
         line.setAttribute("x2", p2.x);
@@ -281,129 +303,322 @@ function renderMatrix(results) {
         const len = Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
         line.style.strokeDasharray = len;
         line.style.strokeDashoffset = len;
-        line.style.animation = 'none';
-        line.setAttribute("data-anim", `drawLine 1.2s ease ${idx * 60}ms forwards`);
-        line.setAttribute("data-from", from);
-        line.setAttribute("data-to", to);
+        line.dataset.length = len;
+        line.dataset.from = from;
+        line.dataset.to = to;
+        line.dataset.idx = idx;
 
         svg.appendChild(line);
     });
 
-    // Draw nodes (initially paused - will animate on scroll)
+    // Energy pulse layer container (Layer 2 will populate this)
+    const pulseLayer = document.createElementNS(SVG_NS, "g");
+    pulseLayer.setAttribute("id", "matrixPulseLayer");
+    svg.appendChild(pulseLayer);
+
+    // ============ DRAW NODES ============
+    // Each node has 3 breathing halos + glow + main orb + number + label
     const nodeOrder = ["B", "D", "J", "Z", "I", "L", "G", "M", "N", "A", "K", "V", "E"];
 
     nodeOrder.forEach((key, idx) => {
         const pos = NODE_POSITIONS[key];
-        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        const g = document.createElementNS(SVG_NS, "g");
         g.setAttribute("class", "node-circle");
         g.setAttribute("data-key", key);
-        g.style.animation = 'none';
-        g.style.opacity = '0';
-        g.setAttribute("data-anim-delay", `${800 + idx * 150}ms`);
+        g.dataset.idx = idx;
+        g.style.opacity = '0'; // hidden until cinematic entrance
 
-        // Outer pulse ring
-        const pulseCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        pulseCircle.setAttribute("cx", pos.x);
-        pulseCircle.setAttribute("cy", pos.y);
-        pulseCircle.setAttribute("r", 32);
-        pulseCircle.setAttribute("fill", "none");
-        pulseCircle.setAttribute("stroke", pos.color);
-        pulseCircle.setAttribute("stroke-width", "1");
-        pulseCircle.setAttribute("class", "node-pulse");
-        pulseCircle.style.animationDelay = `${idx * 230}ms`;
-        g.appendChild(pulseCircle);
+        // ----- 3 breathing halo layers -----
+        const halo1 = document.createElementNS(SVG_NS, "circle");
+        halo1.setAttribute("cx", pos.x);
+        halo1.setAttribute("cy", pos.y);
+        halo1.setAttribute("r", 36);
+        halo1.setAttribute("fill", "none");
+        halo1.setAttribute("stroke", pos.color);
+        halo1.setAttribute("stroke-width", "1.2");
+        halo1.setAttribute("class", "node-halo node-halo-1");
+        halo1.style.animationDelay = `${idx * 0.3}s`;
+        g.appendChild(halo1);
 
-        // Second pulse ring (offset)
-        const pulse2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        pulse2.setAttribute("cx", pos.x);
-        pulse2.setAttribute("cy", pos.y);
-        pulse2.setAttribute("r", 35);
-        pulse2.setAttribute("fill", "none");
-        pulse2.setAttribute("stroke", pos.color);
-        pulse2.setAttribute("stroke-width", "0.5");
-        pulse2.setAttribute("class", "node-pulse");
-        pulse2.style.animationDelay = `${idx * 230 + 1500}ms`;
-        g.appendChild(pulse2);
+        const halo2 = document.createElementNS(SVG_NS, "circle");
+        halo2.setAttribute("cx", pos.x);
+        halo2.setAttribute("cy", pos.y);
+        halo2.setAttribute("r", 50);
+        halo2.setAttribute("fill", "none");
+        halo2.setAttribute("stroke", pos.color);
+        halo2.setAttribute("stroke-width", "0.8");
+        halo2.setAttribute("class", "node-halo node-halo-2");
+        halo2.style.animationDelay = `${idx * 0.3 + 1}s`;
+        g.appendChild(halo2);
 
-        // Hover glow
-        const glowCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        const halo3 = document.createElementNS(SVG_NS, "circle");
+        halo3.setAttribute("cx", pos.x);
+        halo3.setAttribute("cy", pos.y);
+        halo3.setAttribute("r", 64);
+        halo3.setAttribute("fill", "none");
+        halo3.setAttribute("stroke", pos.color);
+        halo3.setAttribute("stroke-width", "0.5");
+        halo3.setAttribute("class", "node-halo node-halo-3");
+        halo3.style.animationDelay = `${idx * 0.3 + 2}s`;
+        g.appendChild(halo3);
+
+        // Hover glow (large, soft, color-tinted)
+        const glowCircle = document.createElementNS(SVG_NS, "circle");
         glowCircle.setAttribute("cx", pos.x);
         glowCircle.setAttribute("cy", pos.y);
-        glowCircle.setAttribute("r", 40);
+        glowCircle.setAttribute("r", 50);
         glowCircle.setAttribute("fill", pos.color);
         glowCircle.setAttribute("opacity", "0");
         glowCircle.setAttribute("class", "node-glow");
+        glowCircle.setAttribute("filter", `url(#glow-${pos.type === 'path' ? 'gold' : pos.type === 'achievement' ? 'cyan' : 'rose'})`);
         g.appendChild(glowCircle);
 
-        // Main circle with gradient
-        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        // 360 swipe ring (hidden, fires on hover)
+        const swipeRing = document.createElementNS(SVG_NS, "circle");
+        swipeRing.setAttribute("cx", pos.x);
+        swipeRing.setAttribute("cy", pos.y);
+        swipeRing.setAttribute("r", 38);
+        swipeRing.setAttribute("fill", "none");
+        swipeRing.setAttribute("stroke", "#FFE9A8");
+        swipeRing.setAttribute("stroke-width", "2");
+        swipeRing.setAttribute("class", "node-swipe-ring");
+        swipeRing.style.opacity = '0';
+        g.appendChild(swipeRing);
+
+        // Main orb with gradient
+        const circle = document.createElementNS(SVG_NS, "circle");
         circle.setAttribute("cx", pos.x);
         circle.setAttribute("cy", pos.y);
         circle.setAttribute("r", 28);
         circle.setAttribute("fill", pos.gradient);
-        circle.setAttribute("stroke", "rgba(255,255,255,0.3)");
+        circle.setAttribute("stroke", "rgba(255,255,255,0.4)");
         circle.setAttribute("stroke-width", "2");
         circle.setAttribute("class", "node-bg");
         g.appendChild(circle);
 
-        // Orbiting particle
-        const orbitG = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        orbitG.setAttribute("class", "node-orbit");
-        orbitG.style.animationDuration = (3 + idx * 0.3) + 's';
-        orbitG.style.animationDelay = (idx * 0.2) + 's';
-        // We need transform-origin at the node center
-        orbitG.setAttribute("transform-origin", `${pos.x} ${pos.y}`);
-        orbitG.style.transformOrigin = `${pos.x}px ${pos.y}px`;
-        const orbitDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        orbitDot.setAttribute("cx", pos.x + 36);
-        orbitDot.setAttribute("cy", pos.y);
-        orbitDot.setAttribute("r", 2);
-        orbitDot.setAttribute("fill", pos.color);
-        orbitDot.setAttribute("opacity", "0.6");
-        orbitG.appendChild(orbitDot);
-        g.appendChild(orbitG);
-
-        // Number text
-        const numText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        // Number text (initially blurred, will sharpen during entrance)
+        const numText = document.createElementNS(SVG_NS, "text");
         numText.setAttribute("x", pos.x);
         numText.setAttribute("y", pos.y + 1);
         numText.setAttribute("class", "node-label");
         numText.setAttribute("dominant-baseline", "middle");
-        numText.textContent = posMap[key] || "";
+        numText.dataset.target = posMap[key] || 0;
+        numText.textContent = '0'; // counter will animate from 0 to target
         g.appendChild(numText);
 
-        // Letter label
-        const labelText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        // Letter label (whispered in)
+        const labelText = document.createElementNS(SVG_NS, "text");
         labelText.setAttribute("x", pos.x);
         labelText.setAttribute("y", pos.y + 48);
         labelText.setAttribute("class", "node-sublabel");
         labelText.setAttribute("dominant-baseline", "middle");
-        labelText.textContent = letterMap[key];
+        labelText.style.opacity = '0';
+        labelText.textContent = key;
         g.appendChild(labelText);
 
         g.addEventListener('click', () => openNodeDetail(key, posMap[key]));
-        g.addEventListener('mouseenter', () => highlightConnections(key, true));
-        g.addEventListener('mouseleave', () => highlightConnections(key, false));
+        g.addEventListener('mouseenter', () => onNodeHover(key, true));
+        g.addEventListener('mouseleave', () => onNodeHover(key, false));
 
         svg.appendChild(g);
     });
 }
 
-// Highlight connected lines
-function highlightConnections(nodeKey, active) {
+// ============================================================
+// LAYER 4: HOVER WOW + CHAIN REACTION
+// ============================================================
+// On hover: 360 swipe ring, chain reaction on connected nodes,
+// dim disconnected nodes, energy pulse on connected lines.
+function onNodeHover(nodeKey, active) {
     const svg = document.getElementById('matrixSvg');
-    const lines = svg.querySelectorAll('.matrix-line');
-    lines.forEach(line => {
-        const from = line.getAttribute('data-from');
-        const to = line.getAttribute('data-to');
-        if (from === nodeKey || to === nodeKey) {
-            if (active) {
+    if (!svg) return;
+    const allNodes = svg.querySelectorAll('.node-circle');
+    const allLines = svg.querySelectorAll('.matrix-line');
+
+    // Find connected nodes
+    const connectedKeys = new Set([nodeKey]);
+    NODE_LINES.forEach(([from, to]) => {
+        if (from === nodeKey) connectedKeys.add(to);
+        if (to === nodeKey) connectedKeys.add(from);
+    });
+
+    if (active) {
+        // Highlight connected lines
+        allLines.forEach(line => {
+            const from = line.dataset.from;
+            const to = line.dataset.to;
+            if (from === nodeKey || to === nodeKey) {
                 line.classList.add('highlight');
+                // Fire an instant energy pulse along this line
+                const start = (from === nodeKey) ? NODE_POSITIONS[from] : NODE_POSITIONS[to];
+                const end   = (from === nodeKey) ? NODE_POSITIONS[to]   : NODE_POSITIONS[from];
+                spawnEnergyPulse(svg, start, end, NODE_POSITIONS[nodeKey].color, 0.7);
+            }
+        });
+
+        // Chain reaction: dim non-connected nodes, brighten connected
+        allNodes.forEach(n => {
+            const k = n.getAttribute('data-key');
+            if (connectedKeys.has(k)) {
+                n.classList.add('node-active-chain');
+                n.classList.remove('node-dimmed');
             } else {
-                line.classList.remove('highlight');
+                n.classList.add('node-dimmed');
+                n.classList.remove('node-active-chain');
+            }
+        });
+
+        // 360 swipe ring on the hovered node
+        const hoveredNode = svg.querySelector(`[data-key="${nodeKey}"]`);
+        if (hoveredNode) {
+            const swipe = hoveredNode.querySelector('.node-swipe-ring');
+            if (swipe) {
+                swipe.style.opacity = '0';
+                swipe.classList.remove('node-swipe-active');
+                // Force reflow then re-add to restart animation
+                void swipe.getBoundingClientRect();
+                swipe.classList.add('node-swipe-active');
             }
         }
+    } else {
+        allLines.forEach(line => line.classList.remove('highlight'));
+        allNodes.forEach(n => {
+            n.classList.remove('node-dimmed');
+            n.classList.remove('node-active-chain');
+        });
+    }
+}
+
+// ============================================================
+// LAYER 2: ENERGY PULSES — traveling light along connection lines
+// ============================================================
+// Spawns a single energy pulse traveling from `start` to `end`.
+// Uses GSAP if available, otherwise plain CSS animation.
+function spawnEnergyPulse(svg, start, end, color, sizeScale) {
+    const SVG_NS = "http://www.w3.org/2000/svg";
+    const pulseLayer = svg.querySelector('#matrixPulseLayer');
+    if (!pulseLayer) return;
+
+    const pulse = document.createElementNS(SVG_NS, "circle");
+    pulse.setAttribute("cx", start.x);
+    pulse.setAttribute("cy", start.y);
+    pulse.setAttribute("r", 3 * (sizeScale || 1));
+    pulse.setAttribute("fill", color || "#FFE9A8");
+    pulse.setAttribute("class", "matrix-pulse-particle");
+    pulse.setAttribute("filter", "url(#glow-strong)");
+    pulseLayer.appendChild(pulse);
+
+    // Trail
+    const trail = document.createElementNS(SVG_NS, "circle");
+    trail.setAttribute("cx", start.x);
+    trail.setAttribute("cy", start.y);
+    trail.setAttribute("r", 6 * (sizeScale || 1));
+    trail.setAttribute("fill", color || "#FFE9A8");
+    trail.setAttribute("opacity", "0.3");
+    trail.setAttribute("class", "matrix-pulse-trail");
+    pulseLayer.appendChild(trail);
+
+    if (window.gsap) {
+        const dur = 0.9 + Math.random() * 0.4;
+        gsap.to(pulse, {
+            attr: { cx: end.x, cy: end.y },
+            duration: dur,
+            ease: 'power2.inOut',
+            onComplete: () => {
+                pulse.remove();
+                // Brief flash on the destination
+                flashNodeAtPosition(svg, end);
+            }
+        });
+        gsap.to(trail, {
+            attr: { cx: end.x, cy: end.y },
+            duration: dur,
+            ease: 'power2.inOut',
+            opacity: 0,
+            onComplete: () => trail.remove()
+        });
+    } else {
+        // Fallback: just remove after delay
+        setTimeout(() => { pulse.remove(); trail.remove(); }, 1000);
+    }
+}
+
+function flashNodeAtPosition(svg, pos) {
+    // Find any node at this position and flash it briefly
+    const node = Array.from(svg.querySelectorAll('.node-circle')).find(n => {
+        const k = n.getAttribute('data-key');
+        const p = NODE_POSITIONS[k];
+        return p && p.x === pos.x && p.y === pos.y;
     });
+    if (!node) return;
+    const bg = node.querySelector('.node-bg');
+    if (!bg || !window.gsap) return;
+    gsap.to(bg, { attr: { 'stroke-width': 4 }, duration: 0.2, yoyo: true, repeat: 1, ease: 'sine.out' });
+}
+
+// Continuously spawn random energy pulses on random lines (after entrance)
+let _energyPulseInterval = null;
+function startEnergyPulses(svg) {
+    if (_energyPulseInterval) clearInterval(_energyPulseInterval);
+    const fire = () => {
+        const lines = NODE_LINES;
+        if (!lines.length) return;
+        const [from, to] = lines[Math.floor(Math.random() * lines.length)];
+        const startPos = NODE_POSITIONS[from];
+        const endPos = NODE_POSITIONS[to];
+        if (!startPos || !endPos) return;
+        const colors = ["#FFE9A8", "#A8DBF0", "#F0A0B5"];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        spawnEnergyPulse(svg, startPos, endPos, color, 0.8);
+    };
+    // Initial burst
+    setTimeout(fire, 800);
+    setTimeout(fire, 1600);
+    // Continuous random pulses
+    _energyPulseInterval = setInterval(() => {
+        if (Math.random() < 0.7) fire();
+    }, 1500);
+}
+
+// ============================================================
+// LAYER 5: AMBIENT COSMIC DUST PARTICLES
+// ============================================================
+function startMatrixAmbientParticles(container) {
+    if (!container) return;
+    container.innerHTML = '';
+
+    function createParticle() {
+        const p = document.createElement('div');
+        p.className = 'matrix-dust-particle';
+        const size = 1 + Math.random() * 2.5;
+        const startX = Math.random() * 100;
+        const drift = (Math.random() - 0.5) * 30;
+        const duration = 12 + Math.random() * 18;
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+        p.style.left = startX + '%';
+        p.style.bottom = '-5%';
+        p.style.setProperty('--drift', drift + 'px');
+        p.style.setProperty('--dur', duration + 's');
+        p.style.animationDuration = duration + 's';
+        // Random tint
+        const r = Math.random();
+        if (r < 0.7)      p.style.background = 'rgba(255,233,168,0.85)'; // gold
+        else if (r < 0.85) p.style.background = 'rgba(208,154,232,0.75)'; // amethyst
+        else               p.style.background = 'rgba(232,112,138,0.70)'; // rose
+        p.style.boxShadow = `0 0 ${size * 3}px ${p.style.background}`;
+        container.appendChild(p);
+        // Auto-cleanup after animation completes
+        setTimeout(() => p.remove(), duration * 1000);
+    }
+
+    // Spawn initial batch
+    for (let i = 0; i < 20; i++) {
+        setTimeout(createParticle, i * 600);
+    }
+    // Continuously spawn
+    if (container._dustInterval) clearInterval(container._dustInterval);
+    container._dustInterval = setInterval(createParticle, 1200);
 }
 
 // --- Age Periods ---
@@ -688,22 +903,165 @@ function initMatrixScrollTrigger() {
     observer.observe(matrixSection);
 }
 
+// ============================================================
+// LAYER 1: CINEMATIC ENTRANCE SEQUENCE (6-phase ritual)
+// ============================================================
+// Phase 1: Center light point appears and pulses
+// Phase 2: Energy wave expands outward from center
+// Phase 3: Connection lines draw with golden ink (stroke offset)
+// Phase 4: Node orbs materialize with stagger
+// Phase 5: Numbers count from 0 to target with blur-to-clarity
+// Phase 6: Letter labels whisper in
+// Final:   All nodes briefly flash, then ambient mode begins
 function triggerMatrixAnimations() {
     const svg = document.getElementById('matrixSvg');
     if (!svg) return;
 
-    // Animate lines (CSS-driven stroke draw)
-    svg.querySelectorAll('.matrix-line[data-anim]').forEach(line => {
-        line.style.animation = line.getAttribute('data-anim');
-    });
+    // Mark ambient particles started so we don't double-start
+    if (svg.dataset.entranceStarted) return;
+    svg.dataset.entranceStarted = '1';
 
-    // Nodes are animated by GSAP ScrollTrigger in animation.js
-    // (initDynamicSectionAnimations) — no CSS animation here.
+    const lines = Array.from(svg.querySelectorAll('.matrix-line'));
+    const nodes = Array.from(svg.querySelectorAll('.node-circle'));
+    const centerBurst = svg.querySelector('.matrix-center-burst');
+    const centerWave = svg.querySelector('.matrix-center-wave');
 
-    // Animate age periods
+    // Start ambient particles immediately (background atmosphere)
+    const dustContainer = document.getElementById('matrixDust');
+    if (dustContainer) startMatrixAmbientParticles(dustContainer);
+
+    // Animate age periods (entrance from below)
     document.querySelectorAll('.age-period').forEach((el, i) => {
-        el.style.animation = `slideInUp 0.6s ease ${2500 + i * 150}ms forwards`;
+        el.style.animation = `slideInUp 0.6s ease ${3500 + i * 150}ms forwards`;
     });
+
+    // If GSAP not available, use a simpler fallback
+    if (!window.gsap) {
+        // Reveal everything immediately + start basic animations
+        nodes.forEach(n => { n.style.opacity = '1'; });
+        lines.forEach(l => {
+            l.style.transition = 'stroke-dashoffset 1.5s ease';
+            l.style.strokeDashoffset = '0';
+        });
+        nodes.forEach(n => {
+            const numText = n.querySelector('.node-label');
+            if (numText) numText.textContent = numText.dataset.target;
+            const sublabel = n.querySelector('.node-sublabel');
+            if (sublabel) sublabel.style.opacity = '1';
+        });
+        startEnergyPulses(svg);
+        return;
+    }
+
+    const tl = gsap.timeline();
+
+    // ----- Phase 1: Center light appears -----
+    tl.to(centerBurst, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.4,
+        ease: 'power2.out',
+        transformOrigin: '300px 350px'
+    }, 0);
+    tl.to(centerBurst, {
+        attr: { r: 60 },
+        duration: 0.6,
+        ease: 'power2.out'
+    }, 0.2);
+
+    // ----- Phase 2: Energy wave expands outward -----
+    tl.to(centerWave, {
+        opacity: 0.9,
+        duration: 0.2
+    }, 0.3);
+    tl.to(centerWave, {
+        attr: { r: 320 },
+        opacity: 0,
+        duration: 1.4,
+        ease: 'power2.out'
+    }, 0.3);
+
+    // Fade out the center burst as wave expands
+    tl.to(centerBurst, {
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power2.in'
+    }, 1.0);
+
+    // ----- Phase 3: Lines draw with golden ink (sequential, follows wave outward) -----
+    lines.forEach((line, idx) => {
+        const len = parseFloat(line.dataset.length || 100);
+        // Order lines by distance from center (rough proxy: idx)
+        const delay = 0.9 + (idx * 0.04);
+        tl.to(line, {
+            strokeDashoffset: 0,
+            duration: 0.8,
+            ease: 'power2.out'
+        }, delay);
+    });
+
+    // ----- Phase 4: Node orbs materialize -----
+    // Order from center outward — use distance from (300, 350)
+    const sortedNodes = nodes.slice().sort((a, b) => {
+        const ka = a.getAttribute('data-key'), kb = b.getAttribute('data-key');
+        const pa = NODE_POSITIONS[ka], pb = NODE_POSITIONS[kb];
+        const da = Math.hypot(pa.x - 300, pa.y - 350);
+        const db = Math.hypot(pb.x - 300, pb.y - 350);
+        return da - db;
+    });
+    sortedNodes.forEach((node, idx) => {
+        const delay = 1.6 + (idx * 0.09);
+        // Set transform-origin to node center for proper scale
+        const k = node.getAttribute('data-key');
+        const p = NODE_POSITIONS[k];
+        node.style.transformOrigin = `${p.x}px ${p.y}px`;
+        tl.fromTo(node,
+            { opacity: 0, scale: 0 },
+            { opacity: 1, scale: 1, duration: 0.55, ease: 'back.out(2)' },
+            delay
+        );
+    });
+
+    // ----- Phase 5: Number counters animate from 0 to target -----
+    nodes.forEach((node, idx) => {
+        const numText = node.querySelector('.node-label');
+        if (!numText) return;
+        const target = parseInt(numText.dataset.target || '0');
+        const delay = 2.4 + (idx * 0.05);
+        const obj = { val: 0 };
+        tl.to(obj, {
+            val: target,
+            duration: 0.6,
+            ease: 'power2.out',
+            onUpdate: function() { numText.textContent = Math.round(obj.val); }
+        }, delay);
+    });
+
+    // ----- Phase 6: Letter labels whisper in -----
+    const sublabels = nodes.map(n => n.querySelector('.node-sublabel')).filter(Boolean);
+    tl.to(sublabels, {
+        opacity: 1,
+        duration: 0.5,
+        stagger: 0.04,
+        ease: 'power2.out'
+    }, 3.0);
+
+    // ----- Final: All nodes flash simultaneously -----
+    const allBgs = nodes.map(n => n.querySelector('.node-bg')).filter(Boolean);
+    tl.to(allBgs, {
+        attr: { 'stroke-width': 5 },
+        duration: 0.25,
+        ease: 'sine.out'
+    }, 3.6);
+    tl.to(allBgs, {
+        attr: { 'stroke-width': 2 },
+        duration: 0.5,
+        ease: 'sine.in',
+        onComplete: () => {
+            // Start continuous energy pulses on lines
+            startEnergyPulses(svg);
+        }
+    }, 3.85);
 }
 
 // Init scroll animations for info cards on page load

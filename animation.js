@@ -798,7 +798,8 @@ function initDynamicSectionAnimations() {
         );
     }
 
-    // ----- Matrix section: section fade + nodes stagger -----
+    // ----- Matrix section: section fade only (nodes are animated by
+    //       triggerMatrixAnimations() in calculator.js — Layer 1 cinematic entrance)
     const matrixSection = document.querySelector('.matrix-section');
     if (matrixSection && matrixSection.style.display !== 'none' && !matrixSection.dataset.scrollAnimated) {
         matrixSection.dataset.scrollAnimated = '1';
@@ -816,25 +817,9 @@ function initDynamicSectionAnimations() {
             }
         });
 
-        // Nodes appear one by one
-        const nodes = matrixSection.querySelectorAll('.node-circle');
-        if (nodes.length) {
-            gsap.fromTo(nodes,
-                { opacity: 0, scale: 0 },
-                {
-                    opacity: 1,
-                    scale: 1,
-                    duration: 0.55,
-                    stagger: 0.08,
-                    ease: 'back.out(1.6)',
-                    scrollTrigger: {
-                        trigger: matrixSection,
-                        start: 'top 78%',
-                        once: true
-                    }
-                }
-            );
-        }
+        // Note: nodes (.node-circle) entrance is handled by Layer 1 cinematic
+        // sequence in calculator.js triggerMatrixAnimations() — do NOT animate
+        // them here to avoid double-trigger.
     }
 
     // ----- Results section: section fade + cards from left -----

@@ -854,112 +854,256 @@ body::after {
     letter-spacing: 0.5px;
 }
 
-/* ====== MATRIX DIAGRAM ====== */
+/* ====== MATRIX DIAGRAM (yeni 5-katmanlı animasyon sistemi) ====== */
 .matrix-section {
     padding: 60px 20px 40px;
     position: relative;
     z-index: 1;
 }
 .matrix-wrapper {
-    max-width: 600px;
+    max-width: 640px;
     margin: 0 auto;
     position: relative;
+    isolation: isolate;
 }
-.matrix-wrapper::before {
-    content: '';
+
+/* ----- LAYER 5a: 3-color breathing background aura ----- */
+.matrix-aura {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    width: 520px;
-    height: 520px;
-    background: radial-gradient(circle,
-        rgba(212,175,55,0.06) 0%,
-        rgba(155,89,182,0.04) 30%,
-        rgba(74,144,217,0.02) 50%,
-        transparent 70%);
     border-radius: 50%;
     pointer-events: none;
-    animation: matrixAura 8s ease-in-out infinite alternate;
+    transform: translate(-50%, -50%);
+    will-change: transform, opacity;
+    z-index: 0;
 }
-@keyframes matrixAura {
-    0%   { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-    100% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.08); }
+.matrix-aura-gold {
+    width: 540px;
+    height: 540px;
+    background: radial-gradient(circle,
+        rgba(212,175,55,0.18) 0%,
+        rgba(212,175,55,0.08) 30%,
+        rgba(212,175,55,0.02) 55%,
+        transparent 75%);
+    animation: matrixAuraGold 8s ease-in-out infinite alternate;
+    filter: blur(20px);
 }
-.matrix-wrapper svg {
+.matrix-aura-amethyst {
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle,
+        rgba(155,89,182,0.10) 0%,
+        rgba(155,89,182,0.04) 35%,
+        transparent 65%);
+    animation: matrixAuraAmethyst 12s ease-in-out infinite alternate;
+    filter: blur(40px);
+}
+.matrix-aura-crimson {
+    width: 860px;
+    height: 860px;
+    background: radial-gradient(circle,
+        rgba(139,26,46,0.07) 0%,
+        rgba(139,26,46,0.03) 40%,
+        transparent 70%);
+    animation: matrixAuraCrimson 16s ease-in-out infinite alternate;
+    filter: blur(60px);
+}
+@keyframes matrixAuraGold {
+    0%   { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 1; transform: translate(-50%, -50%) scale(1.12); }
+}
+@keyframes matrixAuraAmethyst {
+    0%   { opacity: 0.40; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0.85; transform: translate(-50%, -50%) scale(1.08); }
+}
+@keyframes matrixAuraCrimson {
+    0%   { opacity: 0.30; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0.70; transform: translate(-50%, -50%) scale(1.05); }
+}
+
+/* ----- LAYER 5b: rotating sacred geometry overlay ----- */
+.matrix-sacred-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    height: 600px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 0;
+    animation: matrixSacredRotate 90s linear infinite;
+    opacity: 0.6;
+}
+.matrix-sacred-bg svg {
+    width: 100%;
+    height: 100%;
+}
+@keyframes matrixSacredRotate {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* ----- LAYER 5c: cosmic dust particles (drifting upward) ----- */
+.matrix-dust {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+.matrix-dust-particle {
+    position: absolute;
+    border-radius: 50%;
+    will-change: transform, opacity;
+    animation: matrixDustFloat var(--dur, 15s) linear forwards;
+    opacity: 0;
+}
+@keyframes matrixDustFloat {
+    0%   { transform: translate(0, 0); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { transform: translate(var(--drift, 0), -110vh); opacity: 0; }
+}
+
+.matrix-wrapper svg#matrixSvg {
     width: 100%;
     height: auto;
-    filter: drop-shadow(0 0 40px rgba(212,175,55,0.05));
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 0 60px rgba(212,175,55,0.12));
 }
 
-/* SVG Line animation */
+/* ----- LAYER 1 props: center burst & wave ----- */
+.matrix-center-burst {
+    transform-origin: 300px 350px;
+    pointer-events: none;
+    filter: blur(2px);
+}
+.matrix-center-wave {
+    pointer-events: none;
+    filter: drop-shadow(0 0 8px rgba(255,233,168,0.8));
+}
+
+/* ----- SVG Lines ----- */
 .matrix-line {
-    stroke: rgba(212, 175, 55, 0.12);
-    stroke-width: 1;
+    stroke: rgba(212, 175, 55, 0.32);
+    stroke-width: 1.2;
     fill: none;
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
-    animation: drawLine 1.5s ease forwards;
-    transition: all 0.4s ease;
+    transition: stroke 0.4s ease, stroke-width 0.4s ease, filter 0.4s ease;
 }
 .matrix-line.highlight {
-    stroke: rgba(212, 175, 55, 0.45);
+    stroke: rgba(255, 233, 168, 0.75);
     stroke-width: 2;
-    filter: drop-shadow(0 0 6px rgba(212,175,55,0.3));
-}
-@keyframes drawLine {
-    to { stroke-dashoffset: 0; }
+    filter: drop-shadow(0 0 8px rgba(212,175,55,0.6));
 }
 
-/* SVG Node Styles */
-/* Initial state for GSAP ScrollTrigger entrance (set in animation.js) */
+/* ----- Energy pulse particles (Layer 2) ----- */
+.matrix-pulse-particle,
+.matrix-pulse-trail {
+    pointer-events: none;
+}
+
+/* ----- Node base ----- */
 .node-circle {
     cursor: pointer;
-    opacity: 0;
-    transform-origin: center;
-}
-/* Fallback: if GSAP fails to load, reveal nodes via @keyframes after a delay */
-@keyframes nodeAppear {
-    from { opacity: 0; transform: scale(0) rotate(-20deg); }
-    to   { opacity: 1; transform: scale(1) rotate(0deg); }
-}
-@media (prefers-reduced-motion: reduce) {
-    .node-circle { opacity: 1; }
-    .result-card { opacity: 1 !important; transform: none !important; }
-    .info-card { opacity: 1 !important; transform: none !important; }
-}
-.node-circle:hover .node-bg {
-    filter: brightness(1.3) drop-shadow(0 0 12px var(--gold-bright));
-    stroke-width: 2.5;
-}
-.node-circle:hover .node-glow {
-    opacity: 0.35;
-}
-.node-circle:hover .node-pulse {
-    animation-play-state: paused;
-    opacity: 0.4;
-}
-.node-bg {
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-.node-glow {
-    opacity: 0;
     transition: opacity 0.4s ease;
 }
+.node-bg {
+    transition: stroke-width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                filter 0.4s ease;
+}
+.node-glow {
+    transition: opacity 0.4s ease;
+}
+
+/* ----- LAYER 3: 3-layer breathing halos ----- */
+.node-halo {
+    pointer-events: none;
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+.node-halo-1 {
+    animation: nodeHalo1 4s ease-in-out infinite;
+}
+.node-halo-2 {
+    animation: nodeHalo2 5s ease-in-out infinite;
+}
+.node-halo-3 {
+    animation: nodeHalo3 6s ease-in-out infinite;
+}
+@keyframes nodeHalo1 {
+    0%, 100% { opacity: 0;    transform: scale(0.95); }
+    50%      { opacity: 0.45; transform: scale(1.18); }
+}
+@keyframes nodeHalo2 {
+    0%, 100% { opacity: 0;    transform: scale(0.95); }
+    50%      { opacity: 0.25; transform: scale(1.20); }
+}
+@keyframes nodeHalo3 {
+    0%, 100% { opacity: 0;    transform: scale(0.95); }
+    50%      { opacity: 0.13; transform: scale(1.22); }
+}
+
+/* ----- LAYER 4: hover state ----- */
+.node-circle:hover .node-bg,
+.node-active-chain .node-bg {
+    filter: brightness(1.45) drop-shadow(0 0 18px rgba(212,175,55,0.7));
+    stroke-width: 3;
+}
+.node-circle:hover .node-glow,
+.node-active-chain .node-glow {
+    opacity: 0.55;
+}
+.node-circle:hover .node-halo,
+.node-active-chain .node-halo {
+    animation-play-state: paused;
+    opacity: 0.5;
+}
+.node-dimmed {
+    opacity: 0.28;
+}
+.node-dimmed .node-halo {
+    animation-play-state: paused;
+}
+
+/* 360 swipe ring fired on hover */
+.node-swipe-ring {
+    pointer-events: none;
+    transform-box: fill-box;
+    transform-origin: center;
+    stroke-dasharray: 240;
+    stroke-dashoffset: 240;
+    opacity: 0;
+}
+.node-swipe-ring.node-swipe-active {
+    animation: nodeSwipe 0.9s ease-out forwards;
+}
+@keyframes nodeSwipe {
+    0%   { stroke-dashoffset: 240; opacity: 0; transform: scale(0.8) rotate(0deg); }
+    20%  { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { stroke-dashoffset: 0;   opacity: 0; transform: scale(1.4) rotate(180deg); }
+}
+
+/* ----- Number labels ----- */
 .node-label {
     font-family: 'IM Fell English', serif;
     font-weight: 400;
     font-style: italic;
-    font-size: 15px;
+    font-size: 17px;
     fill: var(--text-primary);
     text-anchor: middle;
     pointer-events: none;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.7));
 }
 .node-sublabel {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 300;
-    font-size: 9px;
+    font-size: 10px;
     fill: var(--text-secondary);
     text-anchor: middle;
     pointer-events: none;
@@ -967,22 +1111,19 @@ body::after {
     text-transform: uppercase;
 }
 
-/* Node pulse animation */
-.node-pulse {
-    animation: nodePulse 4s ease-in-out infinite;
-}
-@keyframes nodePulse {
-    0%, 100% { opacity: 0.1; r: 32; }
-    50%      { opacity: 0.25; r: 38; }
+@media (prefers-reduced-motion: reduce) {
+    .matrix-aura,
+    .matrix-sacred-bg,
+    .matrix-dust-particle,
+    .node-halo { animation: none !important; }
+    .node-circle { opacity: 1 !important; }
 }
 
-/* Orbiting particles around nodes */
-.node-orbit {
-    animation: orbitSpin 5s linear infinite;
-    transform-origin: center;
-}
-@keyframes orbitSpin {
-    to { transform: rotate(360deg); }
+@media (max-width: 720px) {
+    .matrix-aura-gold     { width: 380px; height: 380px; }
+    .matrix-aura-amethyst { width: 480px; height: 480px; }
+    .matrix-aura-crimson  { width: 580px; height: 580px; }
+    .matrix-sacred-bg     { width: 420px; height: 420px; }
 }
 
 /* ====== AGE PERIODS ====== */
