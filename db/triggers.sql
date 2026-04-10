@@ -32,9 +32,15 @@ create trigger on_auth_user_created
 
 -- 2) Havale/ödeme onayı (atomik kredi yükleme)
 -- ----------------------------------------------------------------------------
--- Kullanım: select public.approve_payment_request('payment-uuid');
--- Çağıran kişi admin olmalı (auth.uid() üzerinden kontrol edilir).
-create or replace function public.approve_payment_request(p_payment_id uuid)
+-- Bu fonksiyon SADECE backend api/ endpointlerinden service_key ile çağrılır.
+-- Yetki kontrolü API katmanında (requireAdmin middleware) yapılır;
+-- bu sayede service_key kullanıldığında auth.uid() NULL döndüğü için
+-- function içinde admin doğrulaması YAPILMAZ.
+-- p_admin_id parametresi audit log için gereklidir (kim onayladı).
+create or replace function public.approve_payment_request(
+    p_payment_id uuid,
+    p_admin_id   uuid
+)
 returns void
 language plpgsql
 security definer
@@ -43,18 +49,7 @@ as $$
 declare
     v_user_id     uuid;
     v_credits     integer;
-    v_admin_id    uuid := auth.uid();
-    v_is_admin    boolean;
 begin
-    -- yetki kontrol
-    select is_admin into v_is_admin
-    from public.profiles
-    where id = v_admin_id;
-
-    if not coalesce(v_is_admin, false) then
-        raise exception 'unauthorized: only admin can approve payments';
-    end if;
-
     -- ödeme bilgisini çek (lock)
     select user_id, credits into v_user_id, v_credits
     from public.payment_requests
@@ -68,7 +63,7 @@ begin
     -- ödeme talebini onaylanmış olarak güncelle
     update public.payment_requests
     set status      = 'approved',
-        approved_by = v_admin_id,
+        approved_by = p_admin_id,
         approved_at = now()
     where id = p_payment_id;
 
@@ -85,30 +80,22 @@ $$;
 
 -- 3) Havale/ödeme reddi
 -- ----------------------------------------------------------------------------
+-- Yetki API katmanında doğrulanır; function içinde admin kontrolü yapılmaz.
 create or replace function public.reject_payment_request(
     p_payment_id uuid,
-    p_reason text default null
+    p_admin_id   uuid,
+    p_reason     text default null
 )
 returns void
 language plpgsql
 security definer
 set search_path = public
 as $$
-declare
-    v_admin_id  uuid := auth.uid();
-    v_is_admin  boolean;
 begin
-    select is_admin into v_is_admin
-    from public.profiles where id = v_admin_id;
-
-    if not coalesce(v_is_admin, false) then
-        raise exception 'unauthorized: only admin can reject payments';
-    end if;
-
     update public.payment_requests
     set status      = 'rejected',
         admin_note  = p_reason,
-        approved_by = v_admin_id,
+        approved_by = p_admin_id,
         approved_at = now()
     where id = p_payment_id and status = 'pending';
 
@@ -147,29 +134,23 @@ begin
 end;
 $$;
 
--- 5) Admin manuel kredi ekleme
+-- 5) Admin manuel kredi ekleme / çıkarma (veya iade)
 -- ----------------------------------------------------------------------------
+-- Bu fonksiyon SADECE backend api/ endpointlerinden service_key ile çağrılır.
+-- Admin yetkisi API katmanında (requireAdmin) doğrulanır.
+-- 'type' parametresi credit_transactions kaydının türünü belirler.
 create or replace function public.admin_grant_credits(
     p_user_id uuid,
     p_amount  integer,
-    p_note    text default null
+    p_note    text default null,
+    p_type    text default 'admin_grant'
 )
 returns void
 language plpgsql
 security definer
 set search_path = public
 as $$
-declare
-    v_admin_id  uuid := auth.uid();
-    v_is_admin  boolean;
 begin
-    select is_admin into v_is_admin
-    from public.profiles where id = v_admin_id;
-
-    if not coalesce(v_is_admin, false) then
-        raise exception 'unauthorized: only admin can grant credits';
-    end if;
-
     if p_amount = 0 then
         raise exception 'amount must not be zero';
     end if;
@@ -178,7 +159,11 @@ begin
     set credits = credits + p_amount
     where id = p_user_id;
 
+    if not found then
+        raise exception 'user not found';
+    end if;
+
     insert into public.credit_transactions (user_id, amount, type, note)
-    values (p_user_id, p_amount, 'admin_grant', coalesce(p_note, 'Admin tarafından eklendi'));
+    values (p_user_id, p_amount, p_type, coalesce(p_note, 'Admin tarafından eklendi'));
 end;
 $$;

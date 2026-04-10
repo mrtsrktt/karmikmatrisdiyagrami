@@ -130,39 +130,20 @@ export default async function handler(req, res) {
             return res.status(404).json({ error: 'payment_not_found_or_processed' });
         }
 
-        const { error: updateErr } = await supabaseAdmin
-            .from('payment_requests')
-            .update({
-                status:      'approved',
-                approved_by: user.id,
-                approved_at: new Date().toISOString()
-            })
-            .eq('id', payment_id)
-            .eq('status', 'pending');
-
-        if (updateErr) {
-            console.error('[approve-payment update]', updateErr);
-            return res.status(500).json({ error: 'update_failed' });
-        }
-
-        const { error: rpcErr } = await supabaseAdmin.rpc('admin_grant_credits', {
-            p_user_id: payment.user_id,
-            p_amount:  payment.credits,
-            p_note:    `Havale onaylandı: ${payment.package_name} (${payment.amount_try} TL)`
+        // Atomik onay: approve_payment_request RPC (status update + kredi yükle + log)
+        const { error: rpcErr } = await supabaseAdmin.rpc('approve_payment_request', {
+            p_payment_id: payment_id,
+            p_admin_id:   user.id
         });
 
         if (rpcErr) {
             console.error('[approve-payment rpc]', rpcErr);
-            await supabaseAdmin
-                .from('payment_requests')
-                .update({ status: 'pending', approved_by: null, approved_at: null })
-                .eq('id', payment_id);
-            return res.status(500).json({ error: 'credit_grant_failed', detail: rpcErr.message });
+            return res.status(500).json({ error: 'approve_failed', detail: rpcErr.message });
         }
 
         return res.status(200).json({
-            success: true,
-            message: `${payment.credits} kredi yüklendi.`,
+            success:    true,
+            message:    `${payment.credits} kredi yüklendi.`,
             payment_id
         });
     }
@@ -176,24 +157,17 @@ export default async function handler(req, res) {
         const { payment_id, reason } = body;
         if (!payment_id) return res.status(400).json({ error: 'missing_payment_id' });
 
-        const { data, error } = await supabaseAdmin
-            .from('payment_requests')
-            .update({
-                status:      'rejected',
-                admin_note:  reason || null,
-                approved_by: user.id,
-                approved_at: new Date().toISOString()
-            })
-            .eq('id', payment_id)
-            .eq('status', 'pending')
-            .select()
-            .single();
+        const { error } = await supabaseAdmin.rpc('reject_payment_request', {
+            p_payment_id: payment_id,
+            p_admin_id:   user.id,
+            p_reason:     reason || null
+        });
 
-        if (error || !data) {
+        if (error) {
             console.error('[reject-payment]', error);
-            return res.status(500).json({ error: 'reject_failed', detail: error?.message });
+            return res.status(500).json({ error: 'reject_failed', detail: error.message });
         }
-        return res.status(200).json({ success: true, payment: data });
+        return res.status(200).json({ success: true });
     }
 
     // ------------------------------------------------------------------
@@ -237,7 +211,8 @@ export default async function handler(req, res) {
         const { error } = await supabaseAdmin.rpc('admin_grant_credits', {
             p_user_id: user_id,
             p_amount:  amt,
-            p_note:    note || null
+            p_note:    note || null,
+            p_type:    'admin_grant'
         });
 
         if (error) {

@@ -152,7 +152,8 @@ export default async function handler(req, res) {
     await supabaseAdmin.rpc('admin_grant_credits', {
       p_user_id: user.id,
       p_amount:  1,
-      p_note:    'Analiz başarısız oldu — kredi iadesi'
+      p_note:    'Analiz başarısız oldu — kredi iadesi',
+      p_type:    'refund'
     }).catch(e => console.error('refund failed', e));
 
     return res.status(500).json({

@@ -175,6 +175,17 @@ function calculateAll() {
         return;
     }
 
+    // Credit gate: kredi yoksa paket satınalma modal'ı aç.
+    // (Hesaplamak ücretsiz görünse de, kullanıcının abonelik sahibi olması zorunludur.)
+    if (typeof window.km_credits === 'number' && window.km_credits < 1) {
+        if (typeof window.showCreditModal === 'function') {
+            window.showCreditModal();
+        } else {
+            window.location.href = '/hesap/odeme.html';
+        }
+        return;
+    }
+
     const dateInput = document.getElementById('birthDate');
     const timeInput = document.getElementById('birthTime');
     const cityInput = document.getElementById('birthCity');

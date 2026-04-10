@@ -25,6 +25,9 @@ Sırasıyla bu dosyaları **Supabase Dashboard → SQL Editor**'de çalıştır:
 
 > Her dosyayı **sırasıyla** çalıştır. Sırayı bozarsan foreign key hatası alırsın.
 
+> ⚠️ **Eski sürümü kurduysan:** db/triggers.sql daha önce çalıştırıldıysa, RPC bug fix için
+> ek olarak `db/migrations/001-fix-rpc-auth-checks.sql` dosyasını da çalıştır.
+
 ### 3. API Anahtarlarını Al
 
 Supabase Dashboard → **Settings → API** sayfasından şu değerleri kopyala:
