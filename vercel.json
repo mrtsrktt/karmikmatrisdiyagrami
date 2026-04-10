@@ -3,5 +3,20 @@
     "api/**/*.js": {
       "maxDuration": 60
     }
-  }
+  },
+  "rewrites": [
+    { "source": "/api/credits/balance",       "destination": "/api/me?action=credits/balance" },
+    { "source": "/api/analyses/list",         "destination": "/api/me?action=analyses/list" },
+    { "source": "/api/analyses/get",          "destination": "/api/me?action=analyses/get" },
+    { "source": "/api/payments/list",         "destination": "/api/me?action=payments/list" },
+    { "source": "/api/payments/submit",       "destination": "/api/me?action=payments/submit" },
+    { "source": "/api/payments/packages",     "destination": "/api/me?action=payments/packages" },
+
+    { "source": "/api/admin/stats",           "destination": "/api/admin?action=stats" },
+    { "source": "/api/admin/payments",        "destination": "/api/admin?action=payments" },
+    { "source": "/api/admin/approve-payment", "destination": "/api/admin?action=approve-payment" },
+    { "source": "/api/admin/reject-payment",  "destination": "/api/admin?action=reject-payment" },
+    { "source": "/api/admin/users",           "destination": "/api/admin?action=users" },
+    { "source": "/api/admin/grant-credits",   "destination": "/api/admin?action=grant-credits" }
+  ]
 }
