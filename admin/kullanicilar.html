@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kullanıcılar — Admin Panel</title>
+    <link rel="stylesheet" href="admin.css">
+    <script src="/lib/supabase-config.js"></script>
+</head>
+<body>
+
+<header class="admin-topbar">
+    <a href="/admin/" class="admin-brand">
+        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 2 L20 12 L30 14 L22 22 L24 32 L16 26 L8 32 L10 22 L2 14 L12 12 Z"/></svg>
+        Admin Panel
+    </a>
+    <nav class="admin-topnav">
+        <a href="/" class="admin-back-link">← Anasayfa</a>
+        <button id="logoutBtn" class="admin-logout-btn">Çıkış</button>
+    </nav>
+</header>
+
+<div class="admin-layout">
+    <aside class="admin-sidebar">
+        <nav class="admin-nav">
+            <a href="/admin/" class="admin-nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                Dashboard
+            </a>
+            <a href="/admin/odemeler.html" class="admin-nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="14" rx="1"/><path d="M3 10 H21"/></svg>
+                Ödemeler
+                <span id="pendingBadge" class="admin-nav-badge" style="display:none;">0</span>
+            </a>
+            <a href="/admin/kullanicilar.html" class="admin-nav-link active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21 a8 8 0 0 1 16 0"/></svg>
+                Kullanıcılar
+            </a>
+        </nav>
+    </aside>
+
+    <main class="admin-content">
+        <header class="admin-page-header">
+            <h1 class="admin-page-title">Kullanıcılar</h1>
+            <p class="admin-page-subtitle">Tüm kayıtlı kullanıcılar, kredi bakiyesi ve hızlı işlemler.</p>
+        </header>
+
+        <input type="search" id="searchInput" class="admin-search" placeholder="E-posta, ad veya telefon ara...">
+
+        <div id="usersContainer">
+            <div class="admin-loading"><div class="admin-spinner"></div></div>
+        </div>
+    </main>
+</div>
+
+<script type="module">
+    import { requireAuth, apiFetch, initAdminTopbar, formatDateTR, escHtml, showToast } from '/admin/admin.js';
+
+    await requireAuth({ requireAdmin: true });
+    await initAdminTopbar();
+
+    let searchTimeout = null;
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => loadUsers(e.target.value.trim()), 300);
+    });
+
+    async function loadUsers(q = '') {
+        const container = document.getElementById('usersContainer');
+        container.innerHTML = '<div class="admin-loading"><div class="admin-spinner"></div></div>';
+
+        try {
+            const url = q ? `/api/admin/users?q=${encodeURIComponent(q)}` : '/api/admin/users';
+            const { users } = await apiFetch(url);
+
+            if (!users || users.length === 0) {
+                container.innerHTML = '<div class="admin-empty">Kullanıcı bulunamadı.</div>';
+                return;
+            }
+
+            container.innerHTML = `
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Kayıt Tarihi</th>
+                            <th>Ad / E-posta</th>
+                            <th>Telefon</th>
+                            <th>Kredi</th>
+                            <th>Rol</th>
+                            <th>İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${users.map(u => `
+                            <tr>
+                                <td>${formatDateTR(u.created_at)}</td>
+                                <td>
+                                    <strong>${escHtml(u.full_name || '—')}</strong>
+                                    <small>${escHtml(u.email || '')}</small>
+                                </td>
+                                <td>${escHtml(u.phone) || '—'}</td>
+                                <td><strong style="color: var(--gold-bright);">${u.credits}</strong></td>
+                                <td>${u.is_admin ? '<span class="hesap-badge approved">Admin</span>' : '—'}</td>
+                                <td>
+                                    <button class="admin-btn-approve" data-action="grant" data-id="${u.id}" style="background: linear-gradient(135deg, #6e3a85, #9B59B6);">Kredi Ekle</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+
+            container.addEventListener('click', async (e) => {
+                const btn = e.target.closest('button[data-action="grant"]');
+                if (!btn) return;
+                const id = btn.dataset.id;
+                const amountStr = prompt('Eklenecek kredi miktarı (negatif değer çıkarır):');
+                if (!amountStr) return;
+                const amount = parseInt(amountStr, 10);
+                if (!Number.isFinite(amount) || amount === 0) {
+                    showToast('error', 'Geçersiz miktar.');
+                    return;
+                }
+                const note = prompt('Açıklama (opsiyonel):') || null;
+
+                btn.disabled = true;
+                try {
+                    await apiFetch('/api/admin/grant-credits', {
+                        method: 'POST',
+                        body: JSON.stringify({ user_id: id, amount, note })
+                    });
+                    showToast('success', `${amount} kredi eklendi.`);
+                    await loadUsers(q);
+                } catch (err) {
+                    showToast('error', 'Kredi eklenemedi: ' + err.message);
+                    btn.disabled = false;
+                }
+            });
+        } catch (err) {
+            console.error(err);
+            container.innerHTML = `<div class="admin-empty">Kullanıcılar yüklenemedi: ${err.message}</div>`;
+        }
+    }
+
+    await loadUsers();
+</script>
+
+</body>
+</html>

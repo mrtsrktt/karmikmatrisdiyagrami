@@ -1,0 +1,784 @@
+/* ============================================================================
+   HESAP / KULLANICI PANELİ — Mistik Luks Tema
+   ============================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=IM+Fell+English:ital@0;1&display=swap');
+
+:root {
+    --bg-deep:        #050308;
+    --bg-base:        #0A0612;
+    --bg-surface:     #110D1A;
+    --bg-elevated:    #1A1428;
+    --gold-bright:    #D4AF37;
+    --gold-muted:     #8B7536;
+    --gold-glow:      rgba(212, 175, 55, 0.15);
+    --amethyst:       #9B59B6;
+    --amethyst-glow:  rgba(155, 89, 182, 0.2);
+    --crimson:        #8B1A2E;
+    --celestial:      #4A90D9;
+    --text-primary:   #F0E6D3;
+    --text-secondary: #D4AAB2;
+    --text-muted:     #B08D95;
+    --border-gold:    rgba(212, 175, 55, 0.3);
+    --border-subtle:  rgba(240, 230, 211, 0.08);
+    --error:          #E74C3C;
+    --success:        #27AE60;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+    background: radial-gradient(ellipse at 20% 50%, #1a0a2e 0%, #050308 60%),
+                radial-gradient(ellipse at 80% 20%, #0d0520 0%, transparent 50%);
+    background-color: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: 'Cormorant Garamond', serif;
+    min-height: 100vh;
+}
+
+/* ============================================================================
+   ÜST BAR
+   ============================================================================ */
+.hesap-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(5, 3, 8, 0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-gold);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.hesap-brand {
+    color: var(--gold-bright);
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.hesap-brand svg {
+    width: 24px;
+    height: 24px;
+}
+
+.hesap-topnav {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+.hesap-credit-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.18), rgba(212, 175, 55, 0.08));
+    border: 1px solid var(--border-gold);
+    color: var(--gold-bright);
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.5rem 0.9rem;
+    border-radius: 2px;
+}
+
+.hesap-credit-pill svg {
+    width: 14px;
+    height: 14px;
+}
+
+.hesap-logout-btn {
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 0.55rem 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+    margin-left: 0.5rem;
+}
+
+.hesap-logout-btn:hover {
+    border-color: var(--crimson);
+    color: #FFB8B0;
+}
+
+/* ============================================================================
+   ANA LAYOUT
+   ============================================================================ */
+.hesap-layout {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 2rem;
+    min-height: calc(100vh - 80px);
+}
+
+@media (max-width: 900px) {
+    .hesap-layout {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+        gap: 1rem;
+    }
+}
+
+/* ============================================================================
+   YAN MENÜ
+   ============================================================================ */
+.hesap-sidebar {
+    position: sticky;
+    top: 90px;
+    align-self: start;
+    background: linear-gradient(135deg,
+        rgba(26, 20, 40, 0.6) 0%,
+        rgba(17, 13, 26, 0.85) 100%);
+    border: 1px solid var(--border-subtle);
+    border-radius: 2px;
+    padding: 1.25rem 0.75rem;
+    backdrop-filter: blur(12px);
+}
+
+@media (max-width: 900px) {
+    .hesap-sidebar {
+        position: relative;
+        top: 0;
+        padding: 0.75rem;
+    }
+}
+
+.hesap-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+@media (max-width: 900px) {
+    .hesap-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+}
+
+.hesap-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.85rem 1.1rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    border-radius: 2px;
+    border-left: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.hesap-nav-link svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.hesap-nav-link:hover {
+    background: rgba(212, 175, 55, 0.06);
+    color: var(--text-primary);
+    border-left-color: var(--gold-muted);
+}
+
+.hesap-nav-link.active {
+    background: linear-gradient(90deg, rgba(212, 175, 55, 0.18), transparent);
+    color: var(--gold-bright);
+    border-left-color: var(--gold-bright);
+}
+
+@media (max-width: 900px) {
+    .hesap-nav-link {
+        flex: 1 1 auto;
+        justify-content: center;
+        font-size: 0.95rem;
+        padding: 0.6rem 0.8rem;
+    }
+}
+
+/* ============================================================================
+   İÇERİK
+   ============================================================================ */
+.hesap-content {
+    min-width: 0;
+}
+
+.hesap-page-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.hesap-page-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: var(--text-primary);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.hesap-page-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* ============================================================================
+   KARTLAR (overview)
+   ============================================================================ */
+.hesap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.hesap-card {
+    background: linear-gradient(135deg,
+        rgba(26, 20, 40, 0.85) 0%,
+        rgba(17, 13, 26, 0.95) 100%);
+    border: 1px solid var(--border-gold);
+    border-radius: 2px;
+    padding: 1.75rem;
+    position: relative;
+    backdrop-filter: blur(20px);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.hesap-card::before, .hesap-card::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-color: var(--gold-bright);
+    border-style: solid;
+    opacity: 0.6;
+}
+.hesap-card::before { top: 6px; left: 6px; border-width: 1px 0 0 1px; }
+.hesap-card::after  { bottom: 6px; right: 6px; border-width: 0 1px 1px 0; }
+
+.hesap-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 50px rgba(212, 175, 55, 0.18);
+}
+
+.hesap-card-label {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-bright);
+    font-weight: 700;
+    margin-bottom: 0.7rem;
+}
+
+.hesap-card-value {
+    font-family: 'IM Fell English', serif;
+    font-size: 2.4rem;
+    color: var(--text-primary);
+    font-weight: 400;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+}
+
+.hesap-card-hint {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* Ana CTA kart (kredi al) */
+.hesap-card-cta {
+    background: linear-gradient(135deg,
+        rgba(212, 175, 55, 0.18) 0%,
+        rgba(155, 89, 182, 0.12) 100%);
+    border-color: var(--gold-bright);
+}
+
+.hesap-card-cta .hesap-card-value {
+    color: var(--gold-bright);
+}
+
+.hesap-cta-link {
+    display: inline-block;
+    margin-top: 1rem;
+    background: linear-gradient(135deg, #8B7536, #D4AF37, #8B7536);
+    background-size: 200% 100%;
+    color: #050308;
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 0.7rem 1.4rem;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all 0.4s ease;
+}
+
+.hesap-cta-link:hover {
+    background-position: right center;
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+    letter-spacing: 0.2em;
+}
+
+/* ============================================================================
+   SECTION
+   ============================================================================ */
+.hesap-section {
+    margin-bottom: 2.5rem;
+}
+
+.hesap-section-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.1rem;
+    color: var(--gold-bright);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+/* ============================================================================
+   ANALIZ TABLOSU
+   ============================================================================ */
+.hesap-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: linear-gradient(135deg,
+        rgba(26, 20, 40, 0.6) 0%,
+        rgba(17, 13, 26, 0.8) 100%);
+    border: 1px solid var(--border-subtle);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.hesap-table th {
+    text-align: left;
+    padding: 1rem 1.2rem;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.7rem;
+    color: var(--gold-bright);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 700;
+    background: rgba(212, 175, 55, 0.06);
+    border-bottom: 1px solid var(--border-gold);
+}
+
+.hesap-table td {
+    padding: 1.1rem 1.2rem;
+    color: var(--text-primary);
+    font-size: 1.05rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.hesap-table tr:last-child td { border-bottom: none; }
+
+.hesap-table tr:hover td {
+    background: rgba(212, 175, 55, 0.04);
+}
+
+.hesap-table-action {
+    background: transparent;
+    border: 1px solid var(--border-gold);
+    color: var(--gold-bright);
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.5rem 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 2px;
+    margin-right: 0.4rem;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.hesap-table-action:hover {
+    background: rgba(212, 175, 55, 0.12);
+    box-shadow: 0 0 18px rgba(212, 175, 55, 0.25);
+}
+
+/* Mobil tablo */
+@media (max-width: 700px) {
+    .hesap-table thead { display: none; }
+    .hesap-table tr {
+        display: block;
+        padding: 1rem;
+        border-bottom: 1px solid var(--border-subtle);
+    }
+    .hesap-table td {
+        display: block;
+        padding: 0.4rem 0;
+        border-bottom: none;
+    }
+    .hesap-table td::before {
+        content: attr(data-label);
+        display: block;
+        font-family: 'Cinzel Decorative', serif;
+        font-size: 0.65rem;
+        color: var(--gold-bright);
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        margin-bottom: 0.2rem;
+    }
+}
+
+/* ============================================================================
+   ROZETLER
+   ============================================================================ */
+.hesap-badge {
+    display: inline-block;
+    padding: 0.25rem 0.7rem;
+    border-radius: 2px;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 700;
+    border: 1px solid;
+}
+
+.hesap-badge.pending {
+    color: var(--gold-bright);
+    border-color: var(--gold-bright);
+    background: rgba(212, 175, 55, 0.1);
+}
+
+.hesap-badge.approved {
+    color: #B0F0C8;
+    border-color: var(--success);
+    background: rgba(39, 174, 96, 0.12);
+}
+
+.hesap-badge.rejected {
+    color: #FFB8B0;
+    border-color: var(--error);
+    background: rgba(231, 76, 60, 0.12);
+}
+
+/* ============================================================================
+   FORM (havale bildirimi)
+   ============================================================================ */
+.hesap-form {
+    background: linear-gradient(135deg,
+        rgba(26, 20, 40, 0.85) 0%,
+        rgba(17, 13, 26, 0.95) 100%);
+    border: 1px solid var(--border-gold);
+    border-radius: 2px;
+    padding: 2rem;
+    backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.hesap-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.hesap-label {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold-bright);
+    font-weight: 700;
+}
+
+.hesap-input,
+.hesap-textarea,
+.hesap-select {
+    background: rgba(10, 6, 18, 0.85);
+    border: 1px solid var(--border-gold);
+    border-radius: 2px;
+    color: var(--text-primary);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    padding: 0.8rem 1rem;
+    transition: all 0.3s;
+    width: 100%;
+}
+
+.hesap-textarea {
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.5;
+}
+
+.hesap-input:focus,
+.hesap-textarea:focus,
+.hesap-select:focus {
+    outline: none;
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12);
+}
+
+.hesap-btn {
+    background: linear-gradient(135deg, #8B7536, #D4AF37, #8B7536);
+    background-size: 200% 100%;
+    border: none;
+    color: #050308;
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    border-radius: 2px;
+    margin-top: 0.5rem;
+}
+
+.hesap-btn:hover:not(:disabled) {
+    background-position: right center;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.45);
+    letter-spacing: 0.23em;
+}
+
+.hesap-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.hesap-btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border-gold);
+    color: var(--gold-bright);
+}
+
+.hesap-btn-ghost:hover {
+    background: rgba(212, 175, 55, 0.08);
+}
+
+/* ============================================================================
+   PAKET KARTLARI (odeme sayfası)
+   ============================================================================ */
+.paket-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.paket-card {
+    background: linear-gradient(135deg,
+        rgba(26, 20, 40, 0.7) 0%,
+        rgba(17, 13, 26, 0.92) 100%);
+    border: 1px solid var(--border-gold);
+    border-radius: 2px;
+    padding: 1.75rem;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    position: relative;
+    backdrop-filter: blur(12px);
+}
+
+.paket-card:hover {
+    border-color: var(--gold-bright);
+    box-shadow: 0 16px 50px rgba(212, 175, 55, 0.18);
+    transform: translateY(-3px);
+}
+
+.paket-card.selected {
+    border-color: var(--gold-bright);
+    background: linear-gradient(135deg,
+        rgba(212, 175, 55, 0.18) 0%,
+        rgba(155, 89, 182, 0.1) 100%);
+    box-shadow: 0 0 32px rgba(212, 175, 55, 0.3);
+}
+
+.paket-card-name {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.15rem;
+    color: var(--text-primary);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+}
+
+.paket-card-desc {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.1rem;
+}
+
+.paket-card-price {
+    font-family: 'IM Fell English', serif;
+    font-size: 2.3rem;
+    color: var(--gold-bright);
+    line-height: 1;
+    font-weight: 400;
+}
+
+.paket-card-credits {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-top: 0.6rem;
+}
+
+/* ============================================================================
+   IBAN BOX
+   ============================================================================ */
+.iban-box {
+    background: linear-gradient(135deg,
+        rgba(212, 175, 55, 0.08) 0%,
+        rgba(155, 89, 182, 0.06) 100%);
+    border: 1px solid var(--border-gold);
+    border-radius: 2px;
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 2rem;
+}
+
+.iban-box-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.85rem;
+    color: var(--gold-bright);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.iban-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0;
+    border-bottom: 1px dashed var(--border-subtle);
+    font-size: 1.1rem;
+}
+
+.iban-row:last-child { border-bottom: none; }
+
+.iban-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.iban-value {
+    color: var(--text-primary);
+    font-family: 'IM Fell English', serif;
+    font-size: 1.15rem;
+}
+
+.iban-copy-btn {
+    background: transparent;
+    border: 1px solid var(--border-gold);
+    color: var(--gold-bright);
+    cursor: pointer;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.7rem;
+    font-family: 'Cinzel Decorative', serif;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    margin-left: 0.5rem;
+    transition: all 0.3s;
+}
+
+.iban-copy-btn:hover {
+    background: rgba(212, 175, 55, 0.12);
+}
+
+/* ============================================================================
+   MESAJ KUTULARI
+   ============================================================================ */
+.hesap-message {
+    padding: 0.95rem 1.1rem;
+    border-radius: 2px;
+    font-size: 1rem;
+    line-height: 1.4;
+    margin: 1rem 0;
+    display: none;
+}
+
+.hesap-message.show { display: block; animation: slideIn 0.3s ease; }
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.hesap-message.error {
+    background: rgba(231, 76, 60, 0.12);
+    border: 1px solid rgba(231, 76, 60, 0.4);
+    color: #FFB8B0;
+}
+
+.hesap-message.success {
+    background: rgba(39, 174, 96, 0.12);
+    border: 1px solid rgba(39, 174, 96, 0.4);
+    color: #B0F0C8;
+}
+
+.hesap-message.info {
+    background: rgba(74, 144, 217, 0.12);
+    border: 1px solid rgba(74, 144, 217, 0.4);
+    color: #B5D5F5;
+}
+
+/* ============================================================================
+   BOŞ DURUM
+   ============================================================================ */
+.hesap-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    font-style: italic;
+}
+
+.hesap-empty svg {
+    width: 56px;
+    height: 56px;
+    color: var(--gold-muted);
+    opacity: 0.5;
+    margin-bottom: 1rem;
+}
+
+/* ============================================================================
+   YÜKLEME SPINNER
+   ============================================================================ */
+.hesap-spinner {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(212, 175, 55, 0.2);
+    border-top-color: var(--gold-bright);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.hesap-loading {
+    text-align: center;
+    padding: 3rem 1rem;
+}

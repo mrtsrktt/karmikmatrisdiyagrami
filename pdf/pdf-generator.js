@@ -114,30 +114,47 @@
   }
 
   // Fetch personalized karmic summary from backend
-  async function fetchSummary(birthDate, matrixResults) {
+  // (kullanıcının auth token'ı gerekiyor — window.km_auth_token üzerinden okunur)
+  async function fetchSummary(birthDate, matrixResults, extra) {
     if (cachedSummaries.has(birthDate)) {
       return cachedSummaries.get(birthDate);
     }
 
+    const headers = { 'Content-Type': 'application/json' };
+    if (window.km_auth_token) {
+      headers['Authorization'] = `Bearer ${window.km_auth_token}`;
+    }
+
     const res = await fetch(API_ENDPOINT, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ birthDate, matrixResults }),
+      headers,
+      body: JSON.stringify({ birthDate, matrixResults, ...(extra || {}) }),
     });
 
     if (!res.ok) {
       let errMsg = `API hatası: ${res.status}`;
+      let errBody = null;
       try {
-        const body = await res.json();
-        if (body.error) errMsg = body.error;
+        errBody = await res.json();
+        if (errBody.message) errMsg = errBody.message;
+        else if (errBody.error) errMsg = errBody.error;
       } catch (e) { /* ignore */ }
-      throw new Error(errMsg);
+      const err = new Error(errMsg);
+      err.status = res.status;
+      err.body = errBody;
+      throw err;
     }
 
     const data = await res.json();
     if (!data.summary) throw new Error('API geçersiz yanıt verdi');
 
     cachedSummaries.set(birthDate, data.summary);
+
+    // Yan etkiler: kredi sayısını UI'da güncelle
+    if (typeof data.credits_remaining === 'number' && typeof window.updateCreditPill === 'function') {
+      window.updateCreditPill(data.credits_remaining);
+    }
+
     return data.summary;
   }
 
@@ -173,8 +190,13 @@
     if (overlay) overlay.style.display = 'none';
   }
 
-  function showError(message) {
+  function showError(message, opts) {
     hideLoadingOverlay();
+    if (opts && opts.actionLabel && opts.actionUrl) {
+      const ok = confirm(message + '\n\n' + opts.actionLabel + '?');
+      if (ok) window.location.href = opts.actionUrl;
+      return;
+    }
     alert('PDF üretilirken hata oluştu:\n\n' + message);
   }
 
@@ -190,6 +212,18 @@
     const birthDate = birthDateInput ? birthDateInput.value.trim() : '';
     if (!birthDate) {
       showError('Doğum tarihi bulunamadı.');
+      return;
+    }
+
+    // Auth kontrolü — kullanıcı giriş yapmamışsa giriş sayfasına yönlendir
+    if (!window.km_auth_token) {
+      const redirect = encodeURIComponent('/');
+      const ok = confirm(
+        'PDF raporu üretmek için hesabınıza giriş yapmalısınız.\n\nGiriş sayfasına yönlendirilmek ister misiniz?'
+      );
+      if (ok) {
+        window.location.href = `/auth/giris.html?redirect=${redirect}`;
+      }
       return;
     }
 
@@ -259,10 +293,83 @@
       }
     } catch (err) {
       console.error('PDF generation error:', err);
+      // Auth ve kredi hatalarını özel olarak ele al
+      if (err.status === 401) {
+        showError('Oturumunuz sona ermiş olabilir. Lütfen yeniden giriş yapın.', {
+          actionLabel: 'Giriş sayfasına git',
+          actionUrl: '/auth/giris.html?redirect=/'
+        });
+        return;
+      }
+      if (err.status === 402) {
+        showError('Kredi bakiyeniz yetersiz. Yeni paket alarak devam edebilirsiniz.', {
+          actionLabel: 'Kredi yükle',
+          actionUrl: '/hesap/odeme.html'
+        });
+        return;
+      }
+      showError(err.message || String(err));
+    }
+  }
+
+  // ----- Replay: stored analysis verilerinden PDF yeniden üret -----
+  // birthDate: "GG.AA.YYYY", matrixResults: object, summaryText: string
+  async function generatePDFFromStored(birthDate, matrixResults, summaryText) {
+    if (!matrixResults || !summaryText) {
+      showError('Analiz verisi eksik.');
+      return;
+    }
+    try {
+      showLoadingOverlay('Atasal yükler okunuyor...');
+
+      await loadPdfMake();
+      updateLoadingMessage('Fontlar hazırlanıyor...');
+      await loadFonts();
+
+      updateLoadingMessage('Sayfalar düzenleniyor (1-2 dakika sürebilir)...');
+      const docDefinition = window.buildPDFDocument(birthDate, matrixResults, summaryText);
+      const fileName = `karmik-matris-${birthDate.replace(/\./g, '-')}.pdf`;
+
+      const messageRotation = [
+        { at: 30000, msg: 'Pozisyon kartları yerleştiriliyor...' },
+        { at: 60000, msg: 'Sağlık yatkınlıkları işleniyor...' },
+        { at: 90000, msg: 'Son düzenlemeler yapılıyor, neredeyse bitti...' },
+        { at: 150000, msg: 'Hâlâ çalışıyor, lütfen bekleyin...' },
+      ];
+      const rotationTimers = messageRotation.map(({ at, msg }) =>
+        setTimeout(() => updateLoadingMessage(msg), at)
+      );
+      const clearRotation = () => rotationTimers.forEach(clearTimeout);
+
+      try {
+        const pdf = window.pdfMake.createPdf(docDefinition);
+        const buffer = await pdf.getBuffer();
+        clearRotation();
+
+        const blob = new Blob([buffer], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+        hideLoadingOverlay();
+      } catch (renderErr) {
+        clearRotation();
+        console.error('pdfmake render error:', renderErr);
+        showError('PDF oluşturma hatası: ' + (renderErr.message || String(renderErr)));
+      }
+    } catch (err) {
+      console.error('PDF replay error:', err);
       showError(err.message || String(err));
     }
   }
 
   // Expose globally
   window.generateAndDownloadPDF = generateAndDownloadPDF;
+  window.generatePDFFromStored = generatePDFFromStored;
 })();

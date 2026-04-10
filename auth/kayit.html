@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hesap Oluştur — Karmik Matris Analizi</title>
+    <link rel="stylesheet" href="auth.css">
+    <script src="/lib/supabase-config.js"></script>
+</head>
+<body>
+
+<div class="auth-stars" aria-hidden="true"></div>
+
+<header class="auth-topbar">
+    <a href="/" class="auth-back">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M10 13L5 8l5-5v3h4v4h-4v3z"/></svg>
+        Ana Sayfa
+    </a>
+    <span class="auth-brand">Karmik Matris Analizi</span>
+</header>
+
+<main class="auth-main">
+    <section class="auth-card">
+
+        <div class="auth-header">
+            <svg class="auth-symbol" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M32 6 L42 26 L62 30 L48 44 L52 62 L32 52 L12 62 L16 44 L2 30 L22 26 Z"/>
+                <circle cx="32" cy="34" r="6"/>
+            </svg>
+            <h1 class="auth-title">Hesap Oluştur</h1>
+            <p class="auth-subtitle">Profesyonel danışmanlık yolculuğunuza başlayın.</p>
+        </div>
+
+        <form id="signupForm" class="auth-form" novalidate>
+
+            <div class="auth-field">
+                <label class="auth-label" for="fullName">Ad Soyad</label>
+                <input class="auth-input" type="text" id="fullName" name="fullName" placeholder="Adınız Soyadınız" autocomplete="name" required>
+            </div>
+
+            <div class="auth-field">
+                <label class="auth-label" for="email">E-posta</label>
+                <input class="auth-input" type="email" id="email" name="email" placeholder="ornek@karmikmatris.com" autocomplete="email" required>
+            </div>
+
+            <div class="auth-field">
+                <label class="auth-label" for="phone">Telefon (opsiyonel)</label>
+                <input class="auth-input" type="tel" id="phone" name="phone" placeholder="+90 5XX XXX XX XX" autocomplete="tel">
+                <p class="auth-hint">Önemli güncellemeler için kullanılır.</p>
+            </div>
+
+            <div class="auth-field">
+                <label class="auth-label" for="password">Şifre</label>
+                <input class="auth-input" type="password" id="password" name="password" placeholder="En az 8 karakter" autocomplete="new-password" required minlength="8">
+                <div id="pwStrength" class="auth-password-strength"><div class="auth-password-strength-bar"></div></div>
+                <p class="auth-password-hint">En az 8 karakter, tercihen büyük/küçük harf ve rakam.</p>
+            </div>
+
+            <div class="auth-field">
+                <label class="auth-label" for="password2">Şifre (Tekrar)</label>
+                <input class="auth-input" type="password" id="password2" name="password2" placeholder="••••••••" autocomplete="new-password" required minlength="8">
+            </div>
+
+            <div class="auth-checkboxes">
+                <label class="auth-checkbox">
+                    <input type="checkbox" id="okKvkk" required>
+                    <span><a href="/legal/kvkk-aydinlatma-metni.html" target="_blank">KVKK Aydınlatma Metni</a> ve <a href="/legal/acik-riza-metni.html" target="_blank">Açık Rıza Metni</a>'ni okudum, kişisel verilerimin işlenmesine onay veriyorum.</span>
+                </label>
+                <label class="auth-checkbox">
+                    <input type="checkbox" id="okTerms" required>
+                    <span><a href="/legal/kullanim-kosullari.html" target="_blank">Kullanım Koşulları</a>, <a href="/legal/mesafeli-satis-sozlesmesi.html" target="_blank">Mesafeli Satış Sözleşmesi</a> ve <a href="/legal/gizlilik-politikasi.html" target="_blank">Gizlilik Politikası</a>'nı kabul ediyorum.</span>
+                </label>
+            </div>
+
+            <div id="authMessage" class="auth-message"></div>
+
+            <button type="submit" id="signupBtn" class="auth-btn">Hesap Oluştur</button>
+        </form>
+
+        <div class="auth-footer">
+            Zaten hesabınız var mı? <a href="/auth/giris.html">Giriş Yapın</a>
+        </div>
+
+    </section>
+</main>
+
+<script type="module">
+    import { initSignupForm } from '/auth/auth.js';
+    initSignupForm();
+</script>
+
+</body>
+</html>

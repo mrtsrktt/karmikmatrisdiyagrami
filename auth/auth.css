@@ -1,0 +1,478 @@
+/* ============================================================================
+   AUTH SAYFALARI — Mistik Luks Tema
+   /auth/giris.html, /auth/kayit.html, /auth/sifremi-unuttum.html, /auth/sifre-sifirla.html
+   ============================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=IM+Fell+English:ital@0;1&display=swap');
+
+:root {
+    --bg-deep:        #050308;
+    --bg-base:        #0A0612;
+    --bg-surface:     #110D1A;
+    --bg-elevated:    #1A1428;
+    --gold-bright:    #D4AF37;
+    --gold-muted:     #8B7536;
+    --gold-glow:      rgba(212, 175, 55, 0.15);
+    --amethyst:       #9B59B6;
+    --amethyst-glow:  rgba(155, 89, 182, 0.2);
+    --crimson:        #8B1A2E;
+    --celestial:      #4A90D9;
+    --text-primary:   #F0E6D3;
+    --text-secondary: #D4AAB2;
+    --text-muted:     #B08D95;
+    --border-gold:    rgba(212, 175, 55, 0.3);
+    --border-subtle:  rgba(240, 230, 211, 0.08);
+    --error:          #E74C3C;
+    --success:        #27AE60;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    background: radial-gradient(ellipse at 20% 50%, #1a0a2e 0%, #050308 60%),
+                radial-gradient(ellipse at 80% 20%, #0d0520 0%, transparent 50%);
+    background-color: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: 'Cormorant Garamond', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle at 50% 50%, transparent 0%, rgba(5,3,8,0.5) 100%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Yıldız parçacıkları */
+.auth-stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.auth-stars::before, .auth-stars::after {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(100px);
+    animation: floatLight 24s ease-in-out infinite;
+}
+
+.auth-stars::before {
+    background: radial-gradient(circle, rgba(155, 89, 182, 0.18) 0%, transparent 70%);
+    top: -200px;
+    left: -200px;
+}
+
+.auth-stars::after {
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.12) 0%, transparent 70%);
+    bottom: -200px;
+    right: -200px;
+    animation-delay: -12s;
+}
+
+@keyframes floatLight {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50%      { transform: translate(40px, -30px) scale(1.1); }
+}
+
+/* Üst bar (geri dön) */
+.auth-topbar {
+    position: relative;
+    z-index: 10;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.auth-back {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.auth-back:hover {
+    color: var(--gold-bright);
+}
+
+.auth-brand {
+    color: var(--gold-bright);
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+/* Ana içerik */
+.auth-main {
+    position: relative;
+    z-index: 5;
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem 4rem;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 480px;
+    background: linear-gradient(135deg,
+        rgba(26, 20, 40, 0.85) 0%,
+        rgba(17, 13, 26, 0.95) 100%);
+    border: 1px solid var(--border-gold);
+    border-radius: 2px;
+    padding: 3rem 2.5rem;
+    backdrop-filter: blur(20px);
+    position: relative;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5),
+                0 0 60px rgba(212, 175, 55, 0.05);
+    animation: cardEnter 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) backwards;
+}
+
+@keyframes cardEnter {
+    from { opacity: 0; transform: translateY(20px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+/* Kart köşe süsleri */
+.auth-card::before, .auth-card::after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-color: var(--gold-bright);
+    border-style: solid;
+}
+
+.auth-card::before {
+    top: 10px; left: 10px;
+    border-width: 1px 0 0 1px;
+}
+
+.auth-card::after {
+    bottom: 10px; right: 10px;
+    border-width: 0 1px 1px 0;
+}
+
+/* Header */
+.auth-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.auth-symbol {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 1.25rem;
+    color: var(--gold-bright);
+    opacity: 0.85;
+}
+
+.auth-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: 700;
+    font-size: 1.65rem;
+    color: var(--text-primary);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+}
+
+.auth-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+/* Form */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.auth-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.auth-label {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-bright);
+    font-weight: 700;
+}
+
+.auth-input {
+    background: rgba(10, 6, 18, 0.85);
+    border: 1px solid var(--border-gold);
+    border-radius: 2px;
+    color: var(--text-primary);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    padding: 0.85rem 1.1rem;
+    transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+    width: 100%;
+}
+
+.auth-input::placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.auth-input:focus {
+    outline: none;
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12),
+                inset 0 0 20px rgba(212, 175, 55, 0.04);
+    background: rgba(15, 10, 24, 0.95);
+}
+
+.auth-hint {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-top: 0.3rem;
+}
+
+/* Onay kutuları */
+.auth-checkboxes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.auth-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    cursor: pointer;
+    font-size: 0.92rem;
+    line-height: 1.4;
+    color: var(--text-secondary);
+}
+
+.auth-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    accent-color: var(--gold-bright);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.auth-checkbox a {
+    color: var(--gold-bright);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--border-gold);
+    transition: color 0.3s;
+}
+
+.auth-checkbox a:hover {
+    color: var(--text-primary);
+}
+
+/* Butonlar */
+.auth-btn {
+    background: linear-gradient(135deg, #8B7536, #D4AF37, #8B7536);
+    background-size: 200% 100%;
+    border: none;
+    color: #050308;
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 1.05rem 2rem;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+
+.auth-btn:hover:not(:disabled) {
+    background-position: right center;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.45);
+    letter-spacing: 0.23em;
+}
+
+.auth-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.auth-btn::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -60%;
+    width: 40%; height: 200%;
+    background: rgba(255,255,255,0.2);
+    transform: skewX(-20deg);
+    transition: left 0.5s ease;
+}
+
+.auth-btn:hover:not(:disabled)::after { left: 120%; }
+
+/* Alt bilgi linki */
+.auth-footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+.auth-footer a {
+    color: var(--gold-bright);
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px dotted var(--border-gold);
+    transition: all 0.3s;
+}
+
+.auth-footer a:hover {
+    color: var(--text-primary);
+    border-bottom-color: var(--text-primary);
+}
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.75rem 0 1.25rem;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.auth-divider::before, .auth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border-gold), transparent);
+}
+
+/* Mesaj kutuları */
+.auth-message {
+    padding: 0.95rem 1.1rem;
+    border-radius: 2px;
+    font-size: 1rem;
+    line-height: 1.4;
+    margin-top: 0.5rem;
+    display: none;
+}
+
+.auth-message.show {
+    display: block;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.auth-message.error {
+    background: rgba(231, 76, 60, 0.12);
+    border: 1px solid rgba(231, 76, 60, 0.4);
+    color: #FFB8B0;
+}
+
+.auth-message.success {
+    background: rgba(39, 174, 96, 0.12);
+    border: 1px solid rgba(39, 174, 96, 0.4);
+    color: #B0F0C8;
+}
+
+.auth-message.info {
+    background: rgba(74, 144, 217, 0.12);
+    border: 1px solid rgba(74, 144, 217, 0.4);
+    color: #B5D5F5;
+}
+
+/* Şifre güç göstergesi */
+.auth-password-strength {
+    margin-top: 0.4rem;
+    height: 4px;
+    background: rgba(240, 230, 211, 0.08);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.auth-password-strength-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--error);
+    transition: width 0.3s, background 0.3s;
+}
+
+.auth-password-strength.weak   .auth-password-strength-bar { width: 30%; background: var(--error);     }
+.auth-password-strength.medium .auth-password-strength-bar { width: 65%; background: var(--gold-muted); }
+.auth-password-strength.strong .auth-password-strength-bar { width: 100%; background: var(--success);  }
+
+.auth-password-hint {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+}
+
+/* Spinner */
+.auth-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(5, 3, 8, 0.3);
+    border-top-color: #050308;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Mobil */
+@media (max-width: 600px) {
+    .auth-card {
+        padding: 2.25rem 1.5rem;
+    }
+    .auth-title {
+        font-size: 1.4rem;
+    }
+    .auth-topbar {
+        padding: 1.2rem 1.25rem;
+    }
+}

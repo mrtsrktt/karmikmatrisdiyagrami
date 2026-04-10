@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kredi Yükle — Karmik Matris Analizi</title>
+    <link rel="stylesheet" href="hesap.css">
+    <script src="/lib/supabase-config.js"></script>
+</head>
+<body>
+
+<header class="hesap-topbar">
+    <a href="/hesap/" class="hesap-brand">
+        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="16" cy="16" r="13"/><path d="M16 3 L16 29 M3 16 L29 16"/></svg>
+        Karmik Matris
+    </a>
+    <nav class="hesap-topnav">
+        <span id="creditPill" class="hesap-credit-pill">…</span>
+        <a href="/admin/" id="adminLink" class="hesap-credit-pill" style="display:none; color: var(--amethyst); border-color: var(--amethyst);">Admin</a>
+        <button id="logoutBtn" class="hesap-logout-btn">Çıkış Yap</button>
+    </nav>
+</header>
+
+<div class="hesap-layout">
+    <aside class="hesap-sidebar">
+        <nav class="hesap-nav">
+            <a href="/hesap/" class="hesap-nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12 L12 3 L21 12 M5 10 V20 H19 V10"/></svg>
+                Genel Bakış
+            </a>
+            <a href="/hesap/gecmis.html" class="hesap-nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12 a9 9 0 1 0 3-6.7"/><path d="M3 4 V10 H9"/><path d="M12 7 V12 L15 14"/></svg>
+                Analiz Geçmişi
+            </a>
+            <a href="/hesap/odeme.html" class="hesap-nav-link active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="14" rx="1"/><path d="M3 10 H21 M7 16 H9"/></svg>
+                Kredi Yükle
+            </a>
+            <a href="/" class="hesap-nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12 L12 5 L19 12 V20 H14 V14 H10 V20 H5 Z"/></svg>
+                Yeni Analiz
+            </a>
+        </nav>
+    </aside>
+
+    <main class="hesap-content">
+        <header class="hesap-page-header">
+            <h1 class="hesap-page-title">Kredi Yükle</h1>
+            <p class="hesap-page-subtitle">Bir paket seçin, havalenizi yapın ve ödemenizi bildirin. Ödemeniz onaylandıktan sonra krediniz hesabınıza yüklenecektir.</p>
+        </header>
+
+        <!-- 1. Adım: Paket seç -->
+        <section class="hesap-section">
+            <h2 class="hesap-section-title">1. Paketinizi Seçin</h2>
+            <div id="paketContainer">
+                <div class="hesap-loading"><div class="hesap-spinner"></div></div>
+            </div>
+        </section>
+
+        <!-- 2. Adım: Havale yap -->
+        <section class="hesap-section">
+            <h2 class="hesap-section-title">2. Havalenizi Yapın</h2>
+            <div class="iban-box">
+                <div class="iban-box-title">Banka Hesap Bilgileri</div>
+                <div class="iban-row">
+                    <span class="iban-label">Banka</span>
+                    <span class="iban-value" id="bankNameDisplay">[BANKA ADI]</span>
+                </div>
+                <div class="iban-row">
+                    <span class="iban-label">Hesap Sahibi</span>
+                    <span class="iban-value" id="accountHolderDisplay">[HESAP SAHİBİ]</span>
+                </div>
+                <div class="iban-row">
+                    <span class="iban-label">IBAN</span>
+                    <span>
+                        <span class="iban-value" id="ibanDisplay">[IBAN]</span>
+                        <button class="iban-copy-btn" id="copyIbanBtn">Kopyala</button>
+                    </span>
+                </div>
+                <div class="iban-row">
+                    <span class="iban-label">Açıklamaya Yazınız</span>
+                    <span class="iban-value">Karmik Matris Kredi <span id="userIdShort"></span></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Adım: Bildirim formu -->
+        <section class="hesap-section">
+            <h2 class="hesap-section-title">3. Ödeme Bildirimi</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                Havalenizi yaptıktan sonra aşağıdaki formu doldurun. Onay sonrası kredileriniz otomatik yüklenir.
+            </p>
+
+            <form id="paymentForm" class="hesap-form" novalidate>
+
+                <div class="hesap-field">
+                    <label class="hesap-label" for="senderName">Havaleyi Yapan Kişinin Adı *</label>
+                    <input class="hesap-input" type="text" id="senderName" required maxlength="200">
+                </div>
+
+                <div class="hesap-field">
+                    <label class="hesap-label" for="bankName">Hangi Bankadan Gönderdiniz?</label>
+                    <input class="hesap-input" type="text" id="bankName" placeholder="Örn: Ziraat, Garanti, İş Bankası..." maxlength="100">
+                </div>
+
+                <div class="hesap-field">
+                    <label class="hesap-label" for="senderIban">Gönderdiğiniz Hesabın IBAN'ı (opsiyonel)</label>
+                    <input class="hesap-input" type="text" id="senderIban" placeholder="TR..." maxlength="34">
+                </div>
+
+                <div class="hesap-field">
+                    <label class="hesap-label" for="transferDate">Havale Tarihi</label>
+                    <input class="hesap-input" type="date" id="transferDate">
+                </div>
+
+                <div class="hesap-field">
+                    <label class="hesap-label" for="referenceNote">Eklemek İstediğiniz Not</label>
+                    <textarea class="hesap-textarea" id="referenceNote" rows="3" maxlength="1000" placeholder="Dekont açıklaması, özel notunuz..."></textarea>
+                </div>
+
+                <div id="paymentMessage" class="hesap-message"></div>
+
+                <button type="submit" id="submitBtn" class="hesap-btn" disabled>Ödeme Bildirimini Gönder</button>
+            </form>
+        </section>
+
+        <!-- 4. Geçmiş ödemeler -->
+        <section class="hesap-section">
+            <h2 class="hesap-section-title">Ödeme Geçmişiniz</h2>
+            <div id="paymentHistory">
+                <div class="hesap-loading"><div class="hesap-spinner"></div></div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script type="module">
+    import { requireAuth, apiFetch, initTopbar, formatDateTR, escHtml, showMessage, clearMessage } from '/hesap/hesap.js';
+    import { getCurrentUser } from '/lib/supabase-client.js';
+
+    await requireAuth();
+    await initTopbar();
+
+    const user = await getCurrentUser();
+    if (user) {
+        const shortId = user.id.slice(0, 8).toUpperCase();
+        document.getElementById('userIdShort').textContent = `(${shortId})`;
+    }
+
+    // Banka bilgileri (admin tarafından doldurulacak — şimdilik yer tutucu)
+    const BANK_INFO = {
+        bank:    '[BANKA ADI]',
+        holder:  '[HESAP SAHİBİ]',
+        iban:    '[IBAN]'
+    };
+    document.getElementById('bankNameDisplay').textContent     = BANK_INFO.bank;
+    document.getElementById('accountHolderDisplay').textContent = BANK_INFO.holder;
+    document.getElementById('ibanDisplay').textContent          = BANK_INFO.iban;
+
+    document.getElementById('copyIbanBtn').addEventListener('click', () => {
+        navigator.clipboard.writeText(BANK_INFO.iban.replace(/\s/g, ''))
+            .then(() => {
+                const btn = document.getElementById('copyIbanBtn');
+                btn.textContent = 'Kopyalandı ✓';
+                setTimeout(() => { btn.textContent = 'Kopyala'; }, 1500);
+            });
+    });
+
+    // Paketleri çek
+    let selectedPackage = null;
+    try {
+        const { packages } = await apiFetch('/api/payments/packages');
+        const container = document.getElementById('paketContainer');
+        if (!packages || packages.length === 0) {
+            container.innerHTML = '<div class="hesap-empty">Aktif paket bulunamadı.</div>';
+        } else {
+            container.innerHTML = `
+                <div class="paket-grid">
+                    ${packages.map(p => `
+                        <article class="paket-card" data-id="${p.id}" data-credits="${p.credits}" data-price="${p.price_try}" data-name="${escHtml(p.name)}">
+                            <div class="paket-card-name">${escHtml(p.name)}</div>
+                            <div class="paket-card-desc">${escHtml(p.description || '')}</div>
+                            <div class="paket-card-price">${p.price_try.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} <span style="font-family: 'Segoe UI', Arial, sans-serif;">₺</span></div>
+                            <div class="paket-card-credits">${p.credits} analiz hakkı</div>
+                        </article>
+                    `).join('')}
+                </div>
+            `;
+
+            container.addEventListener('click', (e) => {
+                const card = e.target.closest('.paket-card');
+                if (!card) return;
+                container.querySelectorAll('.paket-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                selectedPackage = {
+                    id:      card.dataset.id,
+                    name:    card.dataset.name,
+                    credits: parseInt(card.dataset.credits, 10),
+                    price:   parseFloat(card.dataset.price)
+                };
+                document.getElementById('submitBtn').disabled = false;
+            });
+        }
+    } catch (err) {
+        console.error('packages load failed', err);
+        document.getElementById('paketContainer').innerHTML =
+            '<div class="hesap-empty">Paketler yüklenemedi.</div>';
+    }
+
+    // Form submit
+    document.getElementById('paymentForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearMessage('paymentMessage');
+
+        if (!selectedPackage) {
+            showMessage('paymentMessage', 'error', 'Lütfen önce bir paket seçin.');
+            return;
+        }
+
+        const senderName = document.getElementById('senderName').value.trim();
+        if (!senderName) {
+            showMessage('paymentMessage', 'error', 'Havaleyi yapan kişinin adı zorunludur.');
+            return;
+        }
+
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.textContent = 'Gönderiliyor...';
+
+        try {
+            await apiFetch('/api/payments/submit', {
+                method: 'POST',
+                body: JSON.stringify({
+                    package_id:      selectedPackage.id,
+                    sender_name:     senderName,
+                    bank_name:       document.getElementById('bankName').value.trim(),
+                    sender_iban:     document.getElementById('senderIban').value.trim(),
+                    transfer_date:   document.getElementById('transferDate').value || null,
+                    reference_note:  document.getElementById('referenceNote').value.trim()
+                })
+            });
+
+            showMessage('paymentMessage', 'success', 'Ödeme bildiriminiz alındı! Onay sonrası krediniz hesabınıza yüklenecektir. (genellikle 1-24 saat)');
+            document.getElementById('paymentForm').reset();
+            await loadPaymentHistory();
+        } catch (err) {
+            console.error(err);
+            showMessage('paymentMessage', 'error', err.message || 'Bildirim gönderilemedi.');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Ödeme Bildirimini Gönder';
+        }
+    });
+
+    // Ödeme geçmişi
+    async function loadPaymentHistory() {
+        try {
+            const { payments } = await apiFetch('/api/payments/list');
+            const box = document.getElementById('paymentHistory');
+            if (!payments || payments.length === 0) {
+                box.innerHTML = '<div class="hesap-empty">Henüz ödeme bildirimi göndermediniz.</div>';
+                return;
+            }
+            box.innerHTML = `
+                <table class="hesap-table">
+                    <thead>
+                        <tr>
+                            <th>Tarih</th>
+                            <th>Paket</th>
+                            <th>Tutar</th>
+                            <th>Kredi</th>
+                            <th>Durum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${payments.map(p => {
+                            const badge = p.status === 'approved' ? '<span class="hesap-badge approved">Onaylandı</span>'
+                                        : p.status === 'rejected' ? '<span class="hesap-badge rejected">Reddedildi</span>'
+                                        : '<span class="hesap-badge pending">Beklemede</span>';
+                            return `
+                                <tr>
+                                    <td data-label="Tarih">${formatDateTR(p.created_at)}</td>
+                                    <td data-label="Paket">${escHtml(p.package_name)}</td>
+                                    <td data-label="Tutar">${p.amount_try} <span style="font-family: Arial;">₺</span></td>
+                                    <td data-label="Kredi">${p.credits}</td>
+                                    <td data-label="Durum">${badge}${p.admin_note ? `<div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">${escHtml(p.admin_note)}</div>` : ''}</td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
+        } catch (err) {
+            console.error(err);
+            document.getElementById('paymentHistory').innerHTML =
+                '<div class="hesap-empty">Geçmiş yüklenemedi.</div>';
+        }
+    }
+    await loadPaymentHistory();
+</script>
+
+</body>
+</html>

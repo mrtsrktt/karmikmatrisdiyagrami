@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analiz Detayı — Karmik Matris Analizi</title>
+    <link rel="stylesheet" href="hesap.css">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/lib/supabase-config.js"></script>
+    <style>
+        .analiz-summary {
+            background: linear-gradient(135deg, rgba(26, 20, 40, 0.85) 0%, rgba(17, 13, 26, 0.95) 100%);
+            border: 1px solid var(--border-gold);
+            border-radius: 2px;
+            padding: 2.5rem 2rem;
+            margin: 1.5rem 0;
+            font-size: 1.15rem;
+            line-height: 1.85;
+            color: var(--text-primary);
+            font-family: 'Cormorant Garamond', serif;
+            white-space: pre-wrap;
+            backdrop-filter: blur(20px);
+        }
+        .analiz-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .analiz-meta-item {
+            background: rgba(10, 6, 18, 0.7);
+            border: 1px solid var(--border-subtle);
+            border-radius: 2px;
+            padding: 0.85rem 1rem;
+        }
+        .analiz-meta-label {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 0.65rem;
+            color: var(--gold-bright);
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 0.3rem;
+        }
+        .analiz-meta-value {
+            color: var(--text-primary);
+            font-size: 1.05rem;
+        }
+        .analiz-actions {
+            display: flex;
+            gap: 0.8rem;
+            margin: 1rem 0 2rem;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+
+<header class="hesap-topbar">
+    <a href="/hesap/" class="hesap-brand">
+        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="16" cy="16" r="13"/><path d="M16 3 L16 29 M3 16 L29 16"/></svg>
+        Karmik Matris
+    </a>
+    <nav class="hesap-topnav">
+        <span id="creditPill" class="hesap-credit-pill">…</span>
+        <a href="/admin/" id="adminLink" class="hesap-credit-pill" style="display:none; color: var(--amethyst); border-color: var(--amethyst);">Admin</a>
+        <button id="logoutBtn" class="hesap-logout-btn">Çıkış Yap</button>
+    </nav>
+</header>
+
+<div class="hesap-layout">
+    <aside class="hesap-sidebar">
+        <nav class="hesap-nav">
+            <a href="/hesap/" class="hesap-nav-link">Genel Bakış</a>
+            <a href="/hesap/gecmis.html" class="hesap-nav-link active">Analiz Geçmişi</a>
+            <a href="/hesap/odeme.html" class="hesap-nav-link">Kredi Yükle</a>
+            <a href="/" class="hesap-nav-link">Yeni Analiz</a>
+        </nav>
+    </aside>
+
+    <main class="hesap-content">
+        <header class="hesap-page-header">
+            <h1 class="hesap-page-title" id="analizTitle">Analiz Detayı</h1>
+            <p class="hesap-page-subtitle">Yapılmış analizin tüm detayları ve PDF tekrar indirme.</p>
+        </header>
+
+        <div id="analizContent">
+            <div class="hesap-loading"><div class="hesap-spinner"></div></div>
+        </div>
+    </main>
+</div>
+
+<!-- Stored analysis için PDF üretme alt yapısı -->
+<script src="/pdf/health-data.js"></script>
+<script src="/pdf/positions.js"></script>
+<script src="/pdf/pdf-template.js"></script>
+<script src="/pdf/pdf-generator.js"></script>
+
+<script type="module">
+    import { requireAuth, apiFetch, initTopbar, formatDateTR, isoDateToTR, escHtml } from '/hesap/hesap.js';
+
+    await requireAuth();
+    await initTopbar();
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    const autoDownload = params.get('download') === '1';
+
+    if (!id) {
+        document.getElementById('analizContent').innerHTML = '<div class="hesap-empty">Geçersiz analiz ID.</div>';
+    } else {
+        try {
+            const { analysis } = await apiFetch(`/api/analyses/get?id=${encodeURIComponent(id)}`);
+            renderAnalysis(analysis);
+
+            if (autoDownload) {
+                downloadPDF(analysis);
+            }
+        } catch (err) {
+            console.error(err);
+            document.getElementById('analizContent').innerHTML =
+                '<div class="hesap-empty">Analiz yüklenemedi: ' + err.message + '</div>';
+        }
+    }
+
+    function renderAnalysis(a) {
+        const birthDateTR = isoDateToTR(a.birth_date);
+        document.getElementById('analizTitle').textContent =
+            a.client_name ? `${a.client_name} — ${birthDateTR}` : `Analiz: ${birthDateTR}`;
+
+        document.getElementById('analizContent').innerHTML = `
+            <div class="analiz-meta">
+                <div class="analiz-meta-item">
+                    <div class="analiz-meta-label">Yapılma Tarihi</div>
+                    <div class="analiz-meta-value">${formatDateTR(a.created_at)}</div>
+                </div>
+                <div class="analiz-meta-item">
+                    <div class="analiz-meta-label">Doğum Tarihi</div>
+                    <div class="analiz-meta-value">${birthDateTR}</div>
+                </div>
+                ${a.birth_city ? `
+                <div class="analiz-meta-item">
+                    <div class="analiz-meta-label">Doğum Yeri</div>
+                    <div class="analiz-meta-value">${escHtml(a.birth_city)}</div>
+                </div>` : ''}
+                ${a.client_name ? `
+                <div class="analiz-meta-item">
+                    <div class="analiz-meta-label">Müşteri</div>
+                    <div class="analiz-meta-value">${escHtml(a.client_name)}</div>
+                </div>` : ''}
+            </div>
+
+            <div class="analiz-actions">
+                <button id="downloadBtn" class="hesap-btn">PDF Tekrar İndir</button>
+                <a href="/hesap/gecmis.html" class="hesap-btn hesap-btn-ghost">← Geçmişe Dön</a>
+            </div>
+
+            <h2 class="hesap-section-title">Karmik Özet</h2>
+            <div class="analiz-summary">${escHtml(a.ai_summary || '—')}</div>
+        `;
+
+        document.getElementById('downloadBtn').addEventListener('click', () => downloadPDF(a));
+    }
+
+    function downloadPDF(a) {
+        if (!window.generatePDFFromStored) {
+            alert('PDF üretici henüz yüklenmedi, lütfen sayfayı yenileyin.');
+            return;
+        }
+        if (!a.matrix_data) {
+            alert('Bu analizin matris verisi bulunamadı.');
+            return;
+        }
+        const birthDateTR = isoDateToTR(a.birth_date);
+        window.generatePDFFromStored(birthDateTR, a.matrix_data, a.ai_summary);
+    }
+</script>
+
+</body>
+</html>
