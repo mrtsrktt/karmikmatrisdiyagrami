@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eğitmen Paneli — Karmik Matris</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="egitmen.css">
+</head>
+<body>
+
+<!-- ================= PASSWORD GATE ================= -->
+<div id="gateOverlay" class="eg-gate">
+    <div class="eg-gate-card">
+        <div class="eg-gate-glyph">
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.2">
+                <circle cx="32" cy="32" r="28"/>
+                <circle cx="32" cy="32" r="20"/>
+                <polygon points="32,8 54,46 10,46"/>
+                <polygon points="32,56 10,18 54,18"/>
+                <circle cx="32" cy="32" r="4" fill="currentColor"/>
+            </svg>
+        </div>
+        <h1 class="eg-gate-title">Eğitmen Paneli</h1>
+        <p class="eg-gate-sub">Gizem Hanım'a özel — canlı eğitim asistanı</p>
+        <form id="gateForm" class="eg-gate-form">
+            <label for="gatePass">Erişim kodu</label>
+            <input type="password" id="gatePass" autocomplete="off" autofocus>
+            <button type="submit">Gir</button>
+            <div id="gateError" class="eg-gate-error"></div>
+        </form>
+    </div>
+</div>
+
+<!-- ================= TEACHER PAGE ================= -->
+<main id="egitmenPage" class="eg-page" style="display:none;">
+
+    <header class="eg-topbar">
+        <div class="eg-brand">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="16" cy="16" r="13"/>
+                <path d="M16 3 L16 29 M3 16 L29 16"/>
+            </svg>
+            Eğitmen Paneli
+        </div>
+        <div class="eg-topbar-tools">
+            <div class="eg-search-wrap">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>
+                </svg>
+                <input type="search" id="searchBox" placeholder="Ara: '14', 'Yıldız', 'Karmik Düğüm'...">
+                <div id="searchResults" class="eg-search-results"></div>
+            </div>
+            <button id="logoutBtn" class="eg-topbar-btn" title="Çıkış">Kilitle</button>
+        </div>
+    </header>
+
+    <section class="eg-calc-bar">
+        <div class="eg-calc-card">
+            <label class="eg-calc-title">Öğrenci / Örnek Doğum Tarihi</label>
+            <div class="eg-calc-row">
+                <input type="text" id="birthDate" placeholder="GG.AA.YYYY" maxlength="10" autocomplete="off">
+                <button id="calcBtn">Matrisi Aç</button>
+            </div>
+            <p class="eg-calc-hint">
+                <strong>İpucu:</strong> Tek ekranı tek öğrenciye ayır. Birden fazla öğrenci için yeni sekme aç (<kbd>Ctrl</kbd>+<kbd>T</kbd>) ve bu sayfayı tekrar yükle.
+            </p>
+            <div class="eg-quick-dates">
+                <span class="eg-quick-label">Hızlı örnek:</span>
+                <button class="eg-quick-btn" data-date="01.02.1981">01.02.1981</button>
+                <button class="eg-quick-btn" data-date="15.03.1990">15.03.1990</button>
+                <button class="eg-quick-btn" data-date="23.04.1977">23.04.1977</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="eg-stage" id="stageSection" style="display:none;">
+
+        <!-- Interactive hint strip -->
+        <div class="eg-hint-strip">
+            <span class="eg-hint-dot gold"></span> Yol (Altın)
+            <span class="eg-hint-dot cyan"></span> Başarı (Mavi)
+            <span class="eg-hint-dot rose"></span> Karmik (Gül)
+            <span class="eg-hint-sep"></span>
+            <em>Her rakama, harfe, renge ve hücreye tıkla — anında açıklama gelir.</em>
+        </div>
+
+        <!-- Matrix SVG -->
+        <div class="eg-matrix-wrap">
+            <svg id="teacherMatrixSvg" viewBox="0 0 600 700" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <radialGradient id="egGradGold" cx="40%" cy="35%">
+                        <stop offset="0%" stop-color="#FFE9A8"/>
+                        <stop offset="60%" stop-color="#D4AF37"/>
+                        <stop offset="100%" stop-color="#8B7536"/>
+                    </radialGradient>
+                    <radialGradient id="egGradCyan" cx="40%" cy="35%">
+                        <stop offset="0%" stop-color="#A8DBF0"/>
+                        <stop offset="60%" stop-color="#7EB8DA"/>
+                        <stop offset="100%" stop-color="#5189AA"/>
+                    </radialGradient>
+                    <radialGradient id="egGradRose" cx="40%" cy="35%">
+                        <stop offset="0%" stop-color="#F0A0B5"/>
+                        <stop offset="60%" stop-color="#D4507A"/>
+                        <stop offset="100%" stop-color="#8B1A2E"/>
+                    </radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Results table -->
+        <div class="eg-table-wrap">
+            <table class="eg-results-table">
+                <thead>
+                    <tr>
+                        <th data-popup="col:yol">Yol (Temel Arkanlar)</th>
+                        <th data-popup="col:na">Başarı Sayıları (NA)</th>
+                        <th data-popup="col:kn">Karmik Düğümler (KN)</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsTableBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Color legend (clickable) -->
+        <div class="eg-color-legend">
+            <button class="eg-legend-btn" data-popup="color:path">
+                <span class="eg-legend-swatch gold"></span>
+                <span>Altın Düğümler — Yol / Temel</span>
+            </button>
+            <button class="eg-legend-btn" data-popup="color:achievement">
+                <span class="eg-legend-swatch cyan"></span>
+                <span>Mavi Düğümler — Başarı / Potansiyel</span>
+            </button>
+            <button class="eg-legend-btn" data-popup="color:karmic">
+                <span class="eg-legend-swatch rose"></span>
+                <span>Gül Düğümler — Karmik / Ders</span>
+            </button>
+        </div>
+
+    </section>
+
+    <section class="eg-empty" id="emptySection">
+        <div class="eg-empty-inner">
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1" width="48" height="48">
+                <circle cx="32" cy="32" r="28"/>
+                <path d="M20 32 L44 32 M32 20 L32 44"/>
+            </svg>
+            <h2>Derse başlamaya hazırsın</h2>
+            <p>Yukarıdan bir doğum tarihi gir ya da hızlı örneklerden birini seç.<br>Canlı derse başlamadan önce 3 ayrı sekmede 3 farklı örneği açık bırak.</p>
+        </div>
+    </section>
+
+</main>
+
+<!-- ================= POPUP ================= -->
+<div id="teacherPopup" class="eg-popup" style="display:none;">
+    <div class="eg-popup-backdrop" data-close></div>
+    <div class="eg-popup-dialog">
+        <button class="eg-popup-close" data-close aria-label="Kapat">&times;</button>
+        <div class="eg-popup-header">
+            <div class="eg-popup-tag" id="popupTag"></div>
+            <h2 class="eg-popup-title" id="popupTitle"></h2>
+            <div class="eg-popup-subtitle" id="popupSubtitle"></div>
+        </div>
+        <div class="eg-popup-body" id="popupBody"></div>
+    </div>
+</div>
+
+<script src="/arcana-data.js"></script>
+<script src="egitmen.js"></script>
+
+</body>
+</html>

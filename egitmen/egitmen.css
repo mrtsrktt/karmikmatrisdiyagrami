@@ -1,0 +1,859 @@
+/* ============================================================
+   EĞİTMEN PANELİ — Gizem Hanım canlı eğitim asistanı
+   Sadece /egitmen sayfasına özel stiller
+   ============================================================ */
+
+/* ---------- Page layout ---------- */
+.eg-page {
+    min-height: 100vh;
+    padding-bottom: 6rem;
+}
+
+/* ---------- Topbar ---------- */
+.eg-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(180deg, rgba(10, 6, 18, 0.98) 0%, rgba(10, 6, 18, 0.92) 100%);
+    border-bottom: 1px solid var(--border-gold);
+    backdrop-filter: blur(16px);
+}
+.eg-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--gold-bright);
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+.eg-brand svg {
+    width: 22px;
+    height: 22px;
+}
+.eg-topbar-tools {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    justify-content: flex-end;
+}
+.eg-topbar-btn {
+    background: transparent;
+    border: 1px solid var(--border-gold);
+    color: var(--text-secondary);
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.55rem 1rem;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.eg-topbar-btn:hover {
+    border-color: var(--gold-bright);
+    color: var(--gold-bright);
+    box-shadow: 0 0 20px var(--gold-glow);
+}
+
+/* ---------- Search ---------- */
+.eg-search-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: rgba(10, 6, 18, 0.7);
+    border: 1px solid var(--border-gold);
+    padding: 0.55rem 0.9rem;
+    min-width: 340px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.eg-search-wrap:focus-within {
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12);
+}
+.eg-search-wrap svg {
+    color: var(--gold-muted);
+    flex-shrink: 0;
+}
+.eg-search-wrap input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    width: 100%;
+}
+.eg-search-wrap input::placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+}
+.eg-search-results {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: rgba(10, 6, 18, 0.98);
+    border: 1px solid var(--border-gold);
+    backdrop-filter: blur(20px);
+    max-height: 420px;
+    overflow-y: auto;
+    display: none;
+    z-index: 50;
+}
+.eg-search-results.open { display: block; }
+.eg-search-result {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    transition: background 0.25s;
+}
+.eg-search-result:hover {
+    background: rgba(212, 175, 55, 0.08);
+    color: var(--gold-bright);
+}
+.eg-search-result-tag {
+    display: inline-block;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-muted);
+    margin-right: 0.6rem;
+}
+.eg-search-empty {
+    padding: 1rem;
+    color: var(--text-muted);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    text-align: center;
+}
+
+/* ---------- Calculation bar ---------- */
+.eg-calc-bar {
+    padding: 2.5rem 2.5rem 1rem;
+    display: flex;
+    justify-content: center;
+}
+.eg-calc-card {
+    width: 100%;
+    max-width: 700px;
+    background: linear-gradient(135deg, rgba(26, 20, 40, 0.85) 0%, rgba(17, 13, 26, 0.92) 100%);
+    border: 1px solid var(--border-gold);
+    padding: 1.8rem 2rem;
+    backdrop-filter: blur(20px);
+    position: relative;
+}
+.eg-calc-card::before,
+.eg-calc-card::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-color: var(--gold-bright);
+    border-style: solid;
+}
+.eg-calc-card::before {
+    top: 6px;
+    left: 6px;
+    border-width: 1px 0 0 1px;
+}
+.eg-calc-card::after {
+    bottom: 6px;
+    right: 6px;
+    border-width: 0 1px 1px 0;
+}
+.eg-calc-title {
+    display: block;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-bright);
+    margin-bottom: 0.9rem;
+}
+.eg-calc-row {
+    display: flex;
+    gap: 0.8rem;
+}
+.eg-calc-row input {
+    flex: 1;
+    background: rgba(10, 6, 18, 0.85);
+    border: 1px solid var(--border-gold);
+    color: var(--text-primary);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    padding: 0.85rem 1.1rem;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.eg-calc-row input:focus {
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1), inset 0 0 20px rgba(212, 175, 55, 0.05);
+}
+.eg-calc-row button {
+    background: linear-gradient(135deg, #8B7536, #D4AF37, #8B7536);
+    background-size: 200% 100%;
+    border: none;
+    color: #050308;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0 2.4rem;
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
+.eg-calc-row button:hover {
+    background-position: right center;
+    box-shadow: 0 0 28px rgba(212, 175, 55, 0.5);
+    letter-spacing: 0.24em;
+}
+.eg-calc-hint {
+    margin-top: 0.9rem;
+    color: var(--text-muted);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    font-style: italic;
+}
+.eg-calc-hint strong {
+    color: var(--text-secondary);
+    font-weight: 400;
+    font-style: normal;
+}
+.eg-calc-hint kbd {
+    background: rgba(10, 6, 18, 0.8);
+    border: 1px solid var(--border-gold);
+    padding: 0.1rem 0.4rem;
+    font-family: 'IM Fell English', serif;
+    font-size: 0.85rem;
+    color: var(--gold-bright);
+}
+.eg-quick-dates {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.9rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--border-subtle);
+}
+.eg-quick-label {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-muted);
+    margin-right: 0.4rem;
+}
+.eg-quick-btn {
+    background: rgba(10, 6, 18, 0.6);
+    border: 1px solid var(--border-gold);
+    color: var(--text-secondary);
+    font-family: 'IM Fell English', serif;
+    font-size: 0.95rem;
+    padding: 0.35rem 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.eg-quick-btn:hover {
+    color: var(--gold-bright);
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 14px var(--gold-glow);
+}
+
+/* ---------- Stage (matrix + table + legend) ---------- */
+.eg-stage {
+    padding: 2rem 2.5rem 4rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+.eg-hint-strip {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0.9rem 1.2rem;
+    margin-bottom: 2rem;
+    background: rgba(10, 6, 18, 0.6);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+}
+.eg-hint-strip em {
+    color: var(--gold-bright);
+    font-style: italic;
+}
+.eg-hint-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px currentColor;
+    margin-right: -0.25rem;
+}
+.eg-hint-dot.gold { background: #f0c040; color: #f0c040; }
+.eg-hint-dot.cyan { background: #4de8e0; color: #4de8e0; }
+.eg-hint-dot.rose { background: #ff6b9d; color: #ff6b9d; }
+.eg-hint-sep {
+    width: 1px;
+    height: 16px;
+    background: var(--border-gold);
+    margin: 0 0.6rem;
+}
+
+/* ---------- Matrix ---------- */
+.eg-matrix-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+}
+#teacherMatrixSvg {
+    width: 100%;
+    max-width: 720px;
+    height: auto;
+    filter: drop-shadow(0 0 60px rgba(155, 89, 182, 0.15));
+}
+.eg-line {
+    stroke: rgba(212, 175, 55, 0.45);
+    stroke-width: 1.2;
+    transition: stroke 0.3s, stroke-width 0.3s;
+}
+.eg-node-group {
+    cursor: default;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-box: fill-box;
+    transform-origin: center;
+}
+.eg-node-bg {
+    stroke: rgba(255, 255, 255, 0.45);
+    stroke-width: 2;
+    cursor: pointer;
+    transition: filter 0.3s ease;
+}
+.eg-node-bg:hover {
+    filter: drop-shadow(0 0 16px #D4AF37) brightness(1.15);
+}
+.eg-node-num {
+    font-family: 'IM Fell English', serif;
+    font-size: 28px;
+    font-style: italic;
+    fill: #050308;
+    text-anchor: middle;
+    font-weight: 700;
+    pointer-events: all;
+    cursor: pointer;
+    user-select: none;
+}
+.eg-node-num:hover {
+    fill: #2a1a0a;
+}
+.eg-node-label {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 13px;
+    fill: var(--gold-bright);
+    text-anchor: middle;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    pointer-events: all;
+    cursor: pointer;
+    transition: fill 0.3s, filter 0.3s;
+}
+.eg-node-label:hover {
+    fill: #FFE9A8;
+    filter: drop-shadow(0 0 8px #D4AF37);
+}
+
+/* ---------- Results table ---------- */
+.eg-table-wrap {
+    margin-bottom: 2.5rem;
+    display: flex;
+    justify-content: center;
+}
+.eg-results-table {
+    width: 100%;
+    max-width: 960px;
+    border-collapse: collapse;
+    background: linear-gradient(135deg, rgba(26, 20, 40, 0.85) 0%, rgba(17, 13, 26, 0.92) 100%);
+    border: 1px solid var(--border-gold);
+    backdrop-filter: blur(16px);
+}
+.eg-results-table th,
+.eg-results-table td {
+    border: 1px solid var(--border-subtle);
+    padding: 1rem 1.2rem;
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.08rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background 0.25s ease;
+}
+.eg-results-table th {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-bright);
+    border-bottom-color: var(--border-gold);
+    background: rgba(10, 6, 18, 0.6);
+}
+.eg-results-table td:hover,
+.eg-results-table th:hover {
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--gold-bright);
+}
+.eg-cell-label {
+    display: inline-block;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-muted);
+    margin-right: 0.4rem;
+}
+.eg-cell-num {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--gold-bright);
+    font-weight: 700;
+}
+
+/* ---------- Color legend ---------- */
+.eg-color-legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.eg-legend-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    background: rgba(10, 6, 18, 0.7);
+    border: 1px solid var(--border-gold);
+    padding: 0.75rem 1.2rem;
+    color: var(--text-secondary);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.eg-legend-btn:hover {
+    color: var(--gold-bright);
+    box-shadow: 0 0 22px var(--gold-glow);
+    transform: translateY(-2px);
+}
+.eg-legend-swatch {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.eg-legend-swatch.gold { background: radial-gradient(circle at 35% 30%, #FFE9A8, #D4AF37 60%, #8B7536); }
+.eg-legend-swatch.cyan { background: radial-gradient(circle at 35% 30%, #A8DBF0, #7EB8DA 60%, #5189AA); }
+.eg-legend-swatch.rose { background: radial-gradient(circle at 35% 30%, #F0A0B5, #D4507A 60%, #8B1A2E); }
+
+/* ---------- Empty state ---------- */
+.eg-empty {
+    padding: 6rem 2rem;
+    display: flex;
+    justify-content: center;
+}
+.eg-empty-inner {
+    text-align: center;
+    color: var(--text-secondary);
+    max-width: 540px;
+}
+.eg-empty-inner svg {
+    color: var(--gold-muted);
+    margin-bottom: 1rem;
+    opacity: 0.7;
+}
+.eg-empty-inner h2 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.15em;
+    color: var(--text-primary);
+    margin-bottom: 0.8rem;
+}
+.eg-empty-inner p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+}
+
+/* ---------- Password gate ---------- */
+.eg-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: radial-gradient(ellipse at 50% 40%, #1a0a2e 0%, #050308 70%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+.eg-gate-card {
+    width: 100%;
+    max-width: 440px;
+    background: linear-gradient(135deg, rgba(26, 20, 40, 0.9) 0%, rgba(17, 13, 26, 0.96) 100%);
+    border: 1px solid var(--border-gold);
+    padding: 3rem 2.5rem;
+    text-align: center;
+    backdrop-filter: blur(20px);
+    position: relative;
+    animation: egGateFade 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+@keyframes egGateFade {
+    from { opacity: 0; transform: translateY(30px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.eg-gate-card::before,
+.eg-gate-card::after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-color: var(--gold-bright);
+    border-style: solid;
+}
+.eg-gate-card::before { top: 10px; left: 10px; border-width: 1px 0 0 1px; }
+.eg-gate-card::after  { bottom: 10px; right: 10px; border-width: 0 1px 1px 0; }
+.eg-gate-glyph {
+    color: var(--gold-bright);
+    margin-bottom: 1.2rem;
+    animation: egGlyphFloat 5s ease-in-out infinite;
+}
+.eg-gate-glyph svg {
+    width: 70px;
+    height: 70px;
+}
+@keyframes egGlyphFloat {
+    0%, 100% { transform: translateY(0); filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.4)); }
+    50%      { transform: translateY(-4px); filter: drop-shadow(0 0 22px rgba(212, 175, 55, 0.7)); }
+}
+.eg-gate-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    color: var(--gold-bright);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+.eg-gate-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-style: italic;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+.eg-gate-form label {
+    display: block;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-muted);
+    margin-bottom: 0.6rem;
+    text-align: left;
+}
+.eg-gate-form input {
+    width: 100%;
+    background: rgba(10, 6, 18, 0.85);
+    border: 1px solid var(--border-gold);
+    color: var(--text-primary);
+    font-family: 'IM Fell English', serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.25em;
+    padding: 0.85rem 1rem;
+    outline: none;
+    text-align: center;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.eg-gate-form input:focus {
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+.eg-gate-form button {
+    width: 100%;
+    margin-top: 1rem;
+    background: linear-gradient(135deg, #8B7536, #D4AF37, #8B7536);
+    background-size: 200% 100%;
+    border: none;
+    color: #050308;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding: 0.95rem;
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
+.eg-gate-form button:hover {
+    background-position: right center;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+    letter-spacing: 0.26em;
+}
+.eg-gate-error {
+    margin-top: 0.9rem;
+    color: var(--crimson);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    min-height: 1.2rem;
+}
+
+/* ============================================================
+   POPUP
+   ============================================================ */
+.eg-popup {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+.eg-popup-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 3, 8, 0.82);
+    backdrop-filter: blur(6px);
+    animation: egBackdropFade 0.3s ease;
+}
+@keyframes egBackdropFade { from { opacity: 0; } to { opacity: 1; } }
+.eg-popup-dialog {
+    position: relative;
+    width: 100%;
+    max-width: 760px;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: linear-gradient(135deg, rgba(26, 20, 40, 0.97) 0%, rgba(17, 13, 26, 0.98) 100%);
+    border: 1px solid var(--border-gold);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(212, 175, 55, 0.12);
+    padding: 2.5rem 2.5rem 2rem;
+    animation: egPopupFade 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes egPopupFade {
+    from { opacity: 0; transform: scale(0.9) translateY(20px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.eg-popup-dialog::before,
+.eg-popup-dialog::after {
+    content: '';
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-color: var(--gold-bright);
+    border-style: solid;
+}
+.eg-popup-dialog::before { top: 10px; left: 10px; border-width: 1px 0 0 1px; }
+.eg-popup-dialog::after  { bottom: 10px; right: 10px; border-width: 0 1px 1px 0; }
+
+.eg-popup-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    color: var(--gold-muted);
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.3s, transform 0.3s;
+}
+.eg-popup-close:hover {
+    color: var(--gold-bright);
+    transform: rotate(90deg);
+}
+
+.eg-popup-header {
+    text-align: center;
+    padding-bottom: 1.4rem;
+    margin-bottom: 1.4rem;
+    border-bottom: 1px solid var(--border-gold);
+}
+.eg-popup-tag {
+    display: inline-block;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-muted);
+    padding: 0.3rem 0.9rem;
+    border: 1px solid var(--border-gold);
+    margin-bottom: 0.8rem;
+}
+.eg-popup-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    color: var(--gold-bright);
+    margin-bottom: 0.4rem;
+    line-height: 1.3;
+}
+.eg-popup-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+}
+
+.eg-popup-body { color: var(--text-primary); }
+
+.eg-popup-section {
+    margin-bottom: 1.6rem;
+    padding-bottom: 1.4rem;
+    border-bottom: 1px dashed var(--border-subtle);
+}
+.eg-popup-section:last-child { border-bottom: none; margin-bottom: 0; }
+.eg-popup-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-bright);
+    margin-bottom: 0.8rem;
+}
+.eg-popup-section-title .eg-icon {
+    display: inline-flex;
+    width: 22px;
+    height: 22px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--gold-bright);
+    border-radius: 50%;
+    font-size: 0.8rem;
+    color: var(--gold-bright);
+}
+.eg-popup-section p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    line-height: 1.85;
+    color: var(--text-primary);
+    margin-bottom: 0.8rem;
+}
+.eg-popup-section p:last-child { margin-bottom: 0; }
+.eg-popup-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.eg-popup-list li {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--text-primary);
+    padding: 0.35rem 0 0.35rem 1.6rem;
+    position: relative;
+}
+.eg-popup-list li::before {
+    content: '✦';
+    position: absolute;
+    left: 0;
+    top: 0.4rem;
+    color: var(--gold-bright);
+    font-size: 0.85rem;
+}
+.eg-popup-list.shadow li::before { color: var(--crimson); content: '◆'; }
+
+.eg-popup-callout {
+    background: rgba(212, 175, 55, 0.06);
+    border-left: 2px solid var(--gold-bright);
+    padding: 1rem 1.2rem;
+    margin: 0.8rem 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--text-primary);
+}
+.eg-popup-formula {
+    display: inline-block;
+    background: rgba(10, 6, 18, 0.7);
+    border: 1px solid var(--border-gold);
+    padding: 0.4rem 0.9rem;
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--gold-bright);
+    margin-top: 0.4rem;
+}
+
+.eg-popup-keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.6rem;
+}
+.eg-popup-keyword {
+    background: rgba(155, 89, 182, 0.1);
+    border: 1px solid var(--amethyst);
+    color: var(--amethyst);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    padding: 0.25rem 0.8rem;
+}
+
+.eg-popup-meta {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+.eg-popup-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.eg-popup-meta strong {
+    color: var(--gold-muted);
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 768px) {
+    .eg-topbar {
+        flex-direction: column;
+        padding: 1rem;
+        gap: 0.8rem;
+    }
+    .eg-search-wrap { min-width: 0; width: 100%; }
+    .eg-calc-bar, .eg-stage { padding-left: 1rem; padding-right: 1rem; }
+    .eg-calc-row { flex-direction: column; }
+    .eg-calc-row button { padding: 0.9rem; }
+    .eg-popup-dialog { padding: 2rem 1.4rem 1.4rem; }
+    .eg-popup-title { font-size: 1.25rem; }
+}
