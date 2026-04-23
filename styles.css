@@ -661,7 +661,501 @@ section p:not(.section-title):not(.hero-title) {
     background: rgba(154, 123, 40, 0.35) !important;
 }
 
-/* ================ /EDITORIAL ================ */
+/* ================================================================
+   EDITORIAL v2 — 17-item refinement pass
+   ================================================================ */
+
+/* [1] Pricing CTA butonları — yeşil + altın karışıklığını kaldır */
+.pricing-btn,
+.pricing-btn-primary,
+.pricing-btn-secondary {
+    background: transparent !important;
+    background-image: none !important;
+    border: 1px solid var(--text-primary) !important;
+    color: var(--text-primary) !important;
+    border-radius: 0 !important;
+    font-family: 'Cormorant Garamond', serif !important;
+    font-weight: 500 !important;
+    font-size: 0.78rem !important;
+    letter-spacing: 0.32em !important;
+    text-transform: uppercase !important;
+    box-shadow: none !important;
+    text-decoration: none !important;
+    padding: 1.05rem 1.75rem !important;
+    transition: background 0.4s ease, color 0.4s ease, letter-spacing 0.4s ease !important;
+}
+.pricing-btn-primary {
+    background: var(--text-primary) !important;
+    color: var(--bg-deep) !important;
+}
+.pricing-btn-primary:hover {
+    background: var(--gold-bright) !important;
+    border-color: var(--gold-bright) !important;
+    color: var(--bg-deep) !important;
+    transform: none !important;
+    box-shadow: none !important;
+    letter-spacing: 0.36em !important;
+}
+.pricing-btn-secondary:hover {
+    background: var(--text-primary) !important;
+    color: var(--bg-deep) !important;
+    border-color: var(--text-primary) !important;
+    box-shadow: none !important;
+    letter-spacing: 0.36em !important;
+}
+.pricing-btn-primary::after,
+.pricing-btn-secondary::after { display: none !important; }
+.pricing-btn svg,
+.pricing-btn-icon {
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+/* Pricing contact strip — altın link → ink underline */
+.pricing-contact-strip a {
+    color: var(--text-primary) !important;
+    border-bottom: 1px solid rgba(26, 24, 20, 0.4) !important;
+    font-weight: 500 !important;
+}
+.pricing-contact-strip a:hover {
+    color: var(--gold-bright) !important;
+    border-bottom-color: var(--gold-bright) !important;
+}
+.pricing-contact-note strong {
+    color: var(--text-primary) !important;
+    font-weight: 600 !important;
+}
+
+/* [2] IM Fell English'i tamamen Fraunces ile değiştir */
+.pricing-currency,
+.pricing-amount,
+.pricing-quota-num,
+.stat-number,
+.stat-infinity,
+.age-period-value,
+.age-period-label,
+[class*="quota"],
+[class*="amount"] {
+    font-family: 'Fraunces', 'Playfair Display', Georgia, serif !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-variation-settings: "opsz" 120 !important;
+    letter-spacing: -0.02em !important;
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    background: none !important;
+    filter: none !important;
+    font-feature-settings: "lnum" !important;
+}
+.pricing-currency { font-weight: 300 !important; margin-right: 4px !important; }
+.pricing-amount { font-weight: 400 !important; }
+
+/* [3] Hero sola hizala + eyebrow güçlendir + visual anchor */
+.header {
+    text-align: left !important;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+.hero-content {
+    text-align: left !important;
+    padding-left: clamp(1rem, 4vw, 4rem) !important;
+}
+.hero-title-row {
+    justify-content: flex-start !important;
+}
+.header h1,
+.hero-title-row h1 {
+    max-width: 15ch !important;
+    text-align: left !important;
+}
+.header .subtitle,
+.subtitle {
+    text-align: left !important;
+    margin-left: 0 !important;
+}
+.hero-eyebrow {
+    color: var(--gold-bright) !important;
+    -webkit-text-fill-color: var(--gold-bright) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.42em !important;
+    font-size: 0.72rem !important;
+    opacity: 1 !important;
+}
+.hero-eyebrow .eyebrow-text {
+    color: var(--gold-bright) !important;
+}
+/* Hero visual anchor — sol dikey altın dash line */
+.hero-content::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 2px;
+    height: 48px;
+    background: var(--gold-bright);
+    opacity: 1;
+}
+/* Hero N° small numeral anchor */
+.hero-content::after {
+    content: 'N° 01 — Astroşuşu Karmik Sistem';
+    position: absolute;
+    left: clamp(1rem, 4vw, 4rem);
+    top: calc(100% + 8px);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* [4] Form card kenarını güçlendir — sol altın dikey aksan */
+.input-card {
+    border: 1px solid rgba(26, 24, 20, 0.14) !important;
+    border-left: 3px solid var(--gold-bright) !important;
+    padding: clamp(2.5rem, 4vw, 3.5rem) clamp(2rem, 4vw, 3.5rem) !important;
+    box-shadow: 0 1px 3px rgba(26, 24, 20, 0.04), 0 12px 40px rgba(26, 24, 20, 0.04) !important;
+}
+
+/* [5] Howto kartlarında icon kaldır, numeral'ı editorial'e al */
+.howto-step .howto-icon,
+.howto-step > svg:first-child,
+.feature-card .info-icon,
+.feature-card > svg:first-child,
+.profession-card .info-icon {
+    display: none !important;
+}
+.howto-step {
+    padding: 48px 36px 40px !important;
+    position: relative !important;
+}
+.howto-step::before {
+    position: absolute !important;
+    top: 28px !important;
+    left: 36px !important;
+    right: auto !important;
+    font-family: 'Fraunces', Georgia, serif !important;
+    font-style: italic !important;
+    font-weight: 300 !important;
+    font-size: 1rem !important;
+    letter-spacing: 0.3em !important;
+    color: var(--gold-bright) !important;
+    -webkit-text-fill-color: var(--gold-bright) !important;
+    text-transform: uppercase !important;
+    opacity: 1 !important;
+    content: 'N° ' attr(data-step) !important;
+}
+.howto-step h3 {
+    margin-top: 2.5rem !important;
+    font-size: 1.6rem !important;
+}
+
+/* [6] Feature grid → tek sütunlu numaralı editorial liste */
+.features-grid {
+    grid-template-columns: 1fr !important;
+    max-width: 820px !important;
+    gap: 0 !important;
+    counter-reset: feat !important;
+}
+.feature-card {
+    background: transparent !important;
+    border: none !important;
+    border-top: 1px solid rgba(26, 24, 20, 0.1) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 2.5rem 0 2.5rem 5rem !important;
+    position: relative !important;
+    counter-increment: feat !important;
+    transition: padding 0.4s ease !important;
+}
+.feature-card:last-child {
+    border-bottom: 1px solid rgba(26, 24, 20, 0.1) !important;
+}
+.feature-card::before {
+    content: counter(feat, decimal-leading-zero) !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 2.5rem !important;
+    display: block !important;
+    font-family: 'Fraunces', Georgia, serif !important;
+    font-style: italic !important;
+    font-weight: 300 !important;
+    font-size: 1.1rem !important;
+    color: var(--gold-bright) !important;
+    -webkit-text-fill-color: var(--gold-bright) !important;
+    letter-spacing: 0.1em !important;
+    background: none !important;
+    border: none !important;
+    width: auto !important;
+    height: auto !important;
+    opacity: 1 !important;
+}
+.feature-card:hover {
+    padding-left: 5.5rem !important;
+    border-top-color: rgba(26, 24, 20, 0.3) !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+.feature-card h3 {
+    margin-bottom: 0.5rem !important;
+    font-size: 1.6rem !important;
+}
+.feature-card p {
+    max-width: 56ch !important;
+    line-height: 1.65 !important;
+}
+
+/* [7] Kimler İçin 5'li grid — düzgün 5-sütun */
+.professions-grid {
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 0 !important;
+    max-width: 1320px !important;
+}
+.profession-card {
+    grid-column: auto !important;
+    background: transparent !important;
+    border: none !important;
+    border-right: 1px solid rgba(26, 24, 20, 0.1) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 2rem 1.75rem !important;
+}
+.profession-card:last-child { border-right: none !important; }
+.profession-card:nth-child(4),
+.profession-card:nth-child(5) { grid-column: auto !important; }
+.profession-card:hover {
+    background: rgba(154, 123, 40, 0.04) !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+.profession-card h3 {
+    font-size: 1.3rem !important;
+    margin-bottom: 1rem !important;
+}
+.profession-card p {
+    font-size: 1rem !important;
+    line-height: 1.65 !important;
+}
+@media (max-width: 1100px) {
+    .professions-grid { grid-template-columns: repeat(3, 1fr) !important; }
+    .profession-card:nth-child(3) { border-right: none !important; }
+}
+@media (max-width: 720px) {
+    .professions-grid { grid-template-columns: 1fr !important; }
+    .profession-card {
+        border-right: none !important;
+        border-bottom: 1px solid rgba(26, 24, 20, 0.1) !important;
+    }
+}
+
+/* [8] Stats etiketleri — güçlendir */
+.stats-bar::before,
+.stats-bar::after {
+    background: rgba(26, 24, 20, 0.14) !important;
+}
+.stat-item::after {
+    background: rgba(26, 24, 20, 0.12) !important;
+}
+.stat-number {
+    font-family: 'Fraunces', Georgia, serif !important;
+    font-style: italic !important;
+    font-weight: 300 !important;
+    letter-spacing: -0.02em !important;
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    background: none !important;
+    filter: none !important;
+    font-variation-settings: "opsz" 144 !important;
+    font-size: 3.8rem !important;
+}
+.stat-label {
+    color: var(--text-secondary) !important;
+    font-size: 0.8rem !important;
+    letter-spacing: 0.28em !important;
+    text-transform: uppercase !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+}
+
+/* [9] Subtle scroll fade animation */
+@media (prefers-reduced-motion: no-preference) {
+    .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+            opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1),
+            transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.in-view {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* [10] Scroll progress bar */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: transparent;
+    z-index: 9999;
+    pointer-events: none;
+}
+.scroll-progress::after {
+    content: '';
+    display: block;
+    height: 100%;
+    width: var(--progress, 0%);
+    background: var(--gold-bright);
+    transition: width 0.1s linear;
+}
+
+/* [11] Üst editorial nav bar */
+.top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 90;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px clamp(1.5rem, 4vw, 3rem);
+    background: rgba(250, 247, 242, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(26, 24, 20, 0.08);
+    font-family: 'Cormorant Garamond', serif;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+}
+.top-bar-brand {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+.top-bar-brand em {
+    font-style: italic;
+    color: var(--gold-bright);
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 1.1em;
+    margin-right: 10px;
+}
+.top-bar-link {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: color 0.3s ease, letter-spacing 0.3s ease;
+}
+.top-bar-link::after {
+    content: '→';
+    font-size: 1em;
+    transition: transform 0.3s ease;
+}
+.top-bar-link:hover {
+    color: var(--gold-bright);
+    letter-spacing: 0.32em;
+}
+.top-bar-link:hover::after {
+    transform: translateX(4px);
+}
+/* Mevcut floating auth-widget'ı gizle — yerini üst nav aldı */
+.auth-widget { display: none !important; }
+
+/* Üst bar yüzünden header padding-top ayarı */
+.header { padding-top: clamp(8rem, 16vh, 12rem) !important; }
+
+/* [12] Hemen Deneyin CTA banner — sol altın aksan + farklı ton */
+.cta-banner {
+    background: #F1EAD8 !important;
+    border: none !important;
+    border-left: 3px solid var(--gold-bright) !important;
+    padding: 4rem clamp(2rem, 6vw, 5rem) !important;
+    text-align: left !important;
+}
+.cta-banner .cta-title {
+    text-align: left !important;
+    max-width: 20ch !important;
+}
+.cta-banner p {
+    text-align: left !important;
+    max-width: 54ch !important;
+}
+
+/* [13] Footer brand başlığındaki altın gradient artığı */
+.footer-brand-title {
+    font-family: 'Fraunces', Georgia, serif !important;
+    font-style: italic !important;
+    font-weight: 300 !important;
+    font-size: 1.5rem !important;
+    letter-spacing: -0.01em !important;
+    text-transform: none !important;
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    color: var(--text-primary) !important;
+    filter: none !important;
+}
+.footer-brand-sub {
+    color: var(--text-secondary) !important;
+    letter-spacing: 0.28em !important;
+    font-weight: 400 !important;
+}
+
+/* Footer h4 altın → ink italic */
+.footer-col h4,
+.footer h4 {
+    font-family: 'Fraunces', Georgia, serif !important;
+    font-style: italic !important;
+    font-weight: 400 !important;
+    font-size: 1rem !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    background: none !important;
+    padding-bottom: 0.75rem !important;
+    border-bottom: 1px solid var(--gold-bright) !important;
+    display: inline-block !important;
+    margin-bottom: 1.5rem !important;
+}
+
+/* Section başlıkları için küçük ornament ("N° XX" eyebrow above title) */
+.section-title + .section-desc,
+.section-desc {
+    max-width: 52ch !important;
+    margin: 0 auto !important;
+}
+
+/* is-loading katmanini nötrle (intro-loader artik gizli) */
+body.is-loading > *:not(.intro-loader) { opacity: 1 !important; }
+
+/* GSAP ScrollTrigger'ın inline opacity:0'larını kır — editorial'de statik görünüm */
+.input-section, .info-section, .features-section, .professions-section,
+.stats-bar, .cta-banner-section, .cta-banner,
+.info-card, .feature-card, .profession-card, .result-card,
+.birthchart-section, .matrix-section, .results-section,
+.how-it-works-section, .howto-section, .howto-step {
+    opacity: 1 !important;
+}
+
+/* Info-card icons da kapat (Sistem Hakkinda bölümü) */
+.info-section .info-card .info-icon,
+.info-card > svg:first-child {
+    display: none !important;
+}
+
+/* ================ /EDITORIAL v2 ================ */
 
 
 :root {
