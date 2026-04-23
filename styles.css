@@ -1,51 +1,713 @@
 /* ====== RESET & BASE ====== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* ================================================================
+   EDITORIAL MYSTIQUE — beyaz kremsi arka plan, rafine tipografi
+   Tüm dekoratif "tarot template" süslerini kapatır.
+   ================================================================ */
+
+/* --- Süsleri ve kozmik katmanları kapat --- */
+.nebula,
+.starfield,
+.shooting-star,
+#starCanvas,
+.hero-aurora,
+.hero-sparkles,
+.floating-symbols,
+.mandala,
+.hero-divider,
+.hero-ornament,
+.matrix-aura,
+.matrix-sacred-bg,
+.matrix-dust,
+.intro-loader,
+.section-divider::before,
+.section-divider::after {
+    display: none !important;
+}
+
+/* --- Section divider: sadece ince hairline --- */
+.section-divider {
+    height: 1px;
+    width: 80px;
+    margin: 5rem auto;
+    background: rgba(26, 24, 20, 0.18);
+    border: none;
+    display: block;
+}
+
+/* --- HERO: editorial, sola hizalı, italic serif --- */
+.header {
+    text-align: left;
+    min-height: auto;
+    padding: clamp(6rem, 14vh, 10rem) clamp(1.5rem, 6vw, 6rem) clamp(4rem, 10vh, 7rem);
+    overflow: visible;
+    display: block;
+    background: transparent;
+}
+.header::before { display: none !important; }
+
+.hero-content {
+    max-width: 1040px;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0 !important;
+    margin-bottom: 2.5rem !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--gold-bright) !important;
+    font-family: 'Cormorant Garamond', serif !important;
+    font-weight: 500 !important;
+    font-size: 0.78rem !important;
+    letter-spacing: 0.32em !important;
+    text-transform: uppercase;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    overflow: visible !important;
+}
+.hero-eyebrow::before { display: none !important; }
+.hero-eyebrow svg { display: none; }
+.hero-eyebrow .eyebrow-text::before {
+    content: '—';
+    display: inline-block;
+    margin-right: 14px;
+    color: var(--gold-bright);
+}
+
+.hero-title-row {
+    display: block !important;
+    gap: 0 !important;
+    margin: 0 !important;
+}
+.hero-title-row h1,
+.header h1 {
+    font-family: 'Fraunces', 'Playfair Display', 'Cormorant Garamond', Georgia, serif !important;
+    font-weight: 300 !important;
+    font-style: italic !important;
+    font-size: clamp(3rem, 8vw, 6.25rem) !important;
+    letter-spacing: -0.025em !important;
+    line-height: 0.98 !important;
+    text-transform: none !important;
+    color: var(--text-primary) !important;
+    background: none !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+    text-shadow: none !important;
+    margin: 0 !important;
+    max-width: 14ch;
+    font-variation-settings: "opsz" 120, "SOFT" 50;
+}
+/* letter-reveal animasyonunu nötrle — editorial'da tüm başlık birlikte gelsin */
+.hero-title-row h1 span,
+.header h1 span {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    display: inline !important;
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    color: var(--text-primary) !important;
+}
+/* H1 filter/drop-shadow kapali — editorial'da glow yok */
+.hero-title-row h1,
+.header h1 {
+    filter: none !important;
+    animation: none !important;
+}
+
+.subtitle {
+    font-family: 'Cormorant Garamond', serif !important;
+    font-style: italic !important;
+    font-weight: 300 !important;
+    font-size: clamp(1.1rem, 1.6vw, 1.4rem) !important;
+    color: var(--text-secondary) !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    line-height: 1.55 !important;
+    margin: 2rem 0 0 !important;
+    max-width: 52ch;
+    background: none !important;
+    -webkit-text-fill-color: var(--text-secondary) !important;
+}
+
+/* --- Section başlıkları: editorial italic serif --- */
+.section-title,
+h2.section-title,
+section h2 {
+    font-family: 'Fraunces', 'Playfair Display', Georgia, serif !important;
+    font-style: italic !important;
+    font-weight: 300 !important;
+    font-size: clamp(2rem, 3.8vw, 3.25rem) !important;
+    letter-spacing: -0.02em !important;
+    color: var(--text-primary) !important;
+    text-transform: none !important;
+    background: none !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    line-height: 1.05 !important;
+    margin-bottom: 1rem !important;
+    font-variation-settings: "opsz" 96;
+}
+.section-desc,
+.section-description {
+    font-family: 'Cormorant Garamond', serif !important;
+    font-style: italic !important;
+    font-weight: 300 !important;
+    color: var(--text-secondary) !important;
+    font-size: 1.1rem !important;
+    letter-spacing: 0 !important;
+}
+
+/* --- Kartlar: hairline, düz beyaz yüzey, keskin köşe --- */
+.pricing-card,
+.feature-card,
+.howitworks-step,
+.result-card,
+.input-card,
+.why-card,
+.faq-card,
+.step-card {
+    background: var(--bg-card) !important;
+    border: 1px solid rgba(26, 24, 20, 0.09) !important;
+    border-radius: 0 !important;
+    box-shadow: 0 1px 2px rgba(26, 24, 20, 0.03) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    color: var(--text-primary) !important;
+}
+.pricing-card::before,
+.pricing-card::after,
+.result-card::before,
+.result-card::after,
+.feature-card::before,
+.feature-card::after {
+    display: none !important;
+}
+.pricing-card:hover,
+.feature-card:hover,
+.howitworks-step:hover,
+.result-card:hover {
+    border-color: rgba(26, 24, 20, 0.25) !important;
+    box-shadow: 0 8px 24px rgba(26, 24, 20, 0.06) !important;
+    transform: translateY(-2px) !important;
+}
+.pricing-card.pricing-professional {
+    border: 1px solid var(--text-primary) !important;
+    box-shadow: 0 12px 32px rgba(26, 24, 20, 0.08) !important;
+}
+
+/* --- Ana buton: mürekkep-siyahı, keskin köşe --- */
+#calcBtn,
+.btn-primary,
+.login-modal-btn-primary,
+.download-btn,
+button.cta-btn {
+    background: var(--text-primary) !important;
+    background-image: none !important;
+    border: 1px solid var(--text-primary) !important;
+    color: var(--bg-deep) !important;
+    border-radius: 0 !important;
+    font-family: 'Cormorant Garamond', serif !important;
+    font-weight: 500 !important;
+    font-size: 0.78rem !important;
+    letter-spacing: 0.32em !important;
+    text-transform: uppercase !important;
+    padding: 1.05rem 2.75rem !important;
+    transition: background 0.4s ease, color 0.4s ease, letter-spacing 0.4s ease !important;
+    box-shadow: none !important;
+}
+#calcBtn::after,
+.btn-primary::after { display: none !important; }
+#calcBtn:hover,
+.btn-primary:hover,
+.login-modal-btn-primary:hover,
+.download-btn:hover {
+    background: var(--gold-bright) !important;
+    border-color: var(--gold-bright) !important;
+    color: var(--bg-deep) !important;
+    letter-spacing: 0.36em !important;
+    box-shadow: none !important;
+}
+
+/* İkincil buton: outline */
+.login-modal-btn-secondary,
+.btn-secondary {
+    background: transparent !important;
+    border: 1px solid var(--text-primary) !important;
+    color: var(--text-primary) !important;
+    border-radius: 0 !important;
+    font-family: 'Cormorant Garamond', serif !important;
+    letter-spacing: 0.28em !important;
+    text-transform: uppercase !important;
+    font-size: 0.75rem !important;
+}
+.login-modal-btn-secondary:hover,
+.btn-secondary:hover {
+    background: var(--text-primary) !important;
+    color: var(--bg-deep) !important;
+}
+
+/* --- Input: hairline underline (floating-label korumalı) --- */
+.input-field input,
+input[type="text"],
+input[type="date"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+textarea,
+select {
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(26, 24, 20, 0.22) !important;
+    border-radius: 0 !important;
+    color: var(--text-primary) !important;
+    box-shadow: none !important;
+    padding: 22px 4px 10px !important;
+    font-family: 'Cormorant Garamond', serif !important;
+    font-size: 1.1rem !important;
+    font-weight: 400 !important;
+    letter-spacing: 0 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    transition: border-color 0.3s ease !important;
+}
+.input-field input:focus,
+input:focus,
+textarea:focus,
+select:focus {
+    border: none !important;
+    border-bottom: 1px solid var(--gold-bright) !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+::placeholder {
+    color: transparent !important;
+    opacity: 0 !important;
+}
+.input-field input:focus::placeholder {
+    color: var(--text-muted) !important;
+    opacity: 0.6 !important;
+    font-style: italic !important;
+}
+
+/* Floating label — editorial */
+.input-field label {
+    left: 4px !important;
+    color: var(--text-muted) !important;
+    font-family: 'Cormorant Garamond', serif !important;
+    font-style: italic !important;
+    font-weight: 400 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    text-shadow: none !important;
+    font-size: 1.05rem !important;
+    background: transparent !important;
+    padding: 0 !important;
+}
+.input-field input:focus + label,
+.input-field input:not(:placeholder-shown) + label {
+    top: 4px !important;
+    transform: translateY(0) scale(0.78) !important;
+    color: var(--gold-bright) !important;
+    letter-spacing: 0.1em !important;
+    background: transparent !important;
+    text-transform: uppercase !important;
+}
+
+/* Input-card iç label'ler */
+.input-card-title {
+    font-family: 'Fraunces', 'Cormorant Garamond', serif !important;
+    font-style: italic !important;
+    font-weight: 300 !important;
+    color: var(--text-primary) !important;
+    text-transform: none !important;
+    letter-spacing: -0.01em !important;
+    font-size: 1.6rem !important;
+    background: none !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    margin-bottom: 2rem !important;
+    display: block !important;
+}
+.input-hint,
+.input-hint-sub {
+    color: var(--text-muted) !important;
+    font-style: italic !important;
+    font-family: 'Cormorant Garamond', serif !important;
+}
+
+/* --- Auth widget: sade --- */
+.auth-widget {
+    background: var(--text-primary) !important;
+    color: var(--bg-deep) !important;
+    border: 1px solid var(--text-primary) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+.auth-widget a,
+.auth-widget-link {
+    color: var(--bg-deep) !important;
+    font-family: 'Cormorant Garamond', serif !important;
+    letter-spacing: 0.25em !important;
+    text-transform: uppercase !important;
+    font-size: 0.72rem !important;
+}
+
+/* --- Footer --- */
+.footer,
+footer {
+    background: var(--bg-elevated) !important;
+    color: var(--text-secondary) !important;
+    border-top: 1px solid rgba(26, 24, 20, 0.08) !important;
+}
+.footer a { color: var(--text-primary) !important; }
+.footer h4 {
+    font-family: 'Fraunces', Georgia, serif !important;
+    font-style: italic !important;
+    color: var(--text-primary) !important;
+    background: none !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+}
+
+/* --- Pricing kart başlıkları --- */
+.pricing-plan-name {
+    font-family: 'Fraunces', Georgia, serif !important;
+    font-style: italic !important;
+    font-weight: 300 !important;
+    color: var(--text-primary) !important;
+    background: none !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+}
+.pricing-price,
+.pricing-amount,
+.pricing-quota-num {
+    color: var(--text-primary) !important;
+    background: none !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+}
+.pricing-popular-badge {
+    background: var(--text-primary) !important;
+    color: var(--bg-deep) !important;
+    border: none !important;
+    box-shadow: none !important;
+    letter-spacing: 0.28em !important;
+    font-family: 'Cormorant Garamond', serif !important;
+    text-transform: uppercase !important;
+}
+
+/* --- Modal --- */
+.modal-overlay,
+.login-modal-overlay {
+    background: rgba(26, 24, 20, 0.45) !important;
+    backdrop-filter: blur(4px) !important;
+}
+.modal,
+.login-modal {
+    background: var(--bg-surface) !important;
+    border: 1px solid rgba(26, 24, 20, 0.1) !important;
+    border-radius: 0 !important;
+    color: var(--text-primary) !important;
+    box-shadow: 0 24px 60px rgba(26, 24, 20, 0.15) !important;
+}
+.login-modal-title,
+.modal h2, .modal h3 {
+    font-family: 'Fraunces', Georgia, serif !important;
+    font-style: italic !important;
+    font-weight: 300 !important;
+    color: var(--text-primary) !important;
+    background: none !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    text-transform: none !important;
+    letter-spacing: -0.01em !important;
+}
+
+/* --- Başlıklar için gradient-text iptali --- */
+.gradient-gold-text,
+.gradient-text {
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* --- Scrollbar: ince koyu --- */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-elevated); }
+::-webkit-scrollbar-thumb {
+    background: var(--text-muted);
+    border-radius: 0;
+}
+
+/* --- Animasyon hızlarını editorial modu için yavaşlat/sadeleştir --- */
+@keyframes cosmicShift { 0%, 100% { opacity: 1; } }
+@keyframes auraBreath { 0%, 100% { opacity: 0; } }
+@keyframes nebulaDrift { 0%, 100% { opacity: 0; } }
+@keyframes twinkle { 0%, 100% { opacity: 0; } }
+
+/* --- Kart/bölüm içi metinleri charcoal/ink'e zorla --- */
+.howto-step,
+.howto-step p,
+.howto-step h3,
+.howto-grid p,
+.why-card,
+.why-card p,
+.why-card h3,
+.feature-card,
+.feature-card p,
+.feature-card h3,
+.pricing-features,
+.pricing-features li,
+.pricing-plan-tagline,
+.pricing-period,
+.pricing-per-unit,
+.pricing-quota-label,
+.pricing-currency,
+.pricing-desc,
+.pricing-eyebrow,
+.pricing-card p,
+.pricing-card li,
+.section-desc,
+.age-periods,
+.result-card,
+.result-card p,
+.result-card h3,
+.results-section p,
+.footer p,
+.footer li,
+.footer a,
+.footer h4,
+.login-modal-text,
+.login-modal-hint,
+.login-modal p,
+.modal p,
+.modal h3 {
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    background: none !important;
+}
+.howto-step p,
+.why-card p,
+.feature-card p,
+.pricing-desc,
+.section-desc,
+.login-modal-text,
+.login-modal-hint,
+.footer p,
+.footer li,
+.pricing-plan-tagline,
+.pricing-period,
+.pricing-per-unit,
+.pricing-features li {
+    color: var(--text-secondary) !important;
+    -webkit-text-fill-color: var(--text-secondary) !important;
+}
+.input-hint,
+.input-hint-sub,
+.login-modal-hint,
+.chart-disclaimer,
+.pricing-per-unit-savings {
+    color: var(--text-muted) !important;
+    -webkit-text-fill-color: var(--text-muted) !important;
+}
+
+/* Alt başlıklar: editorial italic serif */
+.howto-step h3,
+.why-card h3,
+.feature-card h3,
+.result-group h3,
+.pricing-plan-name,
+.footer h4 {
+    font-family: 'Fraunces', 'Cormorant Garamond', Georgia, serif !important;
+    font-style: italic !important;
+    font-weight: 300 !important;
+    letter-spacing: -0.01em !important;
+    text-transform: none !important;
+    font-size: 1.4rem !important;
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+}
+
+/* Howto numbered glyphs (01, 02, 03) */
+.howto-step::before {
+    color: rgba(154, 123, 40, 0.2) !important;
+    -webkit-text-fill-color: rgba(154, 123, 40, 0.2) !important;
+}
+.howto-step:hover::before {
+    color: rgba(154, 123, 40, 0.4) !important;
+    -webkit-text-fill-color: rgba(154, 123, 40, 0.4) !important;
+}
+.howto-step:not(:last-child)::after {
+    background: rgba(26, 24, 20, 0.15) !important;
+}
+
+/* Pricing checklist çentik/simge */
+.pricing-features li::before {
+    color: var(--gold-bright) !important;
+    -webkit-text-fill-color: var(--gold-bright) !important;
+}
+
+/* Age periods, result cards */
+.age-period,
+.age-period-label,
+.age-period-value {
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+}
+
+/* Info cards (profession-card, kimler-icin, etc.) + CTA blocks */
+.info-card,
+.info-card p,
+.info-card h3,
+.info-card li,
+.profession-card,
+.profession-card p,
+.cta-desc,
+.cta-block p,
+.kimler-icin p,
+.kimler-icin h3,
+.section p,
+section p,
+section li {
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+}
+.info-card p,
+.profession-card p,
+.cta-desc,
+section p:not(.section-title):not(.hero-title) {
+    color: var(--text-secondary) !important;
+    -webkit-text-fill-color: var(--text-secondary) !important;
+}
+.info-card h3,
+.profession-card h3 {
+    font-family: 'Fraunces', Georgia, serif !important;
+    font-style: italic !important;
+    font-weight: 300 !important;
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    text-transform: none !important;
+    letter-spacing: -0.01em !important;
+}
+
+/* Catch-all: cream/pink hex'lerine hardcoded ne varsa override */
+[style*="color: #F5E6E9"],
+[style*="color: #E0CDD2"],
+[style*="color: #F0D99C"] {
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+}
+
+/* CTA Banner (Hemen Deneyin): editorial'e al */
+.cta-banner {
+    background: var(--bg-elevated) !important;
+    border: 1px solid rgba(26, 24, 20, 0.1) !important;
+    border-radius: 0 !important;
+    box-shadow: 0 1px 2px rgba(26, 24, 20, 0.03) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+.cta-banner::before,
+.cta-banner::after { display: none !important; }
+.cta-title {
+    font-family: 'Fraunces', Georgia, serif !important;
+    font-style: italic !important;
+    font-weight: 300 !important;
+    font-size: clamp(2rem, 3.8vw, 3rem) !important;
+    letter-spacing: -0.02em !important;
+    text-transform: none !important;
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    color: var(--text-primary) !important;
+    filter: none !important;
+    animation: none !important;
+}
+.cta-block p,
+.cta-banner p,
+.cta-desc {
+    color: var(--text-secondary) !important;
+    -webkit-text-fill-color: var(--text-secondary) !important;
+}
+
+/* Eyebrow color (various sections) */
+.pricing-eyebrow {
+    color: var(--gold-bright) !important;
+    -webkit-text-fill-color: var(--gold-bright) !important;
+    font-family: 'Cormorant Garamond', serif !important;
+    letter-spacing: 0.32em !important;
+    text-transform: uppercase !important;
+    font-size: 0.75rem !important;
+}
+.pricing-eyebrow-line {
+    background: rgba(154, 123, 40, 0.35) !important;
+}
+
+/* ================ /EDITORIAL ================ */
+
 
 :root {
-    /* Arka plan katmanları — Obsidyen (mor tonlu gece-siyahı) */
-    --bg-deep:        #080512;
-    --bg-base:        #0D0820;
-    --bg-surface:     #14102A;
-    --bg-elevated:    #1C1538;
+    /* Arka plan — kağıt kremi (Editorial Mystique) */
+    --bg-deep:        #FAF7F2;
+    --bg-base:        #FAF7F2;
+    --bg-surface:     #FFFFFF;
+    --bg-elevated:    #F5F0E8;
 
-    /* Ana accent renkleri */
-    --gold-bright:    #D4AF37;
-    --gold-muted:     #8B7536;
-    --gold-glow:      rgba(212, 175, 55, 0.15);
+    /* Accent — antika altın (seyrek kullanım) */
+    --gold-bright:    #9A7B28;
+    --gold-muted:     #7A5E1C;
+    --gold-glow:      rgba(154, 123, 40, 0.10);
 
-    /* Mistik accent — pembe uyumlu */
-    --amethyst:       #C77DBA;
-    --amethyst-glow:  rgba(199, 125, 186, 0.2);
-    --crimson:        #D4507A;
-    --celestial:      #7EB8DA;
+    /* Mistik accent — oxblood ve mürekkep */
+    --amethyst:       #5B1E2E;
+    --amethyst-glow:  rgba(91, 30, 46, 0.08);
+    --crimson:        #5B1E2E;
+    --celestial:      #2A3344;
 
-    /* Metin renkleri — pembe-krem (kontrast için parlatildi) */
-    --text-primary:   #F5E6E9;  /* Lum 232 — yuksek kontrast */
-    --text-secondary: #D4AAB2;  /* Lum 175 — okunabilir muted */
-    --text-muted:     #B08D95;  /* Lum 144 — hala muted ama okunur */
+    /* Metin — antrasit siyah */
+    --text-primary:   #1A1814;
+    --text-secondary: #4A4238;
+    --text-muted:     #8A8275;
 
-    /* Kenarlık */
-    --border-gold:    rgba(212, 175, 55, 0.3);
-    --border-subtle:  rgba(245, 230, 233, 0.08);
+    /* Kenarlık — mürekkep hairline */
+    --border-gold:    rgba(26, 24, 20, 0.14);
+    --border-subtle:  rgba(26, 24, 20, 0.07);
 
     /* Legacy aliases for JS references */
-    --bg-cosmos:      #080512;
-    --accent-gold:    #D4AF37;
-    --accent-warm:    #C49A2A;
-    --accent-rose:    #D4507A;
-    --accent-cyan:    #7EB8DA;
-    --accent-violet:  #C77DBA;
-    --violet-deep:    #8A3D7E;
-    --violet-glow:    rgba(199, 125, 186, 0.25);
-    --cyan-glow:      rgba(126, 184, 218, 0.2);
-    --rose-glow:      rgba(212, 80, 122, 0.2);
-    --text:           #F5E6E9;
-    --text-soft:      #B89098;
-    --text-dim:       #6E4A55;
-    --bg-card:        rgba(20, 16, 42, 0.80);
-    --bg-glass:       rgba(28, 21, 56, 0.55);
-    --glass-blur:     blur(20px);
+    --bg-cosmos:      #FAF7F2;
+    --accent-gold:    #9A7B28;
+    --accent-warm:    #7A5E1C;
+    --accent-rose:    #5B1E2E;
+    --accent-cyan:    #2A3344;
+    --accent-violet:  #5B1E2E;
+    --violet-deep:    #3E1420;
+    --violet-glow:    rgba(91, 30, 46, 0.08);
+    --cyan-glow:      rgba(42, 51, 68, 0.06);
+    --rose-glow:      rgba(91, 30, 46, 0.08);
+    --text:           #1A1814;
+    --text-soft:      #4A4238;
+    --text-dim:       #8A8275;
+    --bg-card:        #FFFFFF;
+    --bg-glass:       rgba(255, 255, 255, 0.75);
+    --glass-blur:     blur(8px);
     --glass-border:   1px solid var(--border-gold);
 }
 
@@ -55,41 +717,19 @@ html {
     overflow-x: hidden;
 }
 body {
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 300;
+    font-family: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
+    font-weight: 400;
     background: var(--bg-deep);
     color: var(--text-primary);
-    line-height: 1.8;
+    line-height: 1.7;
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
+    font-feature-settings: "liga", "dlig", "ss01";
 }
 
-/* Cosmic multi-layered background */
-body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-        radial-gradient(ellipse at 20% 50%, #1A0A2E 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 20%, #0D0520 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 80%, rgba(155, 89, 182, 0.18) 0%, transparent 45%),
-        radial-gradient(ellipse at 30% 30%, rgba(212, 175, 55, 0.06) 0%, transparent 50%);
-    animation: cosmicShift 25s ease-in-out infinite alternate;
-    z-index: 0;
-    pointer-events: none;
-}
-
-/* Noise texture overlay */
-body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    opacity: 0.03;
-    pointer-events: none;
-    z-index: 0;
-}
+/* Editorial: no cosmic gradient, no noise */
+body::before, body::after { display: none; }
 
 @keyframes cosmicShift {
     0%   { opacity: 0.8; transform: scale(1) rotate(0deg); }
