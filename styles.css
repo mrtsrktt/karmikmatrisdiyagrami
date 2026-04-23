@@ -1,12 +1,13 @@
 /* ====== RESET & BASE ====== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+
 :root {
-    /* Arka plan katmanları — Pembe tonları */
-    --bg-deep:        #3D1028;
-    --bg-base:        #4A1832;
-    --bg-surface:     #5A2240;
-    --bg-elevated:    #6E2E52;
+    /* Arka plan katmanları — Obsidyen (mor tonlu gece-siyahı) */
+    --bg-deep:        #080512;
+    --bg-base:        #0D0820;
+    --bg-surface:     #14102A;
+    --bg-elevated:    #1C1538;
 
     /* Ana accent renkleri */
     --gold-bright:    #D4AF37;
@@ -29,7 +30,7 @@
     --border-subtle:  rgba(245, 230, 233, 0.08);
 
     /* Legacy aliases for JS references */
-    --bg-cosmos:      #3D1028;
+    --bg-cosmos:      #080512;
     --accent-gold:    #D4AF37;
     --accent-warm:    #C49A2A;
     --accent-rose:    #D4507A;
@@ -42,8 +43,8 @@
     --text:           #F5E6E9;
     --text-soft:      #B89098;
     --text-dim:       #6E4A55;
-    --bg-card:        rgba(74, 24, 50, 0.75);
-    --bg-glass:       rgba(90, 34, 64, 0.50);
+    --bg-card:        rgba(20, 16, 42, 0.80);
+    --bg-glass:       rgba(28, 21, 56, 0.55);
     --glass-blur:     blur(20px);
     --glass-border:   1px solid var(--border-gold);
 }
@@ -70,9 +71,9 @@ body::before {
     position: fixed;
     inset: 0;
     background:
-        radial-gradient(ellipse at 20% 50%, #5A1838 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 20%, #4A1230 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 80%, rgba(212, 80, 122, 0.25) 0%, transparent 40%),
+        radial-gradient(ellipse at 20% 50%, #1A0A2E 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, #0D0520 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(155, 89, 182, 0.18) 0%, transparent 45%),
         radial-gradient(ellipse at 30% 30%, rgba(212, 175, 55, 0.06) 0%, transparent 50%);
     animation: cosmicShift 25s ease-in-out infinite alternate;
     z-index: 0;
@@ -157,13 +158,13 @@ body::after {
 }
 .nebula:nth-child(1) {
     width: 500px; height: 400px;
-    background: radial-gradient(circle, rgba(199,125,186,0.28), transparent 70%);
+    background: radial-gradient(circle, rgba(155,89,182,0.22), transparent 70%);
     top: -10%; left: -5%;
     animation-duration: 30s;
 }
 .nebula:nth-child(2) {
     width: 400px; height: 500px;
-    background: radial-gradient(circle, rgba(212,80,122,0.22), transparent 70%);
+    background: radial-gradient(circle, rgba(74,144,217,0.14), transparent 70%);
     bottom: -15%; right: -10%;
     animation-duration: 25s;
     animation-delay: 5s;
@@ -203,9 +204,9 @@ body::after {
     width: 900px;
     height: 900px;
     background: radial-gradient(circle,
-        rgba(212,175,55,0.12) 0%,
-        rgba(199,125,186,0.07) 28%,
-        rgba(212,80,122,0.05) 48%,
+        rgba(212,175,55,0.14) 0%,
+        rgba(155,89,182,0.09) 28%,
+        rgba(74,144,217,0.05) 48%,
         transparent 72%);
     animation: auraBreath 12s ease-in-out infinite;
     pointer-events: none;
@@ -248,13 +249,13 @@ body::after {
 .aurora-blob.aurora-2 {
     width: 340px; height: 340px;
     right: 6%; top: 30px;
-    background: radial-gradient(circle, rgba(199,125,186,0.55), transparent 65%);
+    background: radial-gradient(circle, rgba(155,89,182,0.50), transparent 65%);
     animation-delay: 4s;
 }
 .aurora-blob.aurora-3 {
     width: 300px; height: 300px;
     left: 38%; top: 60px;
-    background: radial-gradient(circle, rgba(212,80,122,0.45), transparent 65%);
+    background: radial-gradient(circle, rgba(74,144,217,0.35), transparent 65%);
     animation-delay: 8s;
 }
 @keyframes auroraFloat {
@@ -270,7 +271,7 @@ body::after {
     gap: 14px;
     padding: 13px 30px;
     margin-bottom: 40px;
-    background: linear-gradient(135deg, rgba(40, 28, 56, 0.85), rgba(96, 32, 68, 0.78));
+    background: linear-gradient(135deg, rgba(28, 21, 56, 0.85), rgba(60, 40, 90, 0.78));
     border: 1px solid rgba(212, 175, 55, 0.85);
     border-radius: 2px;
     color: #FFE9A8;
@@ -1968,7 +1969,7 @@ body::after {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(61,16,40,0.82);
+    background: rgba(8,5,18,0.82);
     z-index: 1000;
     justify-content: center;
     align-items: center;
@@ -1986,7 +1987,7 @@ body::after {
     to   { opacity: 1; backdrop-filter: blur(12px); }
 }
 .modal {
-    background: linear-gradient(160deg, rgba(74, 24, 50, 0.97), rgba(61, 16, 40, 0.99));
+    background: linear-gradient(160deg, rgba(28, 21, 56, 0.97), rgba(13, 8, 32, 0.99));
     backdrop-filter: blur(20px);
     border-radius: 2px;
     max-width: 720px;
@@ -2199,7 +2200,7 @@ body::after {
     background: linear-gradient(90deg, transparent, rgba(212,175,55,0.3), rgba(155,89,182,0.2), rgba(212,175,55,0.3), transparent);
 }
 .consultant-divider span {
-    background: linear-gradient(135deg, rgba(58,16,40,0.97), rgba(45,12,32,0.99));
+    background: linear-gradient(135deg, rgba(20,16,42,0.97), rgba(12,7,28,0.99));
     padding: 4px 20px;
     position: relative;
     font-family: 'Cinzel', serif;
@@ -2797,10 +2798,10 @@ body.is-loading > *:not(.intro-loader) {
     justify-content: center;
     background:
         radial-gradient(ellipse at center,
-            #5A1838 0%,
-            #3D1028 35%,
-            #1A0612 75%,
-            #050308 100%);
+            #1C1538 0%,
+            #0D0820 35%,
+            #080512 75%,
+            #030106 100%);
     overflow: hidden;
     will-change: transform, opacity;
 }
@@ -3304,7 +3305,7 @@ body.is-loading > *:not(.intro-loader) {
 
 /* ===== Card base ===== */
 .pricing-card {
-    background: linear-gradient(135deg, rgba(90, 34, 64, 0.85), rgba(58, 16, 40, 0.95));
+    background: linear-gradient(135deg, rgba(28, 21, 56, 0.85), rgba(13, 8, 32, 0.95));
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--border-gold);
