@@ -52,5 +52,29 @@ form-*.png
 before-*.png
 after-*.png
 
+# Audit / iteration screenshots (design review passes)
+audit-*.jpeg
+audit-*.png
+editorial-*.jpeg
+editorial-*.png
+obsidian-*.jpeg
+obsidian-*.png
+v2-*.jpeg
+v2-*.png
+matrix-*.png
+matrix-*.jpeg
+h1-*.jpeg
+h1-*.png
+section-*.jpeg
+section-*.png
+original-*.jpeg
+original-*.png
+pricing-section.png
+legal-kvkk.png
+
+# DeepCode / Vibeyard / other AI tooling
+.deepcode/
+.vibeyardignore
+
 # Project guidelines (local-only)
 CLAUDE.md
