@@ -163,9 +163,15 @@ function calculateMatrixValues(day, month, yearStr) {
 }
 
 // --- Main entry: handles both birth chart + karma matrix ---
-function calculateAll() {
+async function calculateAll() {
+    // Auth widget async yükleniyor; tıklama refresh'ten önce gelirse km_auth_token
+    // henüz set edilmemiş olur. window.km_authReady promise'ini bekleyerek
+    // false-negative login modal'ı engelle.
+    if (window.km_authReady) {
+        try { await window.km_authReady; } catch (_) { /* widget zaten fallback durumda */ }
+    }
+
     // Auth gate: kullanıcı giriş yapmamışsa modal aç ve dur.
-    // window.km_auth_token, index.html'deki Supabase oturumu varsa ayarlanıyor.
     if (!window.km_auth_token) {
         if (typeof window.showLoginModal === 'function') {
             window.showLoginModal();

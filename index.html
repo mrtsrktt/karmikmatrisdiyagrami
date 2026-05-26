@@ -960,7 +960,7 @@
 <script src="animation.js"></script>
 
 <!-- Auth widget — sayfanın sağ üstündeki Hesabım/Giriş butonu -->
-<script src="lib/supabase-config.js?v=3"></script>
+<script src="lib/supabase-config.js?v=4"></script>
 <script type="module">
     import { sb, getCurrentSession, getProfile, signOut } from '/lib/supabase-client.js';
 
@@ -1061,8 +1061,11 @@
         }
     }, 2000);
 
-    refreshWidget();
-    sb.auth.onAuthStateChange(() => refreshWidget());
+    // İlk refresh'i bir promise olarak expose et — calculator.js calculateAll() awaiter.
+    window.km_authReady = refreshWidget();
+    sb.auth.onAuthStateChange(() => {
+        window.km_authReady = refreshWidget();
+    });
 </script>
 
 <!-- Editorial scroll progress + subtle reveal -->
