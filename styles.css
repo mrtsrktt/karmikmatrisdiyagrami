@@ -799,7 +799,7 @@ section p:not(.section-title):not(.hero-title) {
 }
 /* Hero N° small numeral anchor */
 .hero-content::after {
-    content: 'N° 01 — Astroşuşu Karmik Sistem';
+    content: 'N° 01 — Gizemli Karma';
     position: absolute;
     left: clamp(1rem, 4vw, 4rem);
     top: calc(100% + 8px);
