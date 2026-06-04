@@ -20,11 +20,11 @@
 
   // ----- Font yolları (proje köküne göre) -----
   const FONT_FILES = {
-    'Cinzel-Variable.ttf':                   'fonts/Cinzel-Variable.ttf',
-    'CormorantGaramond-Variable.ttf':        'fonts/CormorantGaramond-Variable.ttf',
+    'Cinzel-Variable.ttf':                   '/fonts/Cinzel-Variable.ttf',
+    'CormorantGaramond-Variable.ttf':        '/fonts/CormorantGaramond-Variable.ttf',
     'CormorantGaramond-Italic-Variable.ttf': '/fonts/CormorantGaramond-Italic-Variable.ttf',
-    'IMFellEnglish-Regular.ttf':             'fonts/IMFellEnglish-Regular.ttf',
-    'IMFellEnglish-Italic.ttf':              'fonts/IMFellEnglish-Italic.ttf',
+    'IMFellEnglish-Regular.ttf':             '/fonts/IMFellEnglish-Regular.ttf',
+    'IMFellEnglish-Italic.ttf':              '/fonts/IMFellEnglish-Italic.ttf',
   };
 
   const FONT_FAMILIES = {
