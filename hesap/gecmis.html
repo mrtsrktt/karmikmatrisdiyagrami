@@ -116,18 +116,9 @@
                     // detayı yeni sekmede aç (basit overlay yerine, oturuma yer açmak için)
                     window.location.href = `/hesap/analiz.html?id=${id}`;
                 } else if (action === 'pdf') {
-                    btn.disabled = true;
-                    btn.textContent = '...';
-                    try {
-                        const { analysis } = await apiFetch(`/api/analyses/get?id=${id}`);
-                        // PDF tekrar üretmek için ayrı sayfaya yönlendir
-                        sessionStorage.setItem('km_replay_analysis', JSON.stringify(analysis));
-                        window.location.href = `/hesap/analiz.html?id=${id}&download=1`;
-                    } catch (err) {
-                        alert('PDF üretilemedi: ' + err.message);
-                        btn.disabled = false;
-                        btn.textContent = 'PDF';
-                    }
+                    // analiz.html zaten id ile veriyi çekip otomatik indiriyor —
+                    // burada tekrar fetch yok (gereksiz API çağrısı + olası hata kaynağı kaldırıldı)
+                    window.location.href = `/hesap/analiz.html?id=${id}&download=1`;
                 }
             });
         }

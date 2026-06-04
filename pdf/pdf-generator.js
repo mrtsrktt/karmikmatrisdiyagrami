@@ -22,7 +22,7 @@
   const FONT_FILES = {
     'Cinzel-Variable.ttf':                   'fonts/Cinzel-Variable.ttf',
     'CormorantGaramond-Variable.ttf':        'fonts/CormorantGaramond-Variable.ttf',
-    'CormorantGaramond-Italic-Variable.ttf': 'fonts/CormorantGaramond-Italic-Variable.ttf',
+    'CormorantGaramond-Italic-Variable.ttf': '/fonts/CormorantGaramond-Italic-Variable.ttf',
     'IMFellEnglish-Regular.ttf':             'fonts/IMFellEnglish-Regular.ttf',
     'IMFellEnglish-Italic.ttf':              'fonts/IMFellEnglish-Italic.ttf',
   };
