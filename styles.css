@@ -6336,3 +6336,39 @@ body.is-logged-in .input-section {
     .about-portrait { max-width: 300px; margin: 0 auto; }
     .about-portrait::after { right: -10px; bottom: -10px; top: 10px; left: 10px; }
 }
+
+/* "Bizi Ayıran Şey" bölümü — ters yerleşim + ince ayraç + üç sütun */
+.about-difference { border-top: 1px solid rgba(139, 79, 85, 0.12); }
+@media (min-width: 761px) {
+    .about-grid.about-reverse { grid-template-columns: 1fr minmax(220px, 360px); }
+}
+.about-pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.3rem;
+    margin-top: 2.1rem;
+}
+.about-pillar {
+    border-top: 1px solid var(--border-gold);
+    padding-top: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+.about-pillar-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gold-bright);
+    line-height: 1.3;
+}
+.about-pillar-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.02rem;
+    line-height: 1.4;
+    color: var(--text-secondary);
+}
+@media (max-width: 560px) {
+    .about-pillars { grid-template-columns: 1fr; gap: 1rem; }
+}
