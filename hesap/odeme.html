@@ -72,7 +72,10 @@
                 </div>
                 <div class="iban-row">
                     <span class="iban-label">Hesap Sahibi</span>
-                    <span class="iban-value" id="accountHolderDisplay">[HESAP SAHİBİ]</span>
+                    <span>
+                        <span class="iban-value" id="accountHolderDisplay">[HESAP SAHİBİ]</span>
+                        <button class="iban-copy-btn" id="copyHolderBtn">Kopyala</button>
+                    </span>
                 </div>
                 <div class="iban-row">
                     <span class="iban-label">IBAN</span>
@@ -83,7 +86,10 @@
                 </div>
                 <div class="iban-row">
                     <span class="iban-label">Açıklamaya Yazınız</span>
-                    <span class="iban-value">Karma Matris Kredi <span id="userIdShort"></span></span>
+                    <span>
+                        <span class="iban-value" id="descDisplay">Karma Matris Kredi <span id="userIdShort"></span></span>
+                        <button class="iban-copy-btn" id="copyDescBtn">Kopyala</button>
+                    </span>
                 </div>
             </div>
         </section>
@@ -137,14 +143,20 @@
     document.getElementById('accountHolderDisplay').textContent = BANK_INFO.holder;
     document.getElementById('ibanDisplay').textContent          = BANK_INFO.iban;
 
-    document.getElementById('copyIbanBtn').addEventListener('click', () => {
-        navigator.clipboard.writeText(BANK_INFO.iban.replace(/\s/g, ''))
-            .then(() => {
-                const btn = document.getElementById('copyIbanBtn');
+    // Kopyala butonları — IBAN, Hesap Sahibi ve Açıklama için ortak
+    function wireCopy(btnId, getText) {
+        const btn = document.getElementById(btnId);
+        if (!btn) return;
+        btn.addEventListener('click', () => {
+            navigator.clipboard.writeText(getText()).then(() => {
                 btn.textContent = 'Kopyalandı ✓';
                 setTimeout(() => { btn.textContent = 'Kopyala'; }, 1500);
-            });
-    });
+            }).catch(() => {});
+        });
+    }
+    wireCopy('copyIbanBtn',   () => BANK_INFO.iban.replace(/\s/g, ''));
+    wireCopy('copyHolderBtn', () => BANK_INFO.holder);
+    wireCopy('copyDescBtn',   () => (document.getElementById('descDisplay').textContent || '').trim());
 
     // Paketleri çek
     let selectedPackage = null;
