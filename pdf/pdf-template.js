@@ -199,23 +199,15 @@
       const positions = positionsBy.get(num).join(', ');
       const arcanaName = ARCANA_NAMES[num] || data.name;
 
-      // Build category content as a stack
-      const categoryStacks = [];
-      for (const [catName, items] of Object.entries(data.categories)) {
-        categoryStacks.push({
-          text: [
-            { text: catName + ': ', style: 'healthCatLabel' },
-            { text: items.join(', '), style: 'healthCatItems' },
-          ],
-          margin: [0, 0, 0, 4],
-        });
-      }
-
       // Header row: number + name + badge
       const badgeText = count > 1
         ? `Haritada ${count} kez tekrar ediyor (${positions})`
         : `Haritada 1 kez (${positions})`;
 
+      // NOT: Her kartta tekrar eden eksiksiz hastalık kategorisi dökümü
+      // kaldırıldı (klinik/ürkütücü duruyordu ve her sayıda tekrar ediyordu).
+      // Önemli bedensel alanlar zaten aşağıdaki zarif yorum paragrafının
+      // içinde doğal cümlelerle geçiyor — bölümün özü artık o paragraftır.
       const cardContent = {
         stack: [
           // Header: big number + arcana name
@@ -230,15 +222,13 @@
                 width: '*',
               },
             ],
-            margin: [0, 0, 0, 10],
+            margin: [0, 0, 0, 8],
           },
-          // Categories
-          ...categoryStacks,
-          // Interpretation (gizem-tone paragraph)
+          // Interpretation (gizem-tone paragraph) — bölümün özü
           ...(data.interpretation ? [{
             text: data.interpretation,
             style: 'healthInterpretation',
-            margin: [0, 8, 0, 0],
+            margin: [0, 2, 0, 0],
           }] : []),
         ],
       };
