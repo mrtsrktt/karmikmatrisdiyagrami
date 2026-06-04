@@ -240,7 +240,7 @@
       // Wait for both
       await pdfmakePromise;
 
-      updateLoadingMessage('Karmik metniniz yazılıyor...');
+      updateLoadingMessage('Karmik metniniz yazılıyor (1-2 dakika sürebilir)...');
       const summaryText = await summaryPromise;
 
       // Stage 3: load fonts (parallel with above where possible)
