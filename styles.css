@@ -6289,34 +6289,31 @@ body.is-logged-in .input-section {
     gap: 1.5rem;
     margin-top: clamp(2rem, 5vh, 3.5rem);
 }
+/* Kartlar ŞEFFAF — gerçek ürün görselleri gül kurusu zemine kaynaşsın (kutu yok) */
 .showcase-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(251, 242, 238, 0.96) 100%);
-    border: 1px solid var(--border-gold);
-    border-radius: 2px;
-    padding: 2.4rem 1.8rem;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 1rem 1.2rem 0;
     text-align: center;
     position: relative;
-    transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.45s ease;
+    transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-.showcase-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 52px rgba(139, 79, 85, 0.16);
-}
-/* köşe altın süsü */
-.showcase-card::before, .showcase-card::after {
-    content: '';
-    position: absolute;
-    width: 16px; height: 16px;
-    border-color: var(--gold-bright);
-    border-style: solid;
-    opacity: 0.6;
-}
-.showcase-card::before { top: 8px; left: 8px; border-width: 1px 0 0 1px; }
-.showcase-card::after  { bottom: 8px; right: 8px; border-width: 0 1px 1px 0; }
+.showcase-card:hover { transform: translateY(-6px); }
+.showcase-card::before, .showcase-card::after { content: none; }
 .showcase-visual {
     width: 100%;
-    max-width: 190px;
-    margin: 0 auto 1.6rem;
+    max-width: 200px;
+    margin: 0 auto 1.5rem;
+}
+/* Gerçek ürün görselleri (natal harita + diyagram) — şeffaf gibi, zemine kaynaşır */
+.showcase-visual-img {
+    max-width: 320px;
+}
+.showcase-visual-img img {
+    width: 100%;
+    height: auto;
+    display: block;
 }
 .showcase-visual svg { width: 100%; height: auto; display: block; }
 .showcase-card h3 {
