@@ -10,7 +10,7 @@
 import { SYSTEM_PROMPT, buildUserPrompt, buildFewShotMessages } from '../lib/prompt.js';
 import { authenticateRequest, supabaseAdmin } from '../lib/supabase-server.js';
 
-// AI sağlayıcı: DeepSeek (OpenAI-uyumlu API). Anthropic'ten geçildi.
+// Özet üretim servisi (harici metin API'si).
 // Anahtar Vercel env var'ından okunur: DEEPSEEK_API_KEY
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
 const DEEPSEEK_MODEL   = 'deepseek-chat';
@@ -112,7 +112,7 @@ export default async function handler(req, res) {
   }
 
   // ---------------------------------------------------------------
-  // 4) Claude API
+  // 4) Özet servisi çağrısı
   // ---------------------------------------------------------------
   let summary = null;
   let aiUsage = null;
@@ -145,7 +145,7 @@ export default async function handler(req, res) {
 
     if (!dsResponse.ok) {
       const errText = await dsResponse.text().catch(() => '');
-      throw new Error(`DeepSeek API ${dsResponse.status}: ${errText.slice(0, 300)}`);
+      throw new Error(`Özet servisi ${dsResponse.status}: ${errText.slice(0, 300)}`);
     }
 
     const dsData = await dsResponse.json();
@@ -160,7 +160,7 @@ export default async function handler(req, res) {
       throw new Error(`Üretilen özet beklenenden kısa: ${summary?.length || 0}`);
     }
   } catch (error) {
-    console.error('DeepSeek API error:', error);
+    console.error('summary service error:', error);
 
     // Krediyi geri ver (refund)
     await supabaseAdmin.rpc('admin_grant_credits', {
@@ -172,8 +172,7 @@ export default async function handler(req, res) {
 
     return res.status(500).json({
       error: 'ai_generation_failed',
-      message: 'Karmik özet üretilirken bir hata oluştu. Krediniz iade edildi.',
-      details: error.message
+      message: 'Karmik özet üretilirken bir hata oluştu. Krediniz iade edildi.'
     });
   }
 

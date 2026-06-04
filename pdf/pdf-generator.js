@@ -234,7 +234,7 @@
       const pdfmakePromise = loadPdfMake();
 
       // Stage 2: fetch summary from backend (the slow part)
-      updateLoadingMessage('Sayılarınız Claude\'a iletiliyor...');
+      updateLoadingMessage('Sayılarınız yorumlanıyor...');
       const summaryPromise = fetchSummary(birthDate, matrixResults);
 
       // Wait for both
