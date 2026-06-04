@@ -88,44 +88,16 @@
             </div>
         </section>
 
-        <!-- 3. Adım: Bildirim formu -->
+        <!-- 3. Adım: Ödemeyi bildir — tek buton -->
         <section class="hesap-section">
-            <h2 class="hesap-section-title">3. Ödeme Bildirimi</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                Havalenizi yaptıktan sonra aşağıdaki formu doldurun. Onay sonrası kredileriniz otomatik yüklenir.
+            <h2 class="hesap-section-title">3. Ödemenizi Bildirin</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.25rem;">
+                Havalenizi yukarıdaki hesaba yaptıktan sonra <strong>"Ödeme Yaptım"</strong> butonuna basın.
+                Siparişiniz yöneticimize iletilir; ödemeniz kontrol edilip onaylandıktan sonra krediniz
+                otomatik olarak hesabınıza yüklenir (genellikle 1-24 saat).
             </p>
-
-            <form id="paymentForm" class="hesap-form" novalidate>
-
-                <div class="hesap-field">
-                    <label class="hesap-label" for="senderName">Havaleyi Yapan Kişinin Adı *</label>
-                    <input class="hesap-input" type="text" id="senderName" required maxlength="200">
-                </div>
-
-                <div class="hesap-field">
-                    <label class="hesap-label" for="bankName">Hangi Bankadan Gönderdiniz?</label>
-                    <input class="hesap-input" type="text" id="bankName" placeholder="Örn: Ziraat, Garanti, İş Bankası..." maxlength="100">
-                </div>
-
-                <div class="hesap-field">
-                    <label class="hesap-label" for="senderIban">Gönderdiğiniz Hesabın IBAN'ı (opsiyonel)</label>
-                    <input class="hesap-input" type="text" id="senderIban" placeholder="TR..." maxlength="34">
-                </div>
-
-                <div class="hesap-field">
-                    <label class="hesap-label" for="transferDate">Havale Tarihi</label>
-                    <input class="hesap-input" type="date" id="transferDate">
-                </div>
-
-                <div class="hesap-field">
-                    <label class="hesap-label" for="referenceNote">Eklemek İstediğiniz Not</label>
-                    <textarea class="hesap-textarea" id="referenceNote" rows="3" maxlength="1000" placeholder="Dekont açıklaması, özel notunuz..."></textarea>
-                </div>
-
-                <div id="paymentMessage" class="hesap-message"></div>
-
-                <button type="submit" id="submitBtn" class="hesap-btn" disabled>Ödeme Bildirimini Gönder</button>
-            </form>
+            <div id="paymentMessage" class="hesap-message"></div>
+            <button type="button" id="submitBtn" class="hesap-btn" disabled>Ödeme Yaptım</button>
         </section>
 
         <!-- 4. Geçmiş ödemeler -->
@@ -140,22 +112,26 @@
 
 <script type="module">
     import { requireAuth, apiFetch, initTopbar, formatDateTR, escHtml, showMessage, clearMessage } from '/hesap/hesap.js';
-    import { getCurrentUser } from '/lib/supabase-client.js';
+    import { getCurrentUser, getProfile } from '/lib/supabase-client.js';
 
     await requireAuth();
     await initTopbar();
 
     const user = await getCurrentUser();
+    let shortId = '';
     if (user) {
-        const shortId = user.id.slice(0, 8).toUpperCase();
+        shortId = user.id.slice(0, 8).toUpperCase();
         document.getElementById('userIdShort').textContent = `(${shortId})`;
     }
+    // Sipariş için ödeyenin adı — giriş yapan kullanıcının profilinden otomatik alınır
+    const profile = await getProfile().catch(() => null);
+    const payerName = (profile?.full_name || user?.email || 'Kullanıcı').toString();
 
     // Banka bilgileri (admin tarafından doldurulacak — şimdilik yer tutucu)
     const BANK_INFO = {
-        bank:    '[BANKA ADI]',
-        holder:  '[HESAP SAHİBİ]',
-        iban:    '[IBAN]'
+        bank:    'VakıfBank',
+        holder:  'Şule Mert',
+        iban:    'TR68 0001 5001 5800 7366 4722 40'
     };
     document.getElementById('bankNameDisplay').textContent     = BANK_INFO.bank;
     document.getElementById('accountHolderDisplay').textContent = BANK_INFO.holder;
@@ -211,19 +187,13 @@
             '<div class="hesap-empty">Paketler yüklenemedi.</div>';
     }
 
-    // Form submit
-    document.getElementById('paymentForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
+    // "Ödeme Yaptım" — seçilen paket için sipariş (pending) oluşturur, admin paneline düşer
+    let submitted = false;
+    document.getElementById('submitBtn').addEventListener('click', async () => {
         clearMessage('paymentMessage');
 
         if (!selectedPackage) {
             showMessage('paymentMessage', 'error', 'Lütfen önce bir paket seçin.');
-            return;
-        }
-
-        const senderName = document.getElementById('senderName').value.trim();
-        if (!senderName) {
-            showMessage('paymentMessage', 'error', 'Havaleyi yapan kişinin adı zorunludur.');
             return;
         }
 
@@ -235,24 +205,21 @@
             await apiFetch('/api/payments/submit', {
                 method: 'POST',
                 body: JSON.stringify({
-                    package_id:      selectedPackage.id,
-                    sender_name:     senderName,
-                    bank_name:       document.getElementById('bankName').value.trim(),
-                    sender_iban:     document.getElementById('senderIban').value.trim(),
-                    transfer_date:   document.getElementById('transferDate').value || null,
-                    reference_note:  document.getElementById('referenceNote').value.trim()
+                    package_id:     selectedPackage.id,
+                    sender_name:    payerName,
+                    reference_note: `Havale açıklaması: Karma Matris Kredi (${shortId})`
                 })
             });
 
-            showMessage('paymentMessage', 'success', 'Ödeme bildiriminiz alındı! Onay sonrası krediniz hesabınıza yüklenecektir. (genellikle 1-24 saat)');
-            document.getElementById('paymentForm').reset();
+            submitted = true;
+            btn.textContent = 'Bildirildi ✓';
+            showMessage('paymentMessage', 'success', 'Ödeme bildiriminiz alındı! Yöneticimiz ödemenizi kontrol edip onayladıktan sonra krediniz hesabınıza yüklenecektir (genellikle 1-24 saat).');
             await loadPaymentHistory();
         } catch (err) {
             console.error(err);
             showMessage('paymentMessage', 'error', err.message || 'Bildirim gönderilemedi.');
         } finally {
-            btn.disabled = false;
-            btn.textContent = 'Ödeme Bildirimini Gönder';
+            if (!submitted) { btn.disabled = false; btn.textContent = 'Ödeme Yaptım'; }
         }
     });
 
