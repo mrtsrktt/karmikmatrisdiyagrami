@@ -9,20 +9,21 @@
 
   // ----- Renk paleti (CLAUDE.md mistik lüks tonu) -----
   const COLORS = {
-    bgDeep:        '#050308',
-    bgBase:        '#0A0612',
-    bgSurface:     '#110D1A',
-    bgElevated:    '#1A1428',
-    goldBright:    '#D4AF37',
-    goldMuted:     '#8B7536',
-    amethyst:      '#9B59B6',
+    // Gül kurusu — AÇIK tema (PDF: açık blush zemin + koyu okunaklı metin)
+    bgDeep:        '#E0B8AD',
+    bgBase:        '#F4E7E2',   // sayfa arka planı — açık blush
+    bgSurface:     '#FFFFFF',   // kart dolgusu — beyaz
+    bgElevated:    '#F0DCD6',
+    goldBright:    '#8B4F55',   // başlık / sayı — derin kuru gül (açık zeminde okunaklı)
+    goldMuted:     '#BE9270',   // ince çizgi / kenarlık — roz altın
+    amethyst:      '#9B5C61',
     crimson:       '#8B1A2E',
-    celestial:     '#4A90D9',
-    textPrimary:   '#F0E6D3',
-    textSecondary: '#A89070',
-    textMuted:     '#5C4A3A',
-    cardBg:        '#1A1428',
-    border:        '#8B7536',
+    celestial:     '#6E5752',
+    textPrimary:   '#2B1F1D',   // gövde metni — koyu mürekkep
+    textSecondary: '#6E5752',
+    textMuted:     '#9A857F',
+    cardBg:        '#FFFFFF',
+    border:        '#C2906B',
   };
 
   // ----- Karmik matris düğüm konumları (calculator.js'ten birebir) -----
@@ -72,23 +73,23 @@
     let svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 700" width="600" height="700">';
 
     // Background
-    svg += '<rect width="600" height="700" fill="#0A0612"/>';
+    svg += '<rect width="600" height="700" fill="#F4E7E2"/>';
 
     // Lines
     for (const [from, to] of NODE_LINES) {
       const p1 = NODE_POSITIONS[from];
       const p2 = NODE_POSITIONS[to];
-      svg += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="rgba(212,175,55,0.25)" stroke-width="0.8"/>`;
+      svg += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="rgba(139,79,85,0.38)" stroke-width="1"/>`;
     }
 
     // Nodes
     for (const [key, pos] of Object.entries(NODE_POSITIONS)) {
       const color = nodeColor(pos.type);
       const value = values[key];
-      svg += `<circle cx="${pos.x}" cy="${pos.y}" r="28" fill="${color}" stroke="#F0E6D3" stroke-width="2"/>`;
+      svg += `<circle cx="${pos.x}" cy="${pos.y}" r="28" fill="${color}" stroke="#FFFFFF" stroke-width="2"/>`;
       // Use registered fonts (Helvetica is NOT available since we override pdfMake.fonts)
       svg += `<text x="${pos.x}" y="${pos.y + 7}" text-anchor="middle" font-family="IMFell" font-size="22" font-weight="bold" fill="#0A0612">${value}</text>`;
-      svg += `<text x="${pos.x}" y="${pos.y + 50}" text-anchor="middle" font-family="Cinzel" font-size="14" fill="#A89070">${key}</text>`;
+      svg += `<text x="${pos.x}" y="${pos.y + 50}" text-anchor="middle" font-family="Cinzel" font-size="15" fill="#6E5752">${key}</text>`;
     }
 
     svg += '</svg>';
@@ -223,8 +224,8 @@
               { text: String(num), font: 'IMFell', fontSize: 28, color: COLORS.goldBright, width: 'auto' },
               {
                 stack: [
-                  { text: arcanaName, font: 'Cinzel', fontSize: 13, color: COLORS.goldBright, characterSpacing: 1, margin: [10, 4, 0, 0] },
-                  { text: badgeText, font: 'Cormorant', italics: true, fontSize: 9, color: COLORS.textSecondary, margin: [10, 2, 0, 0] },
+                  { text: arcanaName, font: 'Cinzel', fontSize: 14, color: COLORS.goldBright, characterSpacing: 1, margin: [10, 4, 0, 0] },
+                  { text: badgeText, font: 'Cormorant', italics: true, fontSize: 11, color: COLORS.textSecondary, margin: [10, 2, 0, 0] },
                 ],
                 width: '*',
               },
@@ -303,9 +304,9 @@
 
       defaultStyle: {
         font: 'Cormorant',
-        fontSize: 11,
+        fontSize: 13,
         color: COLORS.textPrimary,
-        lineHeight: 1.45,
+        lineHeight: 1.5,
       },
 
       content: [
@@ -496,71 +497,71 @@
         sectionDesc: {
           font: 'Cormorant',
           italics: true,
-          fontSize: 11,
+          fontSize: 13,
           color: COLORS.textSecondary,
           alignment: 'center',
         },
         cardTitle: {
           font: 'Cinzel',
-          fontSize: 12,
+          fontSize: 14,
           color: COLORS.goldBright,
           characterSpacing: 1,
         },
         cardNumber: {
           font: 'IMFell',
-          fontSize: 22,
+          fontSize: 26,
           color: COLORS.goldBright,
         },
         cardArcana: {
           font: 'Cormorant',
           italics: true,
-          fontSize: 12,
+          fontSize: 14,
           color: COLORS.textPrimary,
         },
         cardFormula: {
           font: 'IMFell',
           italics: true,
-          fontSize: 9,
+          fontSize: 11,
           color: COLORS.textMuted,
         },
         cardBody: {
           font: 'Cormorant',
-          fontSize: 10.5,
+          fontSize: 13,
           color: COLORS.textPrimary,
-          lineHeight: 1.4,
+          lineHeight: 1.5,
         },
         healthCatLabel: {
           font: 'Cinzel',
-          fontSize: 9.5,
+          fontSize: 12,
           color: COLORS.goldBright,
         },
         healthCatItems: {
           font: 'Cormorant',
-          fontSize: 10,
+          fontSize: 12.5,
           color: COLORS.textPrimary,
-          lineHeight: 1.35,
+          lineHeight: 1.45,
         },
         healthInterpretation: {
           font: 'Cormorant',
           italics: true,
-          fontSize: 10.5,
+          fontSize: 13,
           color: COLORS.textPrimary,
-          lineHeight: 1.5,
+          lineHeight: 1.55,
           alignment: 'justify',
         },
         narrative: {
           font: 'Cormorant',
-          fontSize: 11.5,
+          fontSize: 13.5,
           color: COLORS.textPrimary,
-          lineHeight: 1.55,
+          lineHeight: 1.6,
           alignment: 'justify',
         },
         narrativeMuted: {
           font: 'Cormorant',
           italics: true,
-          fontSize: 10,
+          fontSize: 11.5,
           color: COLORS.textSecondary,
-          lineHeight: 1.5,
+          lineHeight: 1.55,
         },
       },
 
@@ -580,8 +581,8 @@
     function periodCell(label, range) {
       return {
         stack: [
-          { text: label, font: 'Cinzel', fontSize: 10, color: COLORS.goldBright, alignment: 'center', characterSpacing: 1, margin: [0, 0, 0, 4] },
-          { text: range, font: 'IMFell', fontSize: 11, color: COLORS.textPrimary, alignment: 'center' },
+          { text: label, font: 'Cinzel', fontSize: 11, color: COLORS.goldBright, alignment: 'center', characterSpacing: 1, margin: [0, 0, 0, 4] },
+          { text: range, font: 'IMFell', fontSize: 12.5, color: COLORS.textPrimary, alignment: 'center' },
         ],
         fillColor: COLORS.bgSurface,
       };
