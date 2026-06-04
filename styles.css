@@ -6207,3 +6207,135 @@ body.is-paid-customer .section-divider:has(+ [data-marketing]) {
         opacity: 1 !important;
     }
 }
+
+/* ============================================================================
+   GİRİŞ YAPMIŞ KULLANICI — hero + tanıtım bölümlerini gizle (araç moduna geç)
+   ============================================================================ */
+body.is-logged-in .hero-scroll-wrap,
+body.is-logged-in #aboutGizem,
+body.is-logged-in #showcase,
+body.is-logged-in .intro-divider {
+    display: none !important;
+}
+/* Hero gizliyken ilk içerik (form) fixed top-bar'ın altında kalmasın */
+body.is-logged-in .input-section {
+    padding-top: clamp(7rem, 14vh, 9rem) !important;
+}
+
+/* ============================================================================
+   ABOUT / GİZEM — ilk ziyaretçi tanıtımı (gül kurusu, editorial)
+   ============================================================================ */
+.about-gizem { padding: clamp(3.5rem, 9vh, 7rem) 0; }
+.about-grid {
+    display: grid;
+    grid-template-columns: minmax(220px, 360px) 1fr;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;
+}
+.about-portrait { position: relative; }
+.about-portrait img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 2px;
+    box-shadow: 0 24px 60px rgba(139, 79, 85, 0.22);
+}
+.about-portrait::after {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    top: 16px; left: 16px; right: -16px; bottom: -16px;
+    border: 1px solid var(--gold-bright);
+    opacity: 0.55;
+}
+.about-eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    font-size: 0.82rem;
+    color: var(--gold-bright);
+    margin-bottom: 1.1rem;
+}
+.about-eyebrow .kicker-dash { color: var(--gold-bright); margin-right: 0.4em; }
+.about-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-size: clamp(1.9rem, 4vw, 3.1rem);
+    line-height: 1.16;
+    color: var(--text-primary);
+    margin-bottom: 1.6rem;
+}
+.about-title em { font-style: italic; color: var(--amethyst); }
+.about-text p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.18rem;
+    line-height: 1.85;
+    color: var(--text-secondary);
+    margin-bottom: 1.1rem;
+}
+.about-text p strong { color: var(--text-primary); font-weight: 600; }
+.about-benefit { color: var(--text-primary) !important; }
+.about-benefit strong { color: var(--amethyst) !important; }
+
+/* ============================================================================
+   SHOWCASE — sistem ne sunuyor (görsel kartlar)
+   ============================================================================ */
+.showcase { padding: clamp(2rem, 6vh, 4rem) 0 clamp(3rem, 8vh, 6rem); }
+.showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+    gap: 1.5rem;
+    margin-top: clamp(2rem, 5vh, 3.5rem);
+}
+.showcase-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(251, 242, 238, 0.96) 100%);
+    border: 1px solid var(--border-gold);
+    border-radius: 2px;
+    padding: 2.4rem 1.8rem;
+    text-align: center;
+    position: relative;
+    transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.45s ease;
+}
+.showcase-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 52px rgba(139, 79, 85, 0.16);
+}
+/* köşe altın süsü */
+.showcase-card::before, .showcase-card::after {
+    content: '';
+    position: absolute;
+    width: 16px; height: 16px;
+    border-color: var(--gold-bright);
+    border-style: solid;
+    opacity: 0.6;
+}
+.showcase-card::before { top: 8px; left: 8px; border-width: 1px 0 0 1px; }
+.showcase-card::after  { bottom: 8px; right: 8px; border-width: 0 1px 1px 0; }
+.showcase-visual {
+    width: 100%;
+    max-width: 190px;
+    margin: 0 auto 1.6rem;
+}
+.showcase-visual svg { width: 100%; height: auto; display: block; }
+.showcase-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+}
+.showcase-card p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.06rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 760px) {
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .about-portrait { max-width: 300px; margin: 0 auto; }
+    .about-portrait::after { right: -10px; bottom: -10px; top: 10px; left: 10px; }
+}
