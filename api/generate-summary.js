@@ -7,13 +7,13 @@
 // Response: { summary, cached, credits_remaining, analysis_id }
 // ============================================================
 
-import Anthropic from '@anthropic-ai/sdk';
 import { SYSTEM_PROMPT, buildUserPrompt, buildFewShotMessages } from '../lib/prompt.js';
 import { authenticateRequest, supabaseAdmin } from '../lib/supabase-server.js';
 
-const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+// AI sağlayıcı: DeepSeek (OpenAI-uyumlu API). Anthropic'ten geçildi.
+// Anahtar Vercel env var'ından okunur: DEEPSEEK_API_KEY
+const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
+const DEEPSEEK_MODEL   = 'deepseek-chat';
 
 function validateMatrixResults(m) {
   if (!m || typeof m !== 'object') return false;
@@ -121,32 +121,46 @@ export default async function handler(req, res) {
     const fewShotMessages = buildFewShotMessages();
     const userMessage = buildUserPrompt(birthDate, matrixResults);
 
-    const message = await client.messages.create({
-      model: 'claude-haiku-4-5',
-      max_tokens: 3300,
-      system: SYSTEM_PROMPT,
-      messages: [
-        ...fewShotMessages,
-        { role: 'user', content: userMessage }
-      ]
+    if (!process.env.DEEPSEEK_API_KEY) {
+      throw new Error('DEEPSEEK_API_KEY tanımlı değil — Vercel env var olarak ekleyin.');
+    }
+
+    const dsResponse = await fetch(DEEPSEEK_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.DEEPSEEK_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: DEEPSEEK_MODEL,
+        max_tokens: 3300,
+        temperature: 1.1,
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          ...fewShotMessages,
+          { role: 'user', content: userMessage }
+        ]
+      })
     });
 
-    summary = message.content
-      .filter(block => block.type === 'text')
-      .map(block => block.text)
-      .join('\n\n')
-      .trim();
+    if (!dsResponse.ok) {
+      const errText = await dsResponse.text().catch(() => '');
+      throw new Error(`DeepSeek API ${dsResponse.status}: ${errText.slice(0, 300)}`);
+    }
+
+    const dsData = await dsResponse.json();
+    summary = (dsData.choices?.[0]?.message?.content || '').trim();
 
     aiUsage = {
-      input_tokens:  message.usage?.input_tokens,
-      output_tokens: message.usage?.output_tokens
+      input_tokens:  dsData.usage?.prompt_tokens,
+      output_tokens: dsData.usage?.completion_tokens
     };
 
     if (!summary || summary.length < 500) {
       throw new Error(`Üretilen özet beklenenden kısa: ${summary?.length || 0}`);
     }
   } catch (error) {
-    console.error('Claude API error:', error);
+    console.error('DeepSeek API error:', error);
 
     // Krediyi geri ver (refund)
     await supabaseAdmin.rpc('admin_grant_credits', {
@@ -179,7 +193,7 @@ export default async function handler(req, res) {
         matrix_data:       matrixResults,
         birth_chart_data:  birthChartData || null,
         ai_summary:        summary,
-        ai_model:          'claude-haiku-4-5',
+        ai_model:          'deepseek-chat',
         cost_credits:      1
       })
       .select('id')
