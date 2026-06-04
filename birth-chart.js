@@ -4,12 +4,12 @@
 // CLAUDE.md tasarim kilavuzuna uygun
 // ============================================================
 
-// --- Element Colors (Mistik Luks palette) ---
+// --- Element Colors (Mistik Luks palette — boosted for visibility) ---
 const ELEMENT_COLORS = {
-    Ates:   { bg: 'rgba(212,80,122,0.08)',  stroke: 'rgba(232,112,138,0.30)', text: '#E8708A' },
-    Toprak: { bg: 'rgba(212,175,55,0.08)',  stroke: 'rgba(212,175,55,0.30)',  text: '#D4AF37' },
-    Hava:   { bg: 'rgba(126,184,218,0.08)', stroke: 'rgba(140,203,232,0.30)', text: '#8CCBE8' },
-    Su:     { bg: 'rgba(199,125,186,0.08)', stroke: 'rgba(208,154,232,0.30)', text: '#D09AE8' }
+    Ates:   { bg: 'rgba(232,112,138,0.18)', stroke: 'rgba(255,143,163,0.55)', text: '#FF8FA3' },
+    Toprak: { bg: 'rgba(212,175,55,0.18)',  stroke: 'rgba(240,199,87,0.60)',  text: '#F0C757' },
+    Hava:   { bg: 'rgba(140,203,232,0.18)', stroke: 'rgba(168,223,255,0.55)', text: '#A8DFFF' },
+    Su:     { bg: 'rgba(208,154,232,0.18)', stroke: 'rgba(231,170,255,0.55)', text: '#E7AAFF' }
 };
 
 // Turkish element name normalization (handle both accented and unaccented)
@@ -33,81 +33,13 @@ const PLANET_NAMES_TR = {
     venus: 'Ven\u00fcs', mars: 'Mars', jupiter: 'J\u00fcpiter', saturn: 'Sat\u00fcrn'
 };
 
-// ---- SVG Glyph Paths for Zodiac Signs ----
-// Each glyph is an array of path-data strings, designed for a ±6 unit box
-const ZODIAC_GLYPH_PATHS = [
-    // 0: Aries - Two curved horns
-    ['M-4,5 C-4,-1 -0.5,-6 0,0 C0.5,-6 4,-1 4,5'],
-    // 1: Taurus - Horns + circle
-    ['M-4.5,-5 C-2.5,-1 0,0.5 0,0.5 C0,0.5 2.5,-1 4.5,-5',
-     'M-2.5,1.5 C-2.5,4.5 2.5,4.5 2.5,1.5 C2.5,-0.5 -2.5,-0.5 -2.5,1.5'],
-    // 2: Gemini - Two pillars with curves
-    ['M-4,-5.5 C-1,-3.5 1,-3.5 4,-5.5',
-     'M-4,5.5 C-1,3.5 1,3.5 4,5.5',
-     'M-2,-4.5 L-2,4.5', 'M2,-4.5 L2,4.5'],
-    // 3: Cancer - Two interlocking spirals
-    ['M4.5,-1 C4.5,-5 -0.5,-5 -0.5,-1 C-0.5,1 2,1 2,-1',
-     'M-4.5,1 C-4.5,5 0.5,5 0.5,1 C0.5,-1 -2,-1 -2,1'],
-    // 4: Leo - Circle with swoosh tail
-    ['M-4,4 C-6.5,0 -3,-5.5 0,-2.5 C2.5,0 5,-2 3.5,1 C2,3 1,4 1.5,5.5'],
-    // 5: Virgo - M with looped tail
-    ['M-5,5 L-5,-2 C-5,-5 -3,-5 -3,-2 L-3,5',
-     'M-3,-2 C-3,-5 -1,-5 -1,-2 L-1,5',
-     'M-1,-2 C-1,-5 1,-5 1,-2 L1,3 C2,5.5 3.5,4 4,2'],
-    // 6: Libra - Scales (arch + two lines)
-    ['M-5,4 L5,4', 'M-5,1 L5,1',
-     'M-3,-1 C-3,-5.5 3,-5.5 3,-1'],
-    // 7: Scorpio - M with arrow tail
-    ['M-5,5 L-5,-2 C-5,-5 -3,-5 -3,-2 L-3,5',
-     'M-3,-2 C-3,-5 -1,-5 -1,-2 L-1,5',
-     'M-1,-2 C-1,-5 1,-5 1,-2 L1,5 L3.5,2.5',
-     'M2,5 L3.5,5 L3.5,2.5'],
-    // 8: Sagittarius - Diagonal arrow with crossbar
-    ['M-4,5 L5,-4', 'M5,-4 L1.5,-4', 'M5,-4 L5,-0.5',
-     'M-0.5,1.5 L3,-2'],
-    // 9: Capricorn - V with curling tail
-    ['M-4.5,-3 L0,4 L2,-1 C3.5,-4 5.5,-2 5,1 C4.5,3.5 3.5,5 5,6'],
-    // 10: Aquarius - Two zigzag lines
-    ['M-5,-2 L-3,-4 L0,-2 L2,-4 L5,-2',
-     'M-5,2 L-3,0 L0,2 L2,0 L5,2'],
-    // 11: Pisces - Two arcs with connecting line
-    ['M-3.5,-5.5 C1.5,-3.5 1.5,3.5 -3.5,5.5',
-     'M3.5,-5.5 C-1.5,-3.5 -1.5,3.5 3.5,5.5',
-     'M-5,0 L5,0']
-];
+// ---- Astroloji Unicode sembol render desteği ----
+// Profesyonel astroloji yazılımları Unicode glyph kullanır (♈♉♊… ☉☽☿…)
+// Font fallback chain — sistemde en iyi astroloji glyph desteği olan font'u seç
+const ASTRO_FONT_STACK = '"Segoe UI Symbol", "Noto Sans Symbols 2", "Symbola", "Apple Symbols", "DejaVu Sans", Georgia, serif';
 
-// ---- SVG Glyph Data for Planets ----
-// { circles: [{cx,cy,r,fill}], paths: ['d string'] }
-const PLANET_GLYPH_DATA = {
-    gunes: { // Sun - Circle with center dot
-        circles: [{cx:0,cy:0,r:4,fill:false},{cx:0,cy:0,r:1.2,fill:true}],
-        paths: []
-    },
-    ay: { // Moon - Crescent
-        circles: [],
-        paths: ['M2,-5 C-3.5,-4 -3.5,4 2,5 C-0.5,3 -0.5,-3 2,-5']
-    },
-    merkur: { // Mercury - Circle + cross + crescent
-        circles: [{cx:0,cy:-0.5,r:2.5,fill:false}],
-        paths: ['M0,2 L0,6','M-2,4 L2,4','M-2.2,-3 C-2.2,-5.8 2.2,-5.8 2.2,-3']
-    },
-    venus: { // Venus - Circle + cross
-        circles: [{cx:0,cy:-1,r:2.5,fill:false}],
-        paths: ['M0,1.5 L0,5.5','M-2,3.5 L2,3.5']
-    },
-    mars: { // Mars - Circle + arrow
-        circles: [{cx:0,cy:1,r:2.5,fill:false}],
-        paths: ['M1.8,-0.8 L4.5,-3.5','M4.5,-3.5 L2,-3.5','M4.5,-3.5 L4.5,-1']
-    },
-    jupiter: { // Jupiter - Hook + crossbar
-        circles: [],
-        paths: ['M1.5,-5 C-1.5,-2.5 -3.5,-0.5 -4,0','M-4,0 L3.5,0','M1.5,-5 L1.5,5']
-    },
-    saturn: { // Saturn - Cross + hook
-        circles: [],
-        paths: ['M-2,-4.5 L2,-4.5','M0,-4.5 L0,3','M0,3 C0,6 -3.5,6 -4,3.5']
-    }
-};
+// Roma rakamları (klasik astroloji konvansiyonu — 12 ev için)
+const ROMAN_NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
 
 
 // ---- SVG Helper Functions ----
@@ -131,59 +63,48 @@ function lineDist(x1, y1, x2, y2) {
 }
 
 
-// ---- Glyph Drawing Functions ----
+// ---- Glyph Drawing Functions — Unicode tabanlı (profesyonel astroloji konvansiyonu) ----
 function drawZodiacGlyph(svg, signIndex, cx, cy, size, color, delay) {
-    const pathsArr = ZODIAC_GLYPH_PATHS[signIndex];
-    if (!pathsArr) return null;
-    const scale = size / 13;
-    const g = createSVG('g', {
-        transform: `translate(${cx},${cy}) scale(${scale})`
+    const sign = (typeof ZODIAC_SIGNS !== 'undefined') ? ZODIAC_SIGNS[signIndex] : null;
+    if (!sign || !sign.symbol) return null;
+    const t = createSVG('text', {
+        x: cx, y: cy,
+        'text-anchor': 'middle',
+        'dominant-baseline': 'central',
+        'font-size': size * 1.7,
+        'font-family': ASTRO_FONT_STACK,
+        fill: color,
+        stroke: color,
+        'stroke-width': '0.3',
+        'paint-order': 'stroke fill'
     });
-    g.style.opacity = '0';
-    g.style.animation = `fadeIn 600ms ease ${delay}ms forwards`;
-    const sw = Math.max(0.8, 1.0 / scale);
-    pathsArr.forEach(d => {
-        g.appendChild(createSVG('path', {
-            d: d, fill: 'none', stroke: color,
-            'stroke-width': sw,
-            'stroke-linecap': 'round', 'stroke-linejoin': 'round'
-        }));
-    });
-    svg.appendChild(g);
-    return g;
+    t.textContent = sign.symbol;
+    t.style.opacity = '0';
+    t.style.animation = `fadeIn 900ms cubic-bezier(0.22, 0.61, 0.36, 1) ${delay}ms forwards`;
+    svg.appendChild(t);
+    return t;
 }
 
 function drawPlanetGlyph(svg, planetKey, cx, cy, size, color, delay) {
-    const data = PLANET_GLYPH_DATA[planetKey];
-    if (!data) return null;
-    const scale = size / 13;
-    const g = createSVG('g', {
-        transform: `translate(${cx},${cy}) scale(${scale})`
+    const symbol = (typeof PLANET_SYMBOLS !== 'undefined') ? PLANET_SYMBOLS[planetKey] : null;
+    if (!symbol) return null;
+    const t = createSVG('text', {
+        x: cx, y: cy,
+        'text-anchor': 'middle',
+        'dominant-baseline': 'central',
+        'font-size': size * 1.6,
+        'font-family': ASTRO_FONT_STACK,
+        fill: color,
+        stroke: color,
+        'stroke-width': '0.4',
+        'paint-order': 'stroke fill',
+        filter: 'url(#sglow)'
     });
-    g.style.opacity = '0';
-    g.style.animation = `fadeIn 700ms ease ${delay}ms forwards`;
-    const sw = Math.max(0.7, 0.9 / scale);
-    if (data.circles) {
-        data.circles.forEach(c => {
-            g.appendChild(createSVG('circle', {
-                cx: c.cx, cy: c.cy, r: c.r,
-                fill: c.fill ? color : 'none',
-                stroke: color, 'stroke-width': sw,
-                opacity: c.fill ? '0.7' : '1'
-            }));
-        });
-    }
-    if (data.paths) {
-        data.paths.forEach(d => {
-            g.appendChild(createSVG('path', {
-                d: d, fill: 'none', stroke: color,
-                'stroke-width': sw,
-                'stroke-linecap': 'round', 'stroke-linejoin': 'round'
-            }));
-        });
-    }
-    svg.appendChild(g);
-    return g;
+    t.textContent = symbol;
+    t.style.opacity = '0';
+    t.style.animation = `fadeIn 900ms cubic-bezier(0.22, 0.61, 0.36, 1) ${delay}ms forwards`;
+    svg.appendChild(t);
+    return t;
 }
 
 
@@ -197,25 +118,38 @@ function renderBirthChart(chartData, svgId) {
     const cx = 350, cy = 350;
     const outerR = 305, signR = 270, midR = 240, innerR = 180, aspectR = 165;
 
-    // --- Defs ---
+    // --- Defs: filters + gradients ---
     const defs = createSVG('defs', {});
     defs.innerHTML = `
-        <filter id="pglow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        <filter id="sglow"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="pglow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="sglow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="goldGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <radialGradient id="chartBg" cx="50%" cy="50%" r="55%">
+            <stop offset="0%"   stop-color="#2a0f3d" stop-opacity="0.95"/>
+            <stop offset="55%"  stop-color="#1a0828" stop-opacity="0.97"/>
+            <stop offset="100%" stop-color="#0a0414" stop-opacity="0.98"/>
+        </radialGradient>
+        <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="rgba(212,175,55,0.20)"/>
+            <stop offset="60%"  stop-color="rgba(212,175,55,0.05)"/>
+            <stop offset="100%" stop-color="rgba(212,175,55,0)"/>
+        </radialGradient>
     `;
     svg.appendChild(defs);
 
-    // --- Background circle ---
-    svg.appendChild(createSVG('circle', { cx, cy, r: outerR + 3, fill: 'rgba(61,16,40,0.5)', stroke: 'none' }));
+    // --- Deep mystical background (radial: derin merkez → çok derin kenar) ---
+    svg.appendChild(createSVG('circle', { cx, cy, r: outerR + 8, fill: 'url(#chartBg)', stroke: 'none' }));
+    // Hafif merkez altın halo — derinlik
+    svg.appendChild(createSVG('circle', { cx, cy, r: innerR - 10, fill: 'url(#centerGlow)', stroke: 'none' }));
 
-    // 1. Sign segments (subtle colored arcs)
+    // 1. Sign segments (element-renkli halkalar — daha belirgin)
     drawSignSegments(svg, cx, cy, outerR, signR, chartData.ascendant);
 
-    // 2. Main structural circles (increased opacity for visibility)
-    addCircle(svg, cx, cy, outerR, 'rgba(212,175,55,0.40)', 0.8, 0, 2000);
-    addCircle(svg, cx, cy, signR, 'rgba(245,230,233,0.18)', 0.4, 200, 1800);
-    addCircle(svg, cx, cy, midR, 'rgba(245,230,233,0.12)', 0.3, 400, 1500);
-    addCircle(svg, cx, cy, innerR, 'rgba(245,230,233,0.10)', 0.3, 600, 1200);
+    // 2. Ana yapısal halkalar — KALIN ve PARLAK altın + glow filter
+    addCircle(svg, cx, cy, outerR, 'rgba(240,199,87,0.85)', 1.6, 0, 3200, 'goldGlow');
+    addCircle(svg, cx, cy, signR,  'rgba(240,199,87,0.45)', 0.9, 250, 2800);
+    addCircle(svg, cx, cy, midR,   'rgba(245,230,233,0.32)', 0.7, 500, 2400);
+    addCircle(svg, cx, cy, innerR, 'rgba(245,230,233,0.28)', 0.7, 750, 2000);
 
     // 3. Degree tick marks on outer ring
     drawTickMarks(svg, cx, cy, outerR, signR, chartData.ascendant);
@@ -259,15 +193,15 @@ function renderBirthChart(chartData, svgId) {
 }
 
 
-// ---- Animated Circle (stroke-dasharray draw) ----
-function addCircle(svg, cx, cy, r, stroke, width, delay, dur) {
-    const c = createSVG('circle', {
-        cx, cy, r, fill: 'none', stroke, 'stroke-width': width
-    });
+// ---- Animated Circle (stroke-dasharray draw) — premium cubic-bezier ease ----
+function addCircle(svg, cx, cy, r, stroke, width, delay, dur, filterId) {
+    const attrs = { cx, cy, r, fill: 'none', stroke, 'stroke-width': width };
+    if (filterId) attrs.filter = `url(#${filterId})`;
+    const c = createSVG('circle', attrs);
     const circumf = 2 * Math.PI * r;
     c.style.strokeDasharray = circumf;
     c.style.strokeDashoffset = circumf;
-    c.style.animation = `ringDraw ${dur}ms ease ${delay}ms forwards`;
+    c.style.animation = `ringDraw ${dur}ms cubic-bezier(0.22, 0.61, 0.36, 1) ${delay}ms forwards`;
     svg.appendChild(c);
 }
 
@@ -286,35 +220,37 @@ function drawSignSegments(svg, cx, cy, outerR, innerR, asc) {
         const d = `M${p1.x},${p1.y} A${outerR},${outerR} 0 0 0 ${p2.x},${p2.y} L${p3.x},${p3.y} A${innerR},${innerR} 0 0 1 ${p4.x},${p4.y}Z`;
         const seg = createSVG('path', { d, fill: color.bg, stroke: 'none' });
         seg.style.opacity = '0';
-        seg.style.animation = `fadeIn 0.8s ease ${400 + i * 80}ms forwards`;
+        seg.style.animation = `fadeIn 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) ${500 + i * 130}ms forwards`;
         svg.appendChild(seg);
     }
 }
 
 
-// ---- Tick Marks (5-degree intervals) ----
+// ---- Tick Marks (5-degree intervals) — parlak ve net ----
 function drawTickMarks(svg, cx, cy, outerR, innerR, asc) {
     const g = createSVG('g', {});
     g.style.opacity = '0';
-    g.style.animation = 'fadeIn 1.2s ease 2500ms forwards';
+    g.style.animation = 'fadeIn 1.8s cubic-bezier(0.22, 0.61, 0.36, 1) 3400ms forwards';
     for (let deg = 0; deg < 360; deg += 5) {
         const angle = zodiacToSVGAngle(deg, asc);
         const isMajor = deg % 30 === 0;
         const isMinor10 = deg % 10 === 0;
-        if (isMajor) continue; // Sign divisions handle these
-        const len = isMinor10 ? 6 : 3;
+        if (isMajor) continue;
+        const len = isMinor10 ? 9 : 5;
+        const w  = isMinor10 ? 0.9 : 0.55;
+        const op = isMinor10 ? 0.65 : 0.40;
         const p1 = polarToXY(cx, cy, outerR, angle);
         const p2 = polarToXY(cx, cy, outerR - len, angle);
         g.appendChild(createSVG('line', {
             x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y,
-            stroke: 'rgba(212,175,55,0.22)', 'stroke-width': '0.3'
+            stroke: `rgba(240,199,87,${op})`, 'stroke-width': w
         }));
     }
     svg.appendChild(g);
 }
 
 
-// ---- Sign Division Lines ----
+// ---- Sign Division Lines — kalın altın ----
 function drawSignDivisions(svg, cx, cy, outerR, innerR, asc) {
     for (let i = 0; i < 12; i++) {
         const angle = zodiacToSVGAngle(i * 30, asc);
@@ -322,12 +258,12 @@ function drawSignDivisions(svg, cx, cy, outerR, innerR, asc) {
         const p2 = polarToXY(cx, cy, innerR, angle);
         const line = createSVG('line', {
             x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y,
-            stroke: 'rgba(212,175,55,0.30)', 'stroke-width': '0.5'
+            stroke: 'rgba(240,199,87,0.60)', 'stroke-width': '1.1'
         });
         const len = lineDist(p1.x, p1.y, p2.x, p2.y);
         line.style.strokeDasharray = len;
         line.style.strokeDashoffset = len;
-        line.style.animation = `ringDraw 600ms ease ${600 + i * 150}ms forwards`;
+        line.style.animation = `ringDraw 900ms cubic-bezier(0.22, 0.61, 0.36, 1) ${900 + i * 180}ms forwards`;
         svg.appendChild(line);
     }
 }
@@ -341,8 +277,9 @@ function drawSignGlyphs(svg, cx, cy, outerR, innerR, asc) {
         const color = getElementColor(sign.element);
         const midAngle = zodiacToSVGAngle(i * 30 + 15, asc);
         const pos = polarToXY(cx, cy, labelR, midAngle);
-        const delay = 1500 + i * 100;
-        drawZodiacGlyph(svg, i, pos.x, pos.y, 13, color.text, delay);
+        const delay = 1800 + i * 130;
+        // size 18: daha büyük + Unicode sembol → çok daha okunur
+        drawZodiacGlyph(svg, i, pos.x, pos.y, 18, color.text, delay);
     }
 }
 
@@ -368,7 +305,7 @@ function drawHouseCusps(svg, cx, cy, outerR, innerR, houses, asc) {
 }
 
 
-// ---- House Numbers ----
+// ---- House Numbers — Roma rakamları, klasik astroloji kitap görünümü ----
 function drawHouseNumbers(svg, cx, cy, outerR, innerR, houses, asc) {
     for (let i = 0; i < 12; i++) {
         const next = houses[(i + 1) % 12];
@@ -379,13 +316,15 @@ function drawHouseNumbers(svg, cx, cy, outerR, innerR, houses, asc) {
         const label = createSVG('text', {
             x: pos.x, y: pos.y + 3,
             'text-anchor': 'middle', 'dominant-baseline': 'middle',
-            fill: 'rgba(245,230,233,0.25)', 'font-size': '8',
+            fill: 'rgba(245,230,233,0.55)', 'font-size': '12',
             'font-family': "'IM Fell English', Georgia, serif",
-            'font-style': 'italic'
+            'font-style': 'italic',
+            'font-weight': '400',
+            'letter-spacing': '0.5'
         });
-        label.textContent = (i + 1).toString();
+        label.textContent = ROMAN_NUMERALS[i];
         label.style.opacity = '0';
-        label.style.animation = `fadeIn 0.4s ease ${2500 + i * 50}ms forwards`;
+        label.style.animation = `fadeIn 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) ${3000 + i * 80}ms forwards`;
         svg.appendChild(label);
     }
 }
@@ -459,65 +398,89 @@ function drawPlanets(svg, cx, cy, outerR, innerR, planets, asc) {
             svg.appendChild(cl);
         }
 
-        // Subtle glow behind planet
+        // Subtle glow behind planet \u2014 daha b\u00fcy\u00fck, daha parlak
         const glow = createSVG('circle', {
-            cx: pos.x, cy: pos.y, r: 10,
+            cx: pos.x, cy: pos.y, r: 14,
             fill: color.stroke, opacity: '0', filter: 'url(#pglow)'
         });
-        glow.style.animation = `fadeIn 0.8s ease ${delay}ms forwards`;
-        glow.addEventListener('animationend', () => { glow.setAttribute('opacity', '0.15'); });
+        glow.style.animation = `fadeIn 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) ${delay}ms forwards`;
+        glow.addEventListener('animationend', () => { glow.setAttribute('opacity', '0.32'); });
         svg.appendChild(glow);
 
-        // Planet glyph (SVG path)
-        drawPlanetGlyph(svg, planet.key, pos.x, pos.y, 12, color.text, delay + 100);
+        // Planet glyph \u2014 Unicode sembol (\u2609\u263d\u263f\u2640\u2642\u2643\u2644), b\u00fcy\u00fck ve net
+        drawPlanetGlyph(svg, planet.key, pos.x, pos.y, 16, color.text, delay + 120);
 
-        // Degree annotation (small, elegant, outside planet ring)
+        // Degree annotation \u2014 okunabilir boyut
         const deg = getSignDegree(planet.lon);
         const degAngle = zodiacToSVGAngle(planet.dLon, asc);
         const degPos = polarToXY(cx, cy, degR, degAngle);
         const degText = createSVG('text', {
             x: degPos.x, y: degPos.y + 2,
             'text-anchor': 'middle', 'dominant-baseline': 'middle',
-            fill: 'rgba(245,230,233,0.40)', 'font-size': '6.5',
+            fill: 'rgba(245,230,233,0.72)', 'font-size': '9.5',
             'font-family': "'IM Fell English', Georgia, serif",
-            'font-style': 'italic'
+            'font-style': 'italic',
+            'letter-spacing': '0.3'
         });
         degText.textContent = `${Math.floor(deg)}\u00b0${Math.floor((deg % 1) * 60)}'`;
         degText.style.opacity = '0';
-        degText.style.animation = `fadeIn 0.4s ease ${delay + 200}ms forwards`;
+        degText.style.animation = `fadeIn 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) ${delay + 250}ms forwards`;
         svg.appendChild(degText);
     });
 }
 
 
-// ---- Cardinal Labels (ASC, DSC, MC, IC) ----
+// ---- Cardinal Labels — Türkçe anlamlı, 2 satırlı (başlık + açıklama) ----
 function drawCardinalLabels(svg, cx, cy, innerR, outerR, asc, houses) {
     const labels = [
-        { text: 'ASC', lon: asc, color: '#D4AF37' },
-        { text: 'DSC', lon: (asc + 180) % 360, color: 'rgba(245,230,233,0.45)' },
-        { text: 'MC',  lon: houses[9], color: '#8CCBE8' },
-        { text: 'IC',  lon: houses[3], color: 'rgba(245,230,233,0.45)' }
+        { title: 'YÜKSELEN',  sub: 'Doğum anındaki ufuk',  lon: asc,                color: '#F0C757' },
+        { title: 'ALÇALAN',   sub: 'İlişki aynası',         lon: (asc + 180) % 360,  color: 'rgba(245,230,233,0.55)' },
+        { title: 'TEPE',      sub: 'Kariyer ve amaç',       lon: houses[9],           color: '#A8DFFF' },
+        { title: 'KÖKEN',     sub: 'Aile ve içsel dünya',   lon: houses[3],           color: 'rgba(245,230,233,0.55)' }
     ];
     labels.forEach((lbl, i) => {
         const angle = zodiacToSVGAngle(lbl.lon, asc);
-        // Place labels inside the inner ring so they don't overflow
-        const pos = polarToXY(cx, cy, innerR - 16, angle);
-        const el = createSVG('text', {
-            x: pos.x, y: pos.y + 3,
+        const pos = polarToXY(cx, cy, innerR - 22, angle);
+        const delay = 4200 + i * 140;
+
+        // Başlık satırı (büyük, Cinzel)
+        const title = createSVG('text', {
+            x: pos.x, y: pos.y - 2,
             'text-anchor': 'middle', 'dominant-baseline': 'middle',
-            fill: lbl.color, 'font-size': '10', 'font-weight': '600',
+            fill: lbl.color, 'font-size': '12', 'font-weight': '700',
             'font-family': "'Cinzel Decorative', 'Cinzel', Georgia, serif",
-            'letter-spacing': '1.5'
+            'letter-spacing': '2.2',
+            filter: 'url(#sglow)'
         });
-        el.textContent = lbl.text;
-        el.style.opacity = '0';
-        el.style.animation = `fadeIn 0.6s ease ${3500 + i * 100}ms forwards`;
-        svg.appendChild(el);
+        title.textContent = lbl.title;
+        title.style.opacity = '0';
+        title.style.animation = `fadeIn 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) ${delay}ms forwards`;
+        svg.appendChild(title);
+
+        // Açıklama satırı (küçük italic Cormorant)
+        const sub = createSVG('text', {
+            x: pos.x, y: pos.y + 12,
+            'text-anchor': 'middle', 'dominant-baseline': 'middle',
+            fill: 'rgba(245,230,233,0.55)', 'font-size': '8.5',
+            'font-family': "'Cormorant Garamond', Georgia, serif",
+            'font-style': 'italic',
+            'letter-spacing': '0.3'
+        });
+        sub.textContent = lbl.sub;
+        sub.style.opacity = '0';
+        sub.style.animation = `fadeIn 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) ${delay + 100}ms forwards`;
+        svg.appendChild(sub);
     });
 }
 
 
-// ---- Planet Summary Cards ----
+// ---- Planet Summary Cards \u2014 Premium 3D tilt + mouse-follow glow ----
+// Unicode planet glyphs \u2014 kart\u0131n arkas\u0131nda b\u00fcy\u00fck ornament olarak g\u00f6r\u00fcn\u00fcr
+const PLANET_GLYPHS_UNICODE = {
+    gunes: '\u2609', ay: '\u263d', merkur: '\u263f', venus: '\u2640',
+    mars: '\u2642', jupiter: '\u2643', saturn: '\u2644'
+};
+
 function renderPlanetSummary(chartData, containerId) {
     const container = document.getElementById(containerId);
     let html = '';
@@ -527,23 +490,80 @@ function renderPlanetSummary(chartData, containerId) {
         const sign = getZodiacSign(lon);
         const deg = getSignDegree(lon);
         const color = getElementColor(sign.element);
-        html += `<div class="planet-card" style="animation-delay:${5000 + idx * 120}ms">
-            <span class="planet-symbol" style="color:${color.text}">${PLANET_NAMES_TR[key] ? PLANET_NAMES_TR[key].charAt(0) : key.charAt(0).toUpperCase()}</span>
-            <span class="planet-name">${PLANET_NAMES_TR[key] || key}</span>
-            <span class="planet-sign">${sign.symbol} ${sign.name}</span>
-            <span class="planet-degree">${Math.floor(deg)}&deg; ${Math.floor((deg % 1) * 60)}'</span>
+        const initial = PLANET_NAMES_TR[key] ? PLANET_NAMES_TR[key].charAt(0) : key.charAt(0).toUpperCase();
+        const ornament = PLANET_GLYPHS_UNICODE[key] || '\u2734';
+        html += `
+        <div class="planet-card" style="animation-delay:${5000 + idx * 120}ms; --accent:${color.text}; --accent-soft:${color.stroke};">
+            <div class="planet-card-inner">
+                <div class="planet-card-glow" aria-hidden="true"></div>
+                <div class="planet-card-ornament" aria-hidden="true">${ornament}</div>
+                <div class="planet-card-content">
+                    <span class="planet-symbol" style="color:${color.text}">${initial}</span>
+                    <span class="planet-name">${PLANET_NAMES_TR[key] || key}</span>
+                    <span class="planet-sign">${sign.symbol} ${sign.name}</span>
+                    <span class="planet-degree">${Math.floor(deg)}\u00b0 ${Math.floor((deg % 1) * 60)}'</span>
+                </div>
+                <div class="planet-card-shine" aria-hidden="true"></div>
+            </div>
         </div>`;
     });
     const ascSign = getZodiacSign(chartData.ascendant);
     const ascDeg = getSignDegree(chartData.ascendant);
-    html += `<div class="planet-card" style="animation-delay:${5000 + keys.length * 120}ms;border-color:rgba(212,175,55,0.15);">
-        <span class="planet-symbol" style="color:#D4AF37">ASC</span>
-        <span class="planet-name">Y\u00fckselen</span>
-        <span class="planet-sign">${ascSign.symbol} ${ascSign.name}</span>
-        <span class="planet-degree">${Math.floor(ascDeg)}&deg; ${Math.floor((ascDeg % 1) * 60)}'</span>
+    html += `
+    <div class="planet-card planet-card--asc" style="animation-delay:${5000 + keys.length * 120}ms; --accent:#F0C757; --accent-soft:rgba(240,199,87,0.55);">
+        <div class="planet-card-inner">
+            <div class="planet-card-glow" aria-hidden="true"></div>
+            <div class="planet-card-ornament" aria-hidden="true">\u2191</div>
+            <div class="planet-card-content">
+                <span class="planet-symbol" style="color:#F0C757">ASC</span>
+                <span class="planet-name">Y\u00fckselen</span>
+                <span class="planet-sign">${ascSign.symbol} ${ascSign.name}</span>
+                <span class="planet-degree">${Math.floor(ascDeg)}\u00b0 ${Math.floor((ascDeg % 1) * 60)}'</span>
+            </div>
+            <div class="planet-card-shine" aria-hidden="true"></div>
+        </div>
     </div>`;
     container.innerHTML = html;
+
+    // 3D tilt + mouse-follow glow (vanilla port of Framer Motion concept)
+    initPlanetCardTilt(container);
 }
+
+function initPlanetCardTilt(container) {
+    if (window.init3DTilt) window.init3DTilt('.planet-card', { maxTilt: 10, scope: container });
+}
+
+// Generic 3D tilt — mouse-follow rotateX/rotateY + --mx/--my for glow gradients
+// Touch/coarse pointer'larda otomatik devre dışı
+function init3DTilt(selector, options) {
+    const opts = Object.assign({ maxTilt: 8, scope: document }, options || {});
+    if (window.matchMedia('(hover: none), (pointer: coarse)').matches) return;
+    const cards = (opts.scope || document).querySelectorAll(selector);
+    cards.forEach(card => {
+        if (card.__tilt3DBound) return;
+        card.__tilt3DBound = true;
+        let raf = null;
+        card.addEventListener('mousemove', (e) => {
+            const r = card.getBoundingClientRect();
+            const xPct = (e.clientX - r.left) / r.width - 0.5;
+            const yPct = (e.clientY - r.top) / r.height - 0.5;
+            if (raf) cancelAnimationFrame(raf);
+            raf = requestAnimationFrame(() => {
+                card.style.setProperty('--rx', (xPct * opts.maxTilt).toFixed(2) + 'deg');
+                card.style.setProperty('--ry', (-yPct * opts.maxTilt).toFixed(2) + 'deg');
+                card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+                card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+            });
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.setProperty('--rx', '0deg');
+            card.style.setProperty('--ry', '0deg');
+            card.style.setProperty('--mx', '50%');
+            card.style.setProperty('--my', '50%');
+        });
+    });
+}
+window.init3DTilt = init3DTilt;
 
 
 // ---- PNG Download ----

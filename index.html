@@ -3,10 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Karmik Matris Analizi - Astro&#351;u&#351;u Sistemi</title>
-    <!-- Fonts: Fraunces (editorial hero + section titles), Cormorant Garamond (body), IM Fell English (numbers), Cinzel (legacy utility) -->
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500;1,9..144,600&family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <title>Karma Matris Analizi</title>
+    <!-- Tipografi sistemi: Cormorant Garamond (workhorse), Cormorant Infant (finale italic — delikat, Türkçe destekli), Pinyon Script ("matris"), IM Fell English (sayılar) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Pinyon+Script&family=IM+Fell+English:ital@0;1&family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Hero poster görselini hemen indir (video yüklenene kadar gösterilir) -->
+    <link rel="preload" as="image" href="/hero-bg.jpg" fetchpriority="high">
+    <link rel="preload" as="image" href="/finale1-bg.png">
+    <link rel="preload" as="image" href="/finale2-bg.png">
+    <!-- JS aktif → hero elemanları başlangıçta opacity:0, motion fade-in yapar
+         JS kapalı → flag yok, opacity 1 default (SEO/crawler güvenli) -->
+    <script>
+        document.documentElement.classList.add('js-motion');
+        // Refresh sonrası sayfayı her zaman en tepeden başlat (browser scroll restore kapat)
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+        window.addEventListener('beforeunload', () => window.scrollTo(0, 0));
+        window.addEventListener('pageshow', (e) => {
+            window.scrollTo(0, 0);
+            if (window.__lenis && typeof window.__lenis.scrollTo === 'function') {
+                window.__lenis.scrollTo(0, { immediate: true });
+            }
+        });
+        // Pinyon Script font yüklendiğinde class ekle — matris FOUT engelleme
+        // Font yüklenmeden matris CSS'te hidden tutulur, fallback ile sırıtmaz
+        if ('fonts' in document) {
+            document.fonts.load('400 1em "Pinyon Script"').then(() => {
+                document.documentElement.classList.add('pinyon-ready');
+            }).catch(() => {
+                // Network yavaşsa veya fail olursa 1s sonra yine de devam et
+                setTimeout(() => document.documentElement.classList.add('pinyon-ready'), 1000);
+            });
+            // Safety: 2 saniye sonra mutlaka göster (font hiç yüklenemezse fallback)
+            setTimeout(() => document.documentElement.classList.add('pinyon-ready'), 2000);
+        } else {
+            document.documentElement.classList.add('pinyon-ready');
+        }
+    </script>
+    <link rel="stylesheet" href="styles.css?v=20260603h">
+    <link rel="stylesheet" href="/lib/premium-cards.css?v=20260603b">
+    <link rel="stylesheet" href="/lib/motion.css?v=20260530d">
 </head>
 <body class="is-loading">
 
@@ -15,17 +50,18 @@
 
 <!-- Editorial top bar -->
 <nav class="top-bar" aria-label="Ana navigasyon">
-    <a href="/" class="top-bar-brand"><em>K</em>Karmik Matris <span style="opacity:0.5">— Astroşuşu</span></a>
-    <a href="/auth/giris.html" class="top-bar-link" id="authWidgetLink">
-        <span id="authWidgetText">Giriş Yap</span>
+    <a href="/" class="top-bar-brand">Astro&#351;u&#351;u</a>
+    <a href="/auth/giris.html" class="top-bar-link">
+        <span>Giriş Yap</span>
     </a>
 </nav>
 
-<!-- Hesap / Giriş widget'ı (editorial top-bar ile gizli) -->
+<!-- Hesap / Giriş + Üye Ol widget — anonim ve logged-in state'leri JS yönetir -->
 <div class="auth-widget" id="authWidget" aria-hidden="true">
-    <a href="/auth/giris.html" class="auth-widget-link">
-        <span>Giriş Yap</span>
+    <a href="/auth/giris.html" class="auth-widget-link" id="authWidgetLink">
+        <span id="authWidgetText">Giriş Yap</span>
     </a>
+    <a href="/auth/kayit.html" class="auth-widget-signup" id="authWidgetSignup">Üye Ol</a>
 </div>
 
 <!-- Login Required Modal -->
@@ -40,9 +76,9 @@
                 <circle cx="32" cy="32" r="6" fill="currentColor"/>
             </svg>
         </div>
-        <h3 id="loginModalTitle" class="login-modal-title">Karmik Yolculuğa Davet</h3>
+        <h3 id="loginModalTitle" class="login-modal-title">Karma Yolculuğa Davet</h3>
         <p class="login-modal-text">
-            Karmik Matris analizinizi görüntülemek ve detaylı PDF raporunuzu indirmek için bir hesabınızın olması gerekir. Hesap oluşturmak ücretsizdir.
+            Karma Matris analizinizi görüntülemek ve detaylı PDF raporunuzu indirmek için bir hesabınızın olması gerekir. Hesap oluşturmak ücretsizdir.
         </p>
         <div class="login-modal-actions">
             <a href="/auth/giris.html?redirect=/" class="login-modal-btn login-modal-btn-primary">
@@ -70,7 +106,7 @@
         </div>
         <h3 id="creditModalTitle" class="login-modal-title">Analiz Hakkınız Yok</h3>
         <p class="login-modal-text">
-            Karmik Matris analizine başlamak için bir paket satın almanız gerekir. Ödemeniz onaylandıktan sonra dilediğiniz kadar analiz yapabilirsiniz.
+            Karma Matris analizine başlamak için bir paket satın almanız gerekir. Ödemeniz onaylandıktan sonra dilediğiniz kadar analiz yapabilirsiniz.
         </p>
         <p class="login-modal-text" style="font-size: 1rem; color: var(--gold-bright); margin-top: -0.75rem;">
             <strong>Başlangıç</strong> 30 analiz · <strong>Profesyonel</strong> 100 analiz
@@ -107,7 +143,10 @@
 <div class="shooting-star" style="--dur:15s;--delay:3s;--angle:-25deg;top:50%;left:10%;width:80px;"></div>
 <div class="shooting-star" style="--dur:11s;--delay:7s;--angle:-35deg;top:35%;left:75%;width:100px;"></div>
 
-<!-- Header -->
+<!-- Hero pin wrapper — animasyon biterken sayfa pinned kalır -->
+<div class="hero-scroll-wrap" id="heroScrollWrap">
+
+<!-- Header (pinned) -->
 <header class="header">
     <div class="floating-symbols">
         <!-- SVG Star -->
@@ -145,73 +184,121 @@
         <circle cx="200" cy="380" r="4" fill="currentColor" opacity="0.3"/>
         <circle cx="20" cy="200" r="4" fill="currentColor" opacity="0.3"/>
     </svg>
-    <div class="container hero-content">
-        <!-- Aurora glow behind title -->
-        <div class="hero-aurora" aria-hidden="true">
-            <span class="aurora-blob aurora-1"></span>
-            <span class="aurora-blob aurora-2"></span>
-            <span class="aurora-blob aurora-3"></span>
-        </div>
+    <!-- Hero backdrop — pembe/altın sakral geometri video (Google Flow / Veo) -->
+    <div class="iri-stage" aria-hidden="true">
+        <!-- Ana arka plan videosu — autoplay KAPALI: entrance bittikten sonra play() çağrılır
+             Sebep: video decode GPU yükü entrance animasyonuyla rekabet edip stutter yaratıyordu -->
+        <video class="iri-bg-image iri-bg-video"
+               id="heroBgVideo"
+               src="/hero-video.bg.mp4"
+               poster="/hero-bg.jpg"
+               muted playsinline
+               preload="auto"
+               disablepictureinpicture
+               disableremoteplayback
+               aria-hidden="true">
+        </video>
+        <script>
+            (function() {
+                var v = document.getElementById('heroBgVideo');
+                if (!v) return;
+                var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                // Statik poster beklemesi KALDIRILDI — video hazır olur olmaz oynat.
+                // (Önceki 1500ms gecikme, giriş animasyonundan önce donmuş bir foto kare gösteriyordu.)
+                if (!rm) {
+                    var started = false;
+                    var startVideo = function() {
+                        if (started) return;
+                        started = true;
+                        var p = v.play();
+                        if (p && p.catch) p.catch(function() {});
+                        document.documentElement.classList.add('entrance-done');
+                    };
+                    if (v.readyState >= 2) {
+                        startVideo();
+                    } else {
+                        v.addEventListener('loadeddata', startVideo, { once: true });
+                        v.addEventListener('canplay', startVideo, { once: true });
+                    }
+                    // Güvenlik ağı: olaylar gelmezse de kısa sürede başlat
+                    setTimeout(startVideo, 400);
+                } else {
+                    document.documentElement.classList.add('entrance-done');
+                    v.pause();
+                    return;
+                }
+                // Son frame'i kilitlemek için: bitiminden hemen önce currentTime'i sabitleme
+                v.addEventListener('ended', function() {
+                    try {
+                        // duration - epsilon'a sabitle, browser default'unda zaten son frame'de duruyor
+                        v.currentTime = Math.max(0, v.duration - 0.04);
+                    } catch (_) {}
+                });
+            })();
+        </script>
 
-        <!-- Premium eyebrow badge -->
-        <div class="hero-eyebrow" aria-hidden="true">
-            <svg class="eyebrow-glyph" viewBox="0 0 16 16" width="14" height="14">
-                <path d="M8 1 L9.6 6.4 L15 8 L9.6 9.6 L8 15 L6.4 9.6 L1 8 L6.4 6.4 Z" fill="currentColor"/>
-            </svg>
-            <span class="eyebrow-text">Astro&#351;u&#351;u &middot; Karmik Sistem</span>
-            <svg class="eyebrow-glyph" viewBox="0 0 16 16" width="14" height="14">
-                <path d="M8 1 L9.6 6.4 L15 8 L9.6 9.6 L8 15 L6.4 9.6 L1 8 L6.4 6.4 Z" fill="currentColor"/>
-            </svg>
-        </div>
+        <!-- Sol tarafa hafif krem gradient overlay — text kontrastı için -->
+        <div class="iri-overlay"></div>
 
-        <!-- Title with ornament lines -->
-        <div class="hero-title-row">
-            <span class="hero-ornament hero-ornament-left" aria-hidden="true">
-                <svg viewBox="0 0 160 14" preserveAspectRatio="none">
-                    <line x1="0" y1="7" x2="140" y2="7" stroke="currentColor" stroke-width="0.6"/>
-                    <circle cx="148" cy="7" r="2.5" fill="currentColor"/>
-                    <circle cx="156" cy="7" r="1" fill="currentColor"/>
-                </svg>
-            </span>
-            <h1>Karmik Matris Analizi</h1>
-            <span class="hero-ornament hero-ornament-right" aria-hidden="true">
-                <svg viewBox="0 0 160 14" preserveAspectRatio="none">
-                    <circle cx="4" cy="7" r="1" fill="currentColor"/>
-                    <circle cx="12" cy="7" r="2.5" fill="currentColor"/>
-                    <line x1="20" y1="7" x2="160" y2="7" stroke="currentColor" stroke-width="0.6"/>
-                </svg>
-            </span>
-        </div>
+        <!-- Finale arka planları — section 2 ve 3 için premium gradient/görsel -->
+        <div class="finale-bg" id="finale1Bg" aria-hidden="true"></div>
+        <div class="finale-bg" id="finale2Bg" aria-hidden="true"></div>
 
-        <p class="subtitle">Astro&#351;u&#351;u Sistemi ile Derinlemesine Karmik Harita</p>
-
-        <!-- Decorative diamond divider -->
-        <div class="hero-divider" aria-hidden="true">
-            <span class="hero-divider-line"></span>
-            <svg class="hero-divider-glyph" viewBox="0 0 24 24" width="22" height="22">
-                <path d="M12 1 L23 12 L12 23 L1 12 Z" fill="none" stroke="currentColor" stroke-width="0.8"/>
-                <path d="M12 5 L19 12 L12 19 L5 12 Z" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.6"/>
-                <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
-            </svg>
-            <span class="hero-divider-line"></span>
-        </div>
-
-        <!-- Sparkle accents around title -->
-        <div class="hero-sparkles" aria-hidden="true">
-            <span class="sparkle sparkle-1"></span>
-            <span class="sparkle sparkle-2"></span>
-            <span class="sparkle sparkle-3"></span>
-            <span class="sparkle sparkle-4"></span>
-            <span class="sparkle sparkle-5"></span>
-            <span class="sparkle sparkle-6"></span>
+        <!-- Ambient floating particles — görselin üstüne hareket katar -->
+        <div class="iri-ambient">
+            <span class="ambient-spark" style="--x: 14%; --y: 24%; --d: 0s;  --s: 4px;"></span>
+            <span class="ambient-spark" style="--x: 8%;  --y: 65%; --d: 3s;  --s: 5px;"></span>
+            <span class="ambient-spark" style="--x: 32%; --y: 18%; --d: 6s;  --s: 3px;"></span>
+            <span class="ambient-spark" style="--x: 22%; --y: 78%; --d: 9s;  --s: 5px;"></span>
+            <span class="ambient-spark" style="--x: 18%; --y: 45%; --d: 12s; --s: 4px;"></span>
+            <span class="ambient-spark" style="--x: 38%; --y: 88%; --d: 15s; --s: 4px;"></span>
+            <span class="ambient-spark" style="--x: 5%;  --y: 35%; --d: 18s; --s: 3px;"></span>
+            <span class="ambient-spark" style="--x: 28%; --y: 50%; --d: 21s; --s: 5px;"></span>
         </div>
     </div>
+
+    <!-- Aurora compatibility wrapper (eski referanslar için boş) -->
+    <div class="hero-aurora" aria-hidden="true"></div>
+
+    <!-- Hero content — magazine hierarchy -->
+    <div class="container hero-content">
+        <p class="hero-kicker"><span class="kicker-dash">—</span> Karma Sistemi &middot; 22 B&uuml;y&uuml;k Arkana</p>
+
+        <h1 class="hero-title">
+            <span class="hero-word hero-word-pre">Karma</span>
+            <span class="hero-word hero-word-script">matris</span>
+            <span class="hero-word hero-word-post"><em>Analizi</em></span>
+        </h1>
+
+        <p class="hero-tagline">Do&#287;um tarihinize &ouml;zel karma haritan&#305;z.</p>
+
+        <button type="button" class="hero-cta" data-cursor-strong
+                aria-label="Karma matris analizinizi hesaplamak i&ccedil;in do&#287;um bilgisi formuna ge&ccedil;in"
+                onclick="document.getElementById('inputSection').scrollIntoView({behavior:'smooth', block:'start'})">
+            <svg viewBox="0 0 16 16" class="cta-sparkle" aria-hidden="true">
+                <path d="M8 1 L9.6 6.4 L15 8 L9.6 9.6 L8 15 L6.4 9.6 L1 8 L6.4 6.4 Z" fill="currentColor"/>
+            </svg>
+            <span>Hesaplamaya Ba&#351;la</span>
+        </button>
+    </div>
+
+    <!-- Finale #1: hero bitince beliren ilk lirik c&uuml;mle -->
+    <div class="hero-finale" aria-hidden="true">
+        <p class="finale-text" id="finale1">Do&#287;du&#287;un an&#305;n s&#305;rr&#305;n&#305; <em>&mdash;</em> birlikte &ccedil;&ouml;zelim.</p>
+    </div>
+
+    <!-- Finale #2: ilk c&uuml;mle solunca beliren k&#305;sa davet -->
+    <div class="hero-finale" aria-hidden="true">
+        <p class="finale-text finale-text--small" id="finale2">Hadi ba&#351;layal&#305;m.</p>
+    </div>
 </header>
+
+</div><!-- /.hero-scroll-wrap -->
 
 <div class="section-divider"></div>
 
 <!-- Input Section -->
-<section class="input-section">
+<section class="input-section" id="inputSection">
     <div class="container">
         <div class="input-card">
             <label class="input-card-title">Do&#287;um Bilgilerinizi Girin</label>
@@ -246,7 +333,7 @@
                 </button>
             </div>
             <p class="input-hint">&#214;rnek: 15.03.1990 &mdash; 14:30 &mdash; &#304;stanbul</p>
-            <p class="input-hint-sub">Saat ve &#351;ehir bilgisi Do&#287;um Haritas&#305; i&#231;in gereklidir. Sadece tarih girerseniz yaln&#305;zca Karmik Matris hesaplan&#305;r.</p>
+            <p class="input-hint-sub">Saat ve &#351;ehir bilgisi Do&#287;um Haritas&#305; i&#231;in gereklidir. Sadece tarih girerseniz yaln&#305;zca Karma Matris hesaplan&#305;r.</p>
         </div>
     </div>
 </section>
@@ -276,7 +363,7 @@
 <!-- Matrix Diagram -->
 <section class="matrix-section" id="matrixSection" style="display:none;">
     <div class="container">
-        <h2 class="section-title">Karmik Matris Diyagram&#305;</h2>
+        <h2 class="section-title">Karma Matris Diyagram&#305;</h2>
         <p class="section-desc">D&#252;&#287;&#252;mlere t&#305;klayarak detayl&#305; analizi g&#246;r&#252;nt&#252;leyebilirsiniz</p>
 
         <div class="matrix-wrapper">
@@ -329,9 +416,9 @@
                         <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
                     </filter>
                     <radialGradient id="nodeGradGold" cx="40%" cy="35%">
-                        <stop offset="0%" stop-color="#FFE9A8"/>
-                        <stop offset="60%" stop-color="#D4AF37"/>
-                        <stop offset="100%" stop-color="#8B7536"/>
+                        <stop offset="0%" stop-color="#F2D9C2"/>
+                        <stop offset="60%" stop-color="#C2906B"/>
+                        <stop offset="100%" stop-color="#A2754F"/>
                     </radialGradient>
                     <radialGradient id="nodeGradCyan" cx="40%" cy="35%">
                         <stop offset="0%" stop-color="#A8DBF0"/>
@@ -344,9 +431,9 @@
                         <stop offset="100%" stop-color="#8B1A2E"/>
                     </radialGradient>
                     <radialGradient id="centerBurst" cx="50%" cy="50%">
-                        <stop offset="0%" stop-color="#FFE9A8" stop-opacity="1"/>
-                        <stop offset="40%" stop-color="#D4AF37" stop-opacity="0.6"/>
-                        <stop offset="100%" stop-color="#D4AF37" stop-opacity="0"/>
+                        <stop offset="0%" stop-color="#F2D9C2" stop-opacity="1"/>
+                        <stop offset="40%" stop-color="#C2906B" stop-opacity="0.6"/>
+                        <stop offset="100%" stop-color="#C2906B" stop-opacity="0"/>
                     </radialGradient>
                 </defs>
             </svg>
@@ -377,7 +464,7 @@
             </div>
 
             <div class="result-group">
-                <h3>Karmik D&#252;&#287;&#252;mler (KU)</h3>
+                <h3>Karma D&#252;&#287;&#252;mler (KU)</h3>
                 <div class="result-cards" id="karmicCards"></div>
             </div>
         </div>
@@ -392,7 +479,7 @@
                 </svg>
                 <span>Detayl&#305; PDF Raporu &#304;ndir</span>
             </button>
-            <p class="pdf-download-hint">Ki&#351;isel karmik &#246;zetiniz, t&#252;m pozisyon analizleri ve uzun yorum bir PDF olarak haz&#305;rlan&#305;r. Bu i&#351;lem 1-3 dakika s&#252;rer.</p>
+            <p class="pdf-download-hint">Ki&#351;isel karma &#246;zetiniz, t&#252;m pozisyon analizleri ve uzun yorum bir PDF olarak haz&#305;rlan&#305;r. Bu i&#351;lem 1-3 dakika s&#252;rer.</p>
         </div>
     </div>
 </section>
@@ -400,10 +487,10 @@
 <div class="section-divider"></div>
 
 <!-- How It Works Section -->
-<section class="howto-section">
+<section class="howto-section" data-marketing="true">
     <div class="container">
         <h2 class="section-title">Nas&#305;l &#199;al&#305;&#351;&#305;r?</h2>
-        <p class="section-desc">&#220;&#231; basit ad&#305;mda derin karmik analiz</p>
+        <p class="section-desc">&#220;&#231; basit ad&#305;mda derin karma analiz</p>
         <div class="howto-grid">
 
             <div class="howto-step" data-step="01">
@@ -411,8 +498,8 @@
                     <svg viewBox="0 0 64 64" width="56" height="56">
                         <defs>
                             <radialGradient id="howto1Grad" cx="50%" cy="40%">
-                                <stop offset="0%" stop-color="#FFE9A8"/>
-                                <stop offset="100%" stop-color="#D4AF37"/>
+                                <stop offset="0%" stop-color="#F2D9C2"/>
+                                <stop offset="100%" stop-color="#C2906B"/>
                             </radialGradient>
                         </defs>
                         <!-- Quill / pen writing on parchment -->
@@ -425,7 +512,7 @@
                         <path d="M48 8 L56 16 L40 32 L32 32 L32 24 Z"
                             fill="url(#howto1Grad)" opacity="0.9"/>
                         <line x1="48" y1="8" x2="32" y2="24" stroke="#2A1018" stroke-width="0.6"/>
-                        <circle cx="50" cy="14" r="1.5" fill="#FFE9A8"/>
+                        <circle cx="50" cy="14" r="1.5" fill="#F2D9C2"/>
                     </svg>
                 </div>
                 <h3>Do&#287;um Bilgilerini Gir</h3>
@@ -437,8 +524,8 @@
                     <svg viewBox="0 0 64 64" width="56" height="56">
                         <defs>
                             <radialGradient id="howto2Grad" cx="50%" cy="40%">
-                                <stop offset="0%" stop-color="#FFE9A8"/>
-                                <stop offset="100%" stop-color="#D4AF37"/>
+                                <stop offset="0%" stop-color="#F2D9C2"/>
+                                <stop offset="100%" stop-color="#C2906B"/>
                             </radialGradient>
                         </defs>
                         <!-- Concentric orbits + central star -->
@@ -452,13 +539,13 @@
                             fill="url(#howto2Grad)"/>
                         <circle cx="32" cy="32" r="3" fill="#2A1018"/>
                         <!-- Orbit dots -->
-                        <circle cx="58" cy="32" r="2" fill="#FFE9A8"/>
-                        <circle cx="32" cy="6"  r="1.5" fill="#D4AF37"/>
-                        <circle cx="6"  cy="32" r="1.5" fill="#D4AF37"/>
+                        <circle cx="58" cy="32" r="2" fill="#F2D9C2"/>
+                        <circle cx="32" cy="6"  r="1.5" fill="#C2906B"/>
+                        <circle cx="6"  cy="32" r="1.5" fill="#C2906B"/>
                     </svg>
                 </div>
                 <h3>Sistem An&#305;nda Hesaplar</h3>
-                <p>Jean Meeus astronomik algoritmalar&#305; ile 13 karmik pozisyon, 22 B&#252;y&#252;k Arkana ve gezegen konumlar&#305; saniyeler i&#231;inde hesaplan&#305;r.</p>
+                <p>Jean Meeus astronomik algoritmalar&#305; ile 13 karma pozisyon, 22 B&#252;y&#252;k Arkana ve gezegen konumlar&#305; saniyeler i&#231;inde hesaplan&#305;r.</p>
             </div>
 
             <div class="howto-step" data-step="03">
@@ -466,8 +553,8 @@
                     <svg viewBox="0 0 64 64" width="56" height="56">
                         <defs>
                             <radialGradient id="howto3Grad" cx="50%" cy="40%">
-                                <stop offset="0%" stop-color="#FFE9A8"/>
-                                <stop offset="100%" stop-color="#D4AF37"/>
+                                <stop offset="0%" stop-color="#F2D9C2"/>
+                                <stop offset="100%" stop-color="#C2906B"/>
                             </radialGradient>
                         </defs>
                         <!-- Scroll / parchment with shine -->
@@ -485,7 +572,7 @@
                     </svg>
                 </div>
                 <h3>Profesyonel Analizi Sun</h3>
-                <p>M&#252;&#351;terinize haz&#305;r karmik harita ve derinlemesine yorumlar&#305; an&#305;nda sunun. Haritay&#305; PNG olarak indirin, seansa ta&#351;&#305;y&#305;n.</p>
+                <p>M&#252;&#351;terinize haz&#305;r karma harita ve derinlemesine yorumlar&#305; an&#305;nda sunun. Haritay&#305; PNG olarak indirin, seansa ta&#351;&#305;y&#305;n.</p>
             </div>
 
         </div>
@@ -495,13 +582,13 @@
 <div class="section-divider"></div>
 
 <!-- Features / Why This Tool Section -->
-<section class="features-section">
+<section class="features-section" data-marketing="true">
     <div class="container">
-        <h2 class="section-title">Neden Karmik Matris Arac&#305;?</h2>
+        <h2 class="section-title">Neden Karma Matris Arac&#305;?</h2>
         <p class="section-desc">Dakikalar i&#231;inde profesyonel analiz. M&#252;&#351;terilerinize 13 pozisyonlu derinlemesine rapor sunun.</p>
         <div class="features-grid">
 
-            <!-- Kart 1 — 13 Karmik Pozisyon -->
+            <!-- Kart 1 — 13 Karma Pozisyon -->
             <div class="info-card feature-card" data-animate>
                 <div class="info-icon">
                     <svg viewBox="0 0 48 48" width="48" height="48">
@@ -509,8 +596,8 @@
                         <circle cx="24" cy="24" r="1.8" fill="currentColor"/>
                     </svg>
                 </div>
-                <h3>13 Karmik Pozisyon</h3>
-                <p>Astro&#351;u&#351;u sistemine g&#246;re hesaplanan 13 farkl&#305; pozisyon. Her biri 22 B&#252;y&#252;k Arkana ile e&#351;le&#351;tirilmi&#351; derinlemesine analiz.</p>
+                <h3>13 Karma Pozisyon</h3>
+                <p>Bilimsel astronomik algoritmalarla hesaplanan 13 farkl&#305; pozisyon. Her biri 22 B&#252;y&#252;k Arkana ile e&#351;le&#351;tirilmi&#351; derinlemesine analiz.</p>
             </div>
 
             <!-- Kart 2 — Natal Doğum Haritası -->
@@ -547,7 +634,7 @@
                     </svg>
                 </div>
                 <h3>PNG &#304;ndirme</h3>
-                <p>Karmik haritay&#305; PNG olarak indirin. Seans s&#305;ras&#305;nda m&#252;&#351;terinizle payla&#351;&#305;n, ar&#351;ivleyin.</p>
+                <p>Karma haritay&#305; PNG olarak indirin. Seans s&#305;ras&#305;nda m&#252;&#351;terinizle payla&#351;&#305;n, ar&#351;ivleyin.</p>
             </div>
 
             <!-- Kart 5 — PDF Raporu -->
@@ -562,7 +649,7 @@
                     </svg>
                 </div>
                 <h3>PDF Raporu</h3>
-                <p>T&#252;m karmik analizinizi detayl&#305; PDF raporu olarak indirin, ar&#351;ivleyin ve m&#252;&#351;terinize sunun.</p>
+                <p>T&#252;m karma analizinizi detayl&#305; PDF raporu olarak indirin, ar&#351;ivleyin ve m&#252;&#351;terinize sunun.</p>
             </div>
 
             <!-- Kart 6 — Hassas Hesaplama -->
@@ -586,7 +673,7 @@
 <div class="section-divider"></div>
 
 <!-- Professions / Who Is It For Section -->
-<section class="professions-section">
+<section class="professions-section" data-marketing="true">
     <div class="container">
         <h2 class="section-title">Kimler &#304;&#231;in?</h2>
         <p class="section-desc">Spirit&#252;el dan&#305;&#351;manl&#305;k alan&#305;nda &#231;al&#305;&#351;an herkes i&#231;in.</p>
@@ -603,7 +690,7 @@
                     </svg>
                 </div>
                 <h3>Astrologlar</h3>
-                <p>Seans s&#305;ras&#305;nda m&#252;&#351;terinizin karmik haritas&#305;n&#305; an&#305;nda &#231;&#305;kar&#305;n. Gezegen pozisyonlar&#305; ve karmik pozisyonlar&#305; birlikte sunarak analizinizi &#231;ok daha derinlemesine ve etkileyici hale getirin.</p>
+                <p>Seans s&#305;ras&#305;nda m&#252;&#351;terinizin karma haritas&#305;n&#305; an&#305;nda &#231;&#305;kar&#305;n. Gezegen pozisyonlar&#305; ve karma pozisyonlar&#305; birlikte sunarak analizinizi &#231;ok daha derinlemesine ve etkileyici hale getirin.</p>
             </div>
 
             <!-- Kart 2 — Tarot Okuyucuları -->
@@ -616,7 +703,7 @@
                     </svg>
                 </div>
                 <h3>Tarot Okuyucular&#305;</h3>
-                <p>22 B&#252;y&#252;k Arkana ile do&#287;rudan ba&#287;lant&#305;l&#305; karmik matris, tarot seanslar&#305;n&#305;za say&#305;sal bir derinlik katar. M&#252;&#351;terinizin kartlar&#305;n&#305; karmik yolculu&#287;uyla ili&#351;kilendirin.</p>
+                <p>22 B&#252;y&#252;k Arkana ile do&#287;rudan ba&#287;lant&#305;l&#305; karma matris, tarot seanslar&#305;n&#305;za say&#305;sal bir derinlik katar. M&#252;&#351;terinizin kartlar&#305;n&#305; karma yolculu&#287;uyla ili&#351;kilendirin.</p>
             </div>
 
             <!-- Kart 3 — Remil Ustaları -->
@@ -633,7 +720,7 @@
                     </svg>
                 </div>
                 <h3>Remil Ustalar&#305;</h3>
-                <p>Remil analizine karmik matris ekleyerek seans&#305; zenginle&#351;tirin. Saatler s&#252;ren manuel hesaplar&#305;n yerini saniyeler al&#305;r, siz yorumlamaya odaklan&#305;rs&#305;n&#305;z.</p>
+                <p>Remil analizine karma matris ekleyerek seans&#305; zenginle&#351;tirin. Saatler s&#252;ren manuel hesaplar&#305;n yerini saniyeler al&#305;r, siz yorumlamaya odaklan&#305;rs&#305;n&#305;z.</p>
             </div>
 
             <!-- Kart 4 — Numerologlar -->
@@ -645,7 +732,7 @@
                     </svg>
                 </div>
                 <h3>Numerologlar</h3>
-                <p>Do&#287;um tarihinden &#252;retilen 13 karmik say&#305;, numeroloji &#231;al&#305;&#351;malar&#305;n&#305;z&#305; B&#252;y&#252;k Arkana yorumlar&#305;yla birle&#351;tirerek m&#252;&#351;terinize &#231;ok katmanl&#305; bir analiz sunar.</p>
+                <p>Do&#287;um tarihinden &#252;retilen 13 karma say&#305;, numeroloji &#231;al&#305;&#351;malar&#305;n&#305;z&#305; B&#252;y&#252;k Arkana yorumlar&#305;yla birle&#351;tirerek m&#252;&#351;terinize &#231;ok katmanl&#305; bir analiz sunar.</p>
             </div>
 
             <!-- Kart 5 — Spiritüel Danışmanlar -->
@@ -666,7 +753,7 @@
                     </svg>
                 </div>
                 <h3>Spirit&#252;el Dan&#305;&#351;manlar</h3>
-                <p>Ki&#351;isel geli&#351;im seanslar&#305;nda somut ve g&#246;rsel bir ara&#231; kullan&#305;n. M&#252;&#351;terinizin karmik haritas&#305;, dan&#305;&#351;manl&#305;k s&#252;recine profesyonel ve g&#252;venilir bir temel olu&#351;turur.</p>
+                <p>Ki&#351;isel geli&#351;im seanslar&#305;nda somut ve g&#246;rsel bir ara&#231; kullan&#305;n. M&#252;&#351;terinizin karma haritas&#305;, dan&#305;&#351;manl&#305;k s&#252;recine profesyonel ve g&#252;venilir bir temel olu&#351;turur.</p>
             </div>
 
         </div>
@@ -674,12 +761,12 @@
 </section>
 
 <!-- Stats Bar — acts as thin divider between sections -->
-<section class="stats-bar" aria-label="&#304;statistikler">
+<section class="stats-bar" data-marketing="true" aria-label="&#304;statistikler">
     <div class="container">
         <div class="stats-grid">
             <div class="stat-item">
                 <div class="stat-number" data-target="13">0</div>
-                <div class="stat-label">Karmik Pozisyon</div>
+                <div class="stat-label">Karma Pozisyon</div>
             </div>
             <div class="stat-item">
                 <div class="stat-number" data-target="22">0</div>
@@ -694,7 +781,7 @@
 </section>
 
 <!-- Pricing — Paketler -->
-<section class="pricing-section" id="paketler">
+<section class="pricing-section" id="paketler" data-marketing="true">
     <div class="container">
         <div class="pricing-eyebrow" aria-hidden="true">
             <span class="pricing-eyebrow-line"></span>
@@ -730,7 +817,7 @@
                 </div>
 
                 <ul class="pricing-features">
-                    <li>30 Karmik Matris analizi</li>
+                    <li>30 Karma Matris analizi</li>
                     <li>Natal do&#287;um haritas&#305;</li>
                     <li>Detayl&#305; PDF rapor indirme</li>
                     <li>Yapay zek&#226; ki&#351;isel &#246;zet</li>
@@ -784,7 +871,7 @@
                 </div>
 
                 <ul class="pricing-features">
-                    <li>100 Karmik Matris analizi</li>
+                    <li>100 Karma Matris analizi</li>
                     <li>Natal do&#287;um haritas&#305;</li>
                     <li>Detayl&#305; PDF rapor indirme</li>
                     <li>Yapay zek&#226; ki&#351;isel &#246;zet</li>
@@ -820,11 +907,11 @@
 </section>
 
 <!-- CTA Banner — Hemen Deneyin -->
-<section class="cta-banner-section">
+<section class="cta-banner-section" data-marketing="true">
     <div class="container">
         <div class="cta-banner">
             <h2 class="cta-title">Hemen Deneyin</h2>
-            <p class="cta-desc">Kendi karmik haritan&#305;z&#305; &#231;&#305;kar&#305;n. M&#252;&#351;terilerinize nas&#305;l sunaca&#287;&#305;n&#305;z&#305; bizzat deneyimleyin.</p>
+            <p class="cta-desc">Kendi karma haritan&#305;z&#305; &#231;&#305;kar&#305;n. M&#252;&#351;terilerinize nas&#305;l sunaca&#287;&#305;n&#305;z&#305; bizzat deneyimleyin.</p>
             <button type="button" class="cta-btn" onclick="scrollToForm()">
                 <span class="cta-btn-text">Haritam&#305; Hesapla</span>
                 <span class="cta-btn-arrow" aria-hidden="true">&#8594;</span>
@@ -834,7 +921,7 @@
 </section>
 
 <!-- Info Section -->
-<section class="info-section">
+<section class="info-section" data-marketing="true">
     <div class="container">
         <h2 class="section-title">Sistem Hakk&#305;nda</h2>
         <div class="info-grid">
@@ -842,8 +929,8 @@
                 <div class="info-icon">
                     <svg viewBox="0 0 48 48" width="48" height="48"><polygon points="24,2 30,18 48,18 34,28 39,46 24,35 9,46 14,28 0,18 18,18" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="24" r="6" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.5"/></svg>
                 </div>
-                <h3>Astro&#351;u&#351;u Matrisi Nedir?</h3>
-                <p>Astro&#351;u&#351;u Karmik Matrisi, do&#287;um tarihine dayal&#305; bir numerolojik-ezoterik sistemdir. 22 B&#252;y&#252;k Arkana'ya kar&#351;&#305;l&#305;k gelen say&#305;lar kullan&#305;larak, bir ki&#351;inin karmik derslerini, yeteneklerini ve ya&#351;am amac&#305;n&#305; ortaya &#231;&#305;kar&#305;r.</p>
+                <h3>Karma Matris Nedir?</h3>
+                <p>Karma Matris, do&#287;um tarihine dayal&#305; bir numerolojik-ezoterik sistemdir. 22 B&#252;y&#252;k Arkana'ya kar&#351;&#305;l&#305;k gelen say&#305;lar kullan&#305;larak, bir ki&#351;inin karma derslerini, yeteneklerini ve ya&#351;am amac&#305;n&#305; ortaya &#231;&#305;kar&#305;r.</p>
             </div>
             <div class="info-card" data-animate>
                 <div class="info-icon">
@@ -857,7 +944,7 @@
                     <svg viewBox="0 0 48 48" width="48" height="48"><path d="M8,24 C8,24 16,8 24,24 C32,40 40,24 40,24" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8,24 C8,24 16,40 24,24 C32,8 40,24 40,24" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="24" r="3" fill="currentColor" opacity="0.4"/></svg>
                 </div>
                 <h3>Ne &#304;&#351;e Yarar?</h3>
-                <p>Matris, ki&#351;isel geli&#351;im i&#231;in bir rehber niteli&#287;indedir. Do&#287;u&#351;sal yetenekleri, karmik engelleri, ya&#351;am g&#246;revini ve farkl&#305; ya&#351; d&#246;nemlerindeki temalar&#305; ortaya koyar.</p>
+                <p>Matris, ki&#351;isel geli&#351;im i&#231;in bir rehber niteli&#287;indedir. Do&#287;u&#351;sal yetenekleri, karma engelleri, ya&#351;am g&#246;revini ve farkl&#305; ya&#351; d&#246;nemlerindeki temalar&#305; ortaya koyar.</p>
             </div>
         </div>
     </div>
@@ -874,7 +961,7 @@
                 <p class="modal-position" id="modalPosition"></p>
             </div>
         </div>
-        <div class="modal-body" id="modalBody"></div>
+        <div class="modal-body" id="modalBody" data-lenis-prevent></div>
     </div>
 </div>
 
@@ -884,9 +971,9 @@
 
             <!-- LEFT: Brand -->
             <div class="footer-col footer-brand">
-                <h3 class="footer-brand-title">Karmik Matris Analizi</h3>
-                <p class="footer-brand-sub">Astro&#351;u&#351;u Sistemi</p>
-                <p class="footer-brand-desc">Astro&#351;u&#351;u sistemine dayal&#305; numerolojik-ezoterik analiz arac&#305;. Spirit&#252;el dan&#305;&#351;manlar i&#231;in profesyonel karmik harita hesaplama.</p>
+                <h3 class="footer-brand-title">Karma Matris Analizi</h3>
+                
+                <p class="footer-brand-desc">numerolojik-ezoterik analiz arac&#305;. Spirit&#252;el dan&#305;&#351;manlar i&#231;in profesyonel karma harita hesaplama.</p>
             </div>
 
             <!-- MIDDLE: Quick Access -->
@@ -903,7 +990,7 @@
             <!-- RIGHT: Contact -->
             <div class="footer-col footer-contact">
                 <h4 class="footer-col-title">&#304;leti&#351;im</h4>
-                <p class="footer-contact-brand">Astro&#351;u&#351;u</p>
+                <p class="footer-contact-brand">Karma Matris</p>
                 <div class="footer-sparkle-divider" aria-hidden="true">
                     <svg viewBox="0 0 16 16" width="12" height="12">
                         <path d="M8 1 L9.6 6.4 L15 8 L9.6 9.6 L8 15 L6.4 9.6 L1 8 L6.4 6.4 Z" fill="currentColor"/>
@@ -938,7 +1025,7 @@
 
         <!-- Copyright bar -->
         <div class="footer-bottom">
-            <p class="footer-copyright">&copy; 2025 Karmik Matris Analizi &mdash; Astro&#351;u&#351;u Sistemi</p>
+            <p class="footer-copyright">&copy; 2025 Karma Matris Analizi </p>
             <p class="footer-legal">Bu hesaplama ezoterik bir ara&#231;t&#305;r, bilimsel iddia ta&#351;&#305;maz.</p>
         </div>
     </div>
@@ -947,8 +1034,8 @@
 <script src="arcana-data.js"></script>
 <script src="cities-data.js"></script>
 <script src="astro-engine.js"></script>
-<script src="birth-chart.js"></script>
-<script src="calculator.js"></script>
+<script src="birth-chart.js?v=20260602c"></script>
+<script src="calculator.js?v=20260604a"></script>
 <!-- PDF generation -->
 <script src="pdf/positions.js"></script>
 <script src="pdf/health-data.js"></script>
@@ -957,7 +1044,7 @@
 <!-- GSAP for timeline animations -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="animation.js"></script>
+<script src="animation.js?v=20260528a"></script>
 
 <!-- Auth widget — sayfanın sağ üstündeki Hesabım/Giriş butonu -->
 <script src="lib/supabase-config.js?v=4"></script>
@@ -1023,8 +1110,16 @@
                 const profile = await getProfile();
                 const credits = profile?.credits ?? 0;
                 window.km_credits = credits;
+                // Marketing içeriği SADECE ödeme yapmış (krediye sahip) ya da admin
+                // kullanıcılara gizlenir. Free signup yapan ama kredisi olmayan
+                // kullanıcı hala fiyat / özellik bilgilerine ihtiyaç duyar.
+                if (credits > 0 || profile?.is_admin) {
+                    document.body.classList.add('is-paid-customer');
+                } else {
+                    document.body.classList.remove('is-paid-customer');
+                }
                 const adminBadge = profile?.is_admin
-                    ? `<a href="/admin/" style="color: var(--amethyst, #C492DA); margin-right: 0.6rem; text-decoration: none;">ADMIN</a>`
+                    ? `<a href="/admin/" class="auth-widget-admin">Admin</a><span class="auth-widget-sep" aria-hidden="true">·</span>`
                     : '';
                 widgetLink.href = '/hesap/';
                 widgetLink.innerHTML = `
@@ -1032,20 +1127,26 @@
                     ${adminBadge}<span>Hesabım</span>
                     <span class="auth-widget-credit" id="authWidgetCredit">${credits} kredi</span>
                 `;
+                // Logged-in iken Üye Ol gizli
+                const signup = document.getElementById('authWidgetSignup');
+                if (signup) signup.style.display = 'none';
             } else {
                 window.km_auth_token = null;
                 window.km_credits = 0;
+                document.body.classList.remove('is-paid-customer');
                 widgetLink.href = '/auth/giris.html';
-                widgetLink.innerHTML = `
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21 a8 8 0 0 1 16 0"/></svg>
-                    <span>Giriş Yap</span>
-                `;
+                widgetLink.innerHTML = `<span>Giriş Yap</span>`;
+                // Üye Ol linki anonim'de görünür kalır
+                const signup = document.getElementById('authWidgetSignup');
+                if (signup) signup.style.display = '';
             }
         } catch (err) {
             // Supabase init başarısız olsa bile widget'ı tıklanabilir bırak
+            // Defensive: hata varsa marketing içerikleri GÖSTER (anonim varsay)
             console.error('[auth-widget] refresh failed', err);
             window.km_auth_token = null;
             window.km_credits = 0;
+            document.body.classList.remove('is-paid-customer');
             widgetLink.href = '/auth/giris.html';
         } finally {
             widget.classList.add('ready');
@@ -1118,5 +1219,13 @@
     }
 })();
 </script>
+
+<!-- Motion: cursor particle trail + Lenis smooth scroll -->
+<script type="module" src="/lib/motion.js?v=20260602b"></script>
+
+<!-- Hero motion sequence (motion.dev) — kicker → Karma → matris → Analizi → CTA -->
+<script type="module" src="/lib/hero-motion.js?v=20260603d"></script>
+
+<!-- 3D tilt KALDIRILDI (kullanıcı "çok sert" buldu) — kartlar artık sadece soft lift kullanıyor -->
 </body>
 </html>

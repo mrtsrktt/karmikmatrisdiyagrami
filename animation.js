@@ -149,29 +149,15 @@ function initGSAPAnimations() {
     }
 
     // ========================
-    // 0. Mystic intro loader (gates everything else)
+    // Editorial v2: intro-loader devre dışı (görsel/video zaten poster ile snap'siz)
+    // Eski mistik loader 2.55s'de body > * opacity 0→1 fade yapıyordu — flicker'a sebep
     // ========================
-    runIntroLoader(function () {
-        // ====================
-        // 1. Page Load Ceremony
-        // ====================
-        pageLoadCeremony();
+    document.body.classList.remove('is-loading');
 
-        // ====================
-        // 2. Section scroll animations
-        // ====================
-        initSectionScrollAnimations();
-
-        // ====================
-        // 3. Button effects (particles + ripple)
-        // ====================
-        initButtonEffects();
-
-        // ====================
-        // 4. Cursor glow + trail
-        // ====================
-        initCursorEffect();
-    });
+    pageLoadCeremony();
+    initSectionScrollAnimations();
+    initButtonEffects();
+    initCursorEffect();
 }
 
 
@@ -333,22 +319,30 @@ function pageLoadCeremony() {
 
     if (!h1) return;
 
-    // Split title into individual characters wrapped in spans
-    const text = h1.textContent;
-    h1.innerHTML = '';
-    h1.style.opacity = '1';
+    // Editorial v2: h1 zaten yapılandırılmış 3-span markup'a sahipse (hero-word-pre/script/post),
+    // letter-reveal'i atla — CSS animation devralacak.
+    const hasStructuredMarkup = h1.querySelector('.hero-word') !== null;
+    let chars = [];
 
-    // Create span for each character
-    const chars = [];
-    for (let i = 0; i < text.length; i++) {
-        const span = document.createElement('span');
-        span.textContent = text[i];
-        span.style.display = 'inline-block';
-        span.style.opacity = '0';
-        span.style.transform = 'translateY(30px) rotateX(90deg)';
-        if (text[i] === ' ') span.innerHTML = '&nbsp;';
-        h1.appendChild(span);
-        chars.push(span);
+    if (!hasStructuredMarkup) {
+        // Eski path: tüm metni char span'lara böl
+        const text = h1.textContent;
+        h1.innerHTML = '';
+        h1.style.opacity = '1';
+
+        for (let i = 0; i < text.length; i++) {
+            const span = document.createElement('span');
+            span.textContent = text[i];
+            span.style.display = 'inline-block';
+            span.style.opacity = '0';
+            span.style.transform = 'translateY(30px) rotateX(90deg)';
+            if (text[i] === ' ') span.innerHTML = '&nbsp;';
+            h1.appendChild(span);
+            chars.push(span);
+        }
+    } else {
+        // Yeni path: 3-span markup'ı koru, CSS animation halleder.
+        h1.style.opacity = '1';
     }
 
     // GSAP Timeline

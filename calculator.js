@@ -659,11 +659,12 @@ function renderAgePeriods(periods) {
         { label: "4. Dönem", range: `${periods.p3}+ yaş` },
     ];
     container.innerHTML = data.map((d, i) =>
-        `<div class="age-period" style="opacity:0; animation: none;">
+        `<div class="age-period" style="opacity:0; animation: none;" data-num="${i + 1}">
             <div class="period-label">${d.label}</div>
             <div class="period-range">${d.range}</div>
         </div>`
     ).join('');
+    if (window.init3DTilt) window.init3DTilt('.age-period', { maxTilt: 6 });
 }
 
 // --- Result Cards ---
@@ -691,6 +692,7 @@ function renderResultCards(results) {
     document.getElementById('pathCards').innerHTML = pathKeys.map(p => cardHTML(p, 'path')).join('');
     document.getElementById('achievementCards').innerHTML = achieveKeys.map(p => cardHTML(p, 'achievement')).join('');
     document.getElementById('karmicCards').innerHTML = karmicKeys.map(p => cardHTML(p, 'karmic')).join('');
+    if (window.init3DTilt) window.init3DTilt('.result-card', { maxTilt: 7 });
 }
 
 function cardHTML(item, type) {
@@ -914,21 +916,53 @@ document.getElementById('birthDate').addEventListener('keypress', function(e) {
     });
 })();
 
-// Scroll-triggered matrix animation
+// Scroll-triggered matrix animation — HER görünüme girdiğinde yeniden oynar
+let _matrixTl = null;
+let _matrixInView = false;
 function initMatrixScrollTrigger() {
     const matrixSection = document.getElementById('matrixSection');
     if (!matrixSection) return;
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                triggerMatrixAnimations();
-                observer.unobserve(entry.target);
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.18) {
+                if (!_matrixInView) {
+                    _matrixInView = true;
+                    triggerMatrixAnimations();        // (yeniden) oynat
+                }
+            } else if (!entry.isIntersecting) {
+                _matrixInView = false;
+                resetMatrixEntrance();                // tamamen çıkınca sıfırla → tekrar girince baştan oynar
             }
         });
-    }, { threshold: 0.15 });
+    }, { threshold: [0, 0.18] });
 
     observer.observe(matrixSection);
+}
+
+// Matrisi giriş-öncesi gizli haline döndür (yeniden oynatma için)
+function resetMatrixEntrance() {
+    const svg = document.getElementById('matrixSvg');
+    if (!svg) return;
+    if (_matrixTl) { try { _matrixTl.kill(); } catch (e) {} _matrixTl = null; }
+    svg.dataset.entranceStarted = '';
+    const pulseLayer = svg.querySelector('#matrixPulseLayer');
+    if (pulseLayer) pulseLayer.innerHTML = '';
+    const g = window.gsap;
+    svg.querySelectorAll('.node-circle').forEach(n => {
+        if (g) gsap.set(n, { opacity: 0, scale: 0 }); else n.style.opacity = '0';
+        const num = n.querySelector('.node-label'); if (num) num.textContent = '';
+        const sub = n.querySelector('.node-sublabel'); if (sub) sub.style.opacity = '0';
+        const glow = n.querySelector('.node-glow'); if (glow) glow.setAttribute('opacity', '0');
+    });
+    svg.querySelectorAll('.matrix-line').forEach(l => {
+        const len = parseFloat(l.dataset.length || 100);
+        if (g) gsap.set(l, { strokeDashoffset: len }); else { l.style.transition = 'none'; l.style.strokeDashoffset = len; }
+    });
+    const cb = svg.querySelector('.matrix-center-burst');
+    const cw = svg.querySelector('.matrix-center-wave');
+    if (cb) { if (g) gsap.set(cb, { opacity: 0, scale: 1, attr: { r: 8 } }); else cb.style.opacity = '0'; }
+    if (cw) { if (g) gsap.set(cw, { opacity: 0, attr: { r: 10 } }); else cw.style.opacity = '0'; }
 }
 
 // ============================================================
@@ -981,7 +1015,8 @@ function triggerMatrixAnimations() {
         return;
     }
 
-    const tl = gsap.timeline();
+    _matrixTl = gsap.timeline();
+    const tl = _matrixTl;
 
     // ----- Phase 1: Center light appears -----
     tl.to(centerBurst, {
@@ -1073,6 +1108,11 @@ function triggerMatrixAnimations() {
         stagger: 0.04,
         ease: 'power2.out'
     }, 3.0);
+
+    // ----- Phase 6.5: Mistik ışıma bloom — renkli hâle merkezden dalga gibi yayılır -----
+    const glows = nodes.map(n => n.querySelector('.node-glow')).filter(Boolean);
+    tl.to(glows, { opacity: 0.42, duration: 0.5, stagger: { each: 0.06, from: 'center' }, ease: 'sine.out' }, 3.05);
+    tl.to(glows, { opacity: 0, duration: 1.2, stagger: { each: 0.06, from: 'center' }, ease: 'sine.inOut' }, 3.55);
 
     // ----- Final: All nodes flash simultaneously -----
     const allBgs = nodes.map(n => n.querySelector('.node-bg')).filter(Boolean);

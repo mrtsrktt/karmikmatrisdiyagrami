@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Şifre Sıfırla — Karmik Matris Analizi</title>
+    <title>Şifre Sıfırla — Karma Matris Analizi</title>
     <link rel="stylesheet" href="auth.css">
     <script src="/lib/supabase-config.js"></script>
 </head>
@@ -16,7 +16,7 @@
         <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M10 13L5 8l5-5v3h4v4h-4v3z"/></svg>
         Giriş Sayfası
     </a>
-    <span class="auth-brand">Karmik Matris Analizi</span>
+    <span class="auth-brand">Karma Matris Analizi</span>
 </header>
 
 <main class="auth-main">
@@ -28,7 +28,7 @@
                 <circle cx="32" cy="36" r="14"/>
                 <path d="M28 36 L31 39 L38 32"/>
             </svg>
-            <h1 class="auth-title">Yeni Şifre Belirle</h1>
+            <h1 class="auth-title" data-split-reveal>Yeni Şifre Belirle</h1>
             <p class="auth-subtitle">Lütfen yeni şifrenizi iki kez girin.</p>
         </div>
 
@@ -57,6 +57,8 @@
     import { initResetForm } from '/auth/auth.js';
     initResetForm();
 </script>
+
+<script type="module" src="/lib/motion.js"></script>
 
 </body>
 </html>

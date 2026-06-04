@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eğitmen Paneli — Karmik Matris</title>
+    <title>Eğitmen Paneli — Karma Matris</title>
     <meta name="robots" content="noindex, nofollow">
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="egitmen.css">
@@ -49,7 +49,7 @@
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>
                 </svg>
-                <input type="search" id="searchBox" placeholder="Ara: '14', 'Yıldız', 'Karmik Düğüm'...">
+                <input type="search" id="searchBox" placeholder="Ara: '14', 'Yıldız', 'Karma Düğüm'...">
                 <div id="searchResults" class="eg-search-results"></div>
             </div>
             <button id="logoutBtn" class="eg-topbar-btn" title="Çıkış">Kilitle</button>
@@ -81,7 +81,7 @@
         <div class="eg-hint-strip">
             <span class="eg-hint-dot gold"></span> Yol (Altın)
             <span class="eg-hint-dot cyan"></span> Başarı (Mavi)
-            <span class="eg-hint-dot rose"></span> Karmik (Gül)
+            <span class="eg-hint-dot rose"></span> Karma (Gül)
             <span class="eg-hint-sep"></span>
             <em>Her rakama, harfe, renge ve hücreye tıkla — anında açıklama gelir.</em>
         </div>
@@ -91,9 +91,9 @@
             <svg id="teacherMatrixSvg" viewBox="0 0 600 700" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <radialGradient id="egGradGold" cx="40%" cy="35%">
-                        <stop offset="0%" stop-color="#FFE9A8"/>
-                        <stop offset="60%" stop-color="#D4AF37"/>
-                        <stop offset="100%" stop-color="#8B7536"/>
+                        <stop offset="0%" stop-color="#F2D9C2"/>
+                        <stop offset="60%" stop-color="#C2906B"/>
+                        <stop offset="100%" stop-color="#A2754F"/>
                     </radialGradient>
                     <radialGradient id="egGradCyan" cx="40%" cy="35%">
                         <stop offset="0%" stop-color="#A8DBF0"/>
@@ -116,7 +116,7 @@
                     <tr>
                         <th data-popup="col:yol">Yol (Temel Arkanlar)</th>
                         <th data-popup="col:na">Başarı Sayıları (NA)</th>
-                        <th data-popup="col:kn">Karmik Düğümler (KN)</th>
+                        <th data-popup="col:kn">Karma Düğümler (KN)</th>
                     </tr>
                 </thead>
                 <tbody id="resultsTableBody"></tbody>
@@ -135,7 +135,7 @@
             </button>
             <button class="eg-legend-btn" data-popup="color:karmic">
                 <span class="eg-legend-swatch rose"></span>
-                <span>Gül Düğümler — Karmik / Ders</span>
+                <span>Gül Düğümler — Karma / Ders</span>
             </button>
         </div>
 
