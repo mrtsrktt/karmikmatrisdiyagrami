@@ -941,9 +941,12 @@ function spawnRipple(btn, x, y) {
 
 // --- 4. Mystic cursor glow + trail ---
 function initCursorEffect() {
+    // lib/cursor-glow.js ile aynı bayrağı paylaşır — çift mount'u engeller
+    if (window.__cursorGlowMounted) return;
     // Skip on touch / coarse-pointer devices and reduced-motion
     if (window.matchMedia('(pointer: coarse)').matches) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    window.__cursorGlowMounted = true;
 
     // Create the glow follower element
     const glow = document.createElement('div');
