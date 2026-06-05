@@ -472,6 +472,62 @@ a.hesap-home-pill svg {
 }
 
 /* ============================================================================
+   MOBILE TOPBAR FIX — yatay scroll'a yer verme, hepsi sığsın
+   ============================================================================ */
+@media (max-width: 760px) {
+    .hesap-topbar {
+        padding: 0.7rem 1rem !important;
+        flex-wrap: wrap !important;
+        gap: 0.5rem !important;
+    }
+    .hesap-brand {
+        font-size: 0.75rem !important;
+        letter-spacing: 0.10em !important;
+        gap: 0.4rem !important;
+        flex-shrink: 1 !important;
+        min-width: 0 !important;
+    }
+    .hesap-brand svg {
+        width: 20px !important;
+        height: 20px !important;
+        flex-shrink: 0;
+    }
+    .hesap-topnav {
+        gap: 0.3rem !important;
+        flex-wrap: wrap !important;
+        justify-content: flex-end !important;
+    }
+    .hesap-credit-pill {
+        font-size: 0.62rem !important;
+        letter-spacing: 0.08em !important;
+        padding: 0.38rem 0.6rem !important;
+        gap: 0.35rem !important;
+    }
+    .hesap-credit-pill svg {
+        width: 11px !important;
+        height: 11px !important;
+    }
+    a.hesap-home-pill svg {
+        width: 12px !important;
+        height: 12px !important;
+    }
+    .hesap-logout-btn {
+        font-size: 0.6rem !important;
+        letter-spacing: 0.1em !important;
+        padding: 0.38rem 0.7rem !important;
+        margin-left: 0 !important;
+    }
+}
+
+@media (max-width: 420px) {
+    /* Çok küçük telefonlarda — ÇIKIŞ YAP tek kelime "ÇIKIŞ" göstersin */
+    .hesap-brand { font-size: 0.68rem !important; }
+    .hesap-brand svg { width: 18px !important; height: 18px !important; }
+    .hesap-credit-pill { font-size: 0.58rem !important; padding: 0.32rem 0.5rem !important; }
+    .hesap-logout-btn { font-size: 0.56rem !important; padding: 0.32rem 0.55rem !important; }
+}
+
+/* ============================================================================
    ROZETLER
    ============================================================================ */
 .hesap-badge {

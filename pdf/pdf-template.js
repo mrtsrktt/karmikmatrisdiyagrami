@@ -26,7 +26,7 @@
     border:        '#C2906B',
   };
 
-  // ----- Karmik matris düğüm konumları (calculator.js'ten birebir) -----
+  // ----- Karma matris düğüm konumları (calculator.js'ten birebir) -----
   const NODE_POSITIONS = {
     B: { x: 300, y: 50,  type: 'path' },
     D: { x: 100, y: 190, type: 'achievement' },
@@ -213,11 +213,11 @@
           // Header: big number + arcana name
           {
             columns: [
-              { text: String(num), font: 'IMFell', fontSize: 28, color: COLORS.goldBright, width: 'auto' },
+              { text: String(num), font: 'IMFell', fontSize: 30, color: COLORS.goldBright, width: 'auto' },
               {
                 stack: [
-                  { text: arcanaName, font: 'Cinzel', fontSize: 14, color: COLORS.goldBright, characterSpacing: 1, margin: [10, 4, 0, 0] },
-                  { text: badgeText, font: 'Cormorant', italics: true, fontSize: 11, color: COLORS.textSecondary, margin: [10, 2, 0, 0] },
+                  { text: arcanaName, font: 'Cinzel', fontSize: 15.5, color: COLORS.goldBright, characterSpacing: 1, margin: [10, 4, 0, 0] },
+                  { text: badgeText, font: 'Cormorant', italics: true, fontSize: 12.5, color: COLORS.textSecondary, margin: [10, 2, 0, 0] },
                 ],
                 width: '*',
               },
@@ -288,22 +288,22 @@
       },
 
       info: {
-        title: 'Karmik Matris Analizi',
-        subject: 'Karmik Matris Analizi',
+        title: 'Karma Matris Analizi',
+        subject: 'Karma Matris Analizi',
       },
 
       defaultStyle: {
         font: 'Cormorant',
-        fontSize: 13,
+        fontSize: 14.5,
         color: COLORS.textPrimary,
-        lineHeight: 1.5,
+        lineHeight: 1.55,
       },
 
       content: [
         // ============================ KAPAK ============================
         { text: '\n\n\n\n\n', fontSize: 1 },
         {
-          text: 'KARMİK MATRİS',
+          text: 'KARMA MATRİS',
           font: 'Cinzel',
           fontSize: 32,
           alignment: 'center',
@@ -354,7 +354,7 @@
 
         // ============================ SAYFA 2: MATRİS DİYAGRAMI ============================
         {
-          text: 'KARMİK MATRİS DİYAGRAMI',
+          text: 'KARMA MATRİS DİYAGRAMI',
           style: 'sectionTitle',
           pageBreak: 'before',
           margin: [0, 0, 0, 8],
@@ -420,7 +420,7 @@
           margin: [0, 0, 0, 8],
         },
         {
-          text: 'Karmik enerjileriniz beden sağlığınıza da yansır. Aşağıdaki bilgiler tıbbi tavsiye değildir; profesyonel doktor görüşünün yerini tutmaz. Yalnızca sembolik farkındalık amacıyla sunulmuştur.',
+          text: 'Karma enerjileriniz beden sağlığınıza da yansır. Aşağıdaki bilgiler tıbbi tavsiye değildir; profesyonel doktor görüşünün yerini tutmaz. Yalnızca sembolik farkındalık amacıyla sunulmuştur.',
           style: 'sectionDesc',
           alignment: 'center',
           margin: [20, 0, 20, 16],
@@ -429,7 +429,7 @@
 
         // ============================ KİŞİSEL ÖZET ============================
         {
-          text: 'KİŞİSEL KARMİK ÖZET',
+          text: 'KİŞİSEL KARMA ÖZET',
           style: 'sectionTitle',
           alignment: 'center',
           pageBreak: 'before',
@@ -458,7 +458,7 @@
           margin: [0, 80, 0, 16],
         },
         {
-          text: 'Karmik Matris analizi, numerolojik-ezoterik bir araçtır. ' +
+          text: 'Karma Matris analizi, numerolojik-ezoterik bir araçtır. ' +
                 'Bu rapor, 22 Büyük Arkana sistemine dayalı olarak doğum tarihinizden hesaplanan ' +
                 '13 karmik pozisyonun yorumlanmasıyla hazırlanmıştır.',
           style: 'narrative',
@@ -479,7 +479,7 @@
       styles: {
         sectionTitle: {
           font: 'Cinzel',
-          fontSize: 16,
+          fontSize: 18,
           color: COLORS.goldBright,
           characterSpacing: 2.5,
           alignment: 'center',
@@ -487,71 +487,71 @@
         sectionDesc: {
           font: 'Cormorant',
           italics: true,
-          fontSize: 13,
+          fontSize: 14.5,
           color: COLORS.textSecondary,
           alignment: 'center',
         },
         cardTitle: {
           font: 'Cinzel',
-          fontSize: 14,
+          fontSize: 15.5,
           color: COLORS.goldBright,
           characterSpacing: 1,
         },
         cardNumber: {
           font: 'IMFell',
-          fontSize: 26,
+          fontSize: 28,
           color: COLORS.goldBright,
         },
         cardArcana: {
           font: 'Cormorant',
           italics: true,
-          fontSize: 14,
+          fontSize: 15.5,
           color: COLORS.textPrimary,
         },
         cardFormula: {
           font: 'IMFell',
           italics: true,
-          fontSize: 11,
+          fontSize: 12.5,
           color: COLORS.textMuted,
         },
         cardBody: {
           font: 'Cormorant',
-          fontSize: 13,
+          fontSize: 14.5,
           color: COLORS.textPrimary,
-          lineHeight: 1.5,
+          lineHeight: 1.55,
         },
         healthCatLabel: {
           font: 'Cinzel',
-          fontSize: 12,
+          fontSize: 13.5,
           color: COLORS.goldBright,
         },
         healthCatItems: {
           font: 'Cormorant',
-          fontSize: 12.5,
+          fontSize: 14,
           color: COLORS.textPrimary,
-          lineHeight: 1.45,
+          lineHeight: 1.5,
         },
         healthInterpretation: {
           font: 'Cormorant',
           italics: true,
-          fontSize: 13,
+          fontSize: 14.5,
           color: COLORS.textPrimary,
-          lineHeight: 1.55,
+          lineHeight: 1.6,
           alignment: 'justify',
         },
         narrative: {
           font: 'Cormorant',
-          fontSize: 13.5,
+          fontSize: 15,
           color: COLORS.textPrimary,
-          lineHeight: 1.6,
+          lineHeight: 1.65,
           alignment: 'justify',
         },
         narrativeMuted: {
           font: 'Cormorant',
           italics: true,
-          fontSize: 11.5,
+          fontSize: 13,
           color: COLORS.textSecondary,
-          lineHeight: 1.55,
+          lineHeight: 1.6,
         },
       },
 
@@ -561,8 +561,8 @@
         if (currentPage === 1) return null;
         return {
           columns: [
-            { text: 'Karmik Matris Analizi', font: 'Cormorant', italics: true, fontSize: 9, color: COLORS.textMuted, alignment: 'left', margin: [55, 20, 0, 0] },
-            { text: `${currentPage} / ${pageCount}`, font: 'IMFell', fontSize: 9, color: COLORS.textMuted, alignment: 'right', margin: [0, 20, 55, 0] },
+            { text: 'Karma Matris Analizi', font: 'Cormorant', italics: true, fontSize: 10, color: COLORS.textMuted, alignment: 'left', margin: [55, 20, 0, 0] },
+            { text: `${currentPage} / ${pageCount}`, font: 'IMFell', fontSize: 10, color: COLORS.textMuted, alignment: 'right', margin: [0, 20, 55, 0] },
           ],
         };
       },
@@ -571,8 +571,8 @@
     function periodCell(label, range) {
       return {
         stack: [
-          { text: label, font: 'Cinzel', fontSize: 11, color: COLORS.goldBright, alignment: 'center', characterSpacing: 1, margin: [0, 0, 0, 4] },
-          { text: range, font: 'IMFell', fontSize: 12.5, color: COLORS.textPrimary, alignment: 'center' },
+          { text: label, font: 'Cinzel', fontSize: 12, color: COLORS.goldBright, alignment: 'center', characterSpacing: 1, margin: [0, 0, 0, 4] },
+          { text: range, font: 'IMFell', fontSize: 14, color: COLORS.textPrimary, alignment: 'center' },
         ],
         fillColor: COLORS.bgSurface,
       };
