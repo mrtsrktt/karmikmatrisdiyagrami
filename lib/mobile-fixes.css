@@ -421,3 +421,31 @@
         font-size: 1.05rem !important;
     }
 }
+
+/* === 15) Finale backdrop görselleri — mobile'da TAM GÖRÜNSÜN ===
+   Sorun: background-size: cover portrait'te görselin yanlarını kırpıyordu
+   (anne+bebek kompozisyonunda bebek kayboluyordu).
+   Çözüm: mobile'da contain — görsel tamamı yer alır, alt gradient boşluğu doldurur. */
+@media (max-width: 760px) {
+    #finale1Bg,
+    #finale2Bg {
+        background-size:
+            cover,           /* katman 1: krem text-mask gradient (cover kalır) */
+            contain,         /* katman 2: görsel — TAM SIĞAR (kırpılmaz) */
+            cover,           /* katman 3+: fallback gradient'ler (cover kalır) */
+            cover,
+            cover !important;
+        background-position:
+            center,
+            center,
+            center,
+            center,
+            center !important;
+        background-repeat:
+            no-repeat,
+            no-repeat,
+            no-repeat,
+            no-repeat,
+            no-repeat !important;
+    }
+}
