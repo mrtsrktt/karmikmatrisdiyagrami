@@ -353,22 +353,9 @@ select:focus {
     font-family: 'Cormorant Garamond', serif !important;
 }
 
-/* --- Auth widget: sade --- */
-.auth-widget {
-    background: var(--rose-deep) !important;
-    color: #FBEEE9 !important;
-    border: 1px solid rgba(194, 144, 107, 0.45) !important;   /* roz altın hairline (sert koyu kenar yerine) */
-    border-radius: 0 !important;
-    box-shadow: -4px 4px 18px rgba(139, 79, 85, 0.12) !important;  /* yumuşak gül gölgesi — hafif kalkıklık */
-}
-.auth-widget a,
-.auth-widget-link {
-    color: #FBEEE9 !important;
-    font-family: 'Cormorant Garamond', serif !important;
-    letter-spacing: 0.25em !important;
-    text-transform: uppercase !important;
-    font-size: 0.72rem !important;
-}
+/* (Eski .auth-widget { background: rose-deep !important; } koyu bordo kuralı
+   KALDIRILDI — krem editorial tema ile çelişiyordu, kullanıcı şikayeti gerçek.
+   Şimdi line 5011+ deki transparent + cream style kullanılır.) */
 
 /* --- Footer --- */
 .footer,
@@ -5009,16 +4996,23 @@ body.is-loading > *:not(.intro-loader) {
    ============================================================================ */
 /* Auth widget — top-bar ile entegre editorial cream tema (eski dark pill kaldırıldı) */
 .auth-widget {
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 100;
-    padding: 22px clamp(1.75rem, 4vw, 3.5rem);
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    z-index: 100 !important;
+    padding: 22px clamp(1.75rem, 4vw, 3.5rem) !important;
     opacity: 0;
     transition: opacity 0.4s ease;
     pointer-events: none;
-    display: flex;
-    align-items: center;
+    display: flex !important;
+    align-items: center !important;
+    /* GARANTI: background, border, shadow, radius hepsi sıfırlanır */
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    color: var(--text-primary, #2B1F1D) !important;
 }
 
 .auth-widget.ready {
@@ -5026,24 +5020,26 @@ body.is-loading > *:not(.intro-loader) {
     pointer-events: auto;
 }
 
-/* Widget link top-bar-link ile aynı tipografi */
+/* Widget link top-bar-link ile aynı tipografi — !important ile cascade çakışmaları yendi */
 .auth-widget-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.85em;
-    background: transparent;
-    backdrop-filter: none;
-    border: none;
-    color: var(--text-primary, #1A1814);
-    padding: 0;
-    text-decoration: none;
-    border-radius: 0;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.82rem;
-    letter-spacing: 0.34em;
-    text-transform: uppercase;
-    font-weight: 500;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.85em !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    border: none !important;
+    color: var(--text-primary, #2B1F1D) !important;
+    padding: 0 !important;
+    text-decoration: none !important;
+    border-radius: 0 !important;
+    font-family: 'Cormorant Garamond', serif !important;
+    font-size: 0.82rem !important;
+    letter-spacing: 0.34em !important;
+    text-transform: uppercase !important;
+    font-weight: 500 !important;
     transition: color 0.4s ease, letter-spacing 0.4s ease;
+    box-shadow: none !important;
 }
 
 .auth-widget-link:hover {
