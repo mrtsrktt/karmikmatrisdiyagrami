@@ -1,0 +1,15 @@
+# Gizemli Karma — robots.txt
+# https://gizemlikarma.com
+
+User-agent: *
+Allow: /
+
+# Hassas / kullanıcıya özel alanlar (admin paneli, hesap sayfaları, API uçları)
+Disallow: /admin/
+Disallow: /hesap/
+Disallow: /api/
+Disallow: /auth/sifre-sifirla.html
+Disallow: /auth/sifremi-unuttum.html
+
+# Sitemap konumu
+Sitemap: https://gizemlikarma.com/sitemap.xml

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Ana sayfa — en yüksek öncelik -->
+  <url>
+    <loc>https://gizemlikarma.com/</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Auth — kullanıcı giriş/kayıt -->
+  <url>
+    <loc>https://gizemlikarma.com/auth/giris.html</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://gizemlikarma.com/auth/kayit.html</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Legal sayfalar (zorunlu, indekslenmeli) -->
+  <url>
+    <loc>https://gizemlikarma.com/legal/kullanim-kosullari.html</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://gizemlikarma.com/legal/gizlilik-politikasi.html</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://gizemlikarma.com/legal/kvkk-aydinlatma-metni.html</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://gizemlikarma.com/legal/cerez-politikasi.html</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://gizemlikarma.com/legal/mesafeli-satis-sozlesmesi.html</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://gizemlikarma.com/legal/on-bilgilendirme-formu.html</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://gizemlikarma.com/legal/iade-iptal-politikasi.html</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://gizemlikarma.com/legal/acik-riza-metni.html</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+</urlset>

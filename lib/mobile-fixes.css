@@ -1,0 +1,303 @@
+/* ============================================================================
+   MOBILE FIXES — gizemlikarma.com canlıya alındıktan sonra tespit edilen sorunlar
+   - Top-bar + auth widget mobile'da çok büyük/dengesiz
+   - About sections: mobil'de foto-önce-metin sırası
+   - Genel mobil polish
+   ============================================================================ */
+
+/* === 1) TOP BAR + AUTH WIDGET — mobile === */
+@media (max-width: 760px) {
+    /* Top bar daha kompakt, letter-spacing düşür */
+    .top-bar {
+        padding: 14px clamp(1rem, 3vw, 1.5rem) !important;
+        letter-spacing: 0.18em !important;
+        font-size: 0.72rem !important;
+    }
+    .top-bar-brand {
+        font-size: 0.85rem !important;
+        letter-spacing: 0.12em !important;
+    }
+    .top-bar-brand em {
+        font-size: 1.4em !important;
+    }
+    /* Eski Giriş Yap top-bar linki — yer kaplamasın */
+    .top-bar-link {
+        font-size: 0.72rem !important;
+        letter-spacing: 0.16em !important;
+    }
+    .top-bar-link::after {
+        font-size: 0.9em !important;
+    }
+
+    /* Auth widget — sağ üstte küçük, dengeli */
+    .auth-widget {
+        padding: 14px clamp(1rem, 3vw, 1.5rem) !important;
+    }
+    .auth-widget-link {
+        font-size: 0.72rem !important;
+        letter-spacing: 0.16em !important;
+        gap: 0.5em !important;
+    }
+    .auth-widget-link svg {
+        width: 12px !important;
+        height: 12px !important;
+    }
+    .auth-widget-signup {
+        font-size: 0.72rem !important;
+        letter-spacing: 0.16em !important;
+        margin-left: 0.7em !important;
+        padding-left: 0.7em !important;
+    }
+    .auth-widget-credit {
+        font-size: 0.68rem !important;
+        letter-spacing: 0.14em !important;
+        margin-left: 0.3rem !important;
+        padding-left: 0.6rem !important;
+    }
+    .auth-widget-admin {
+        font-size: 0.72rem !important;
+        letter-spacing: 0.14em !important;
+    }
+    .auth-widget-sep {
+        margin: 0 0.3em !important;
+    }
+}
+
+/* === 2) Çok küçük telefonlar (< 420px) — ekstra sıkı === */
+@media (max-width: 420px) {
+    .top-bar-brand {
+        font-size: 0.78rem !important;
+        letter-spacing: 0.08em !important;
+    }
+    .top-bar-brand em {
+        font-size: 1.3em !important;
+        margin-right: 10px !important;
+    }
+    .auth-widget-link {
+        font-size: 0.66rem !important;
+        letter-spacing: 0.10em !important;
+    }
+    .auth-widget-signup {
+        font-size: 0.66rem !important;
+        letter-spacing: 0.10em !important;
+        margin-left: 0.5em !important;
+        padding-left: 0.5em !important;
+    }
+    /* Logged-in iken kredi rozetini sıkıştır */
+    .auth-widget-credit {
+        font-size: 0.62rem !important;
+        letter-spacing: 0.08em !important;
+    }
+}
+
+/* === 3) ABOUT SECTIONS — mobil'de HER ZAMAN foto ÖNCE === */
+/* about-grid (Hakkımızda): DOM'da foto zaten önce — sorun yok */
+/* about-grid.about-reverse (Bizi Ayıran Şey): DOM'da text önce — mobilde portrait'i ÖNE al */
+@media (max-width: 760px) {
+    .about-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 2rem !important;
+    }
+    .about-grid .about-portrait {
+        order: 1 !important;
+        max-width: 320px !important;
+        margin: 0 auto !important;
+    }
+    .about-grid .about-text {
+        order: 2 !important;
+    }
+    /* Reverse'de de aynı kural geçerli — foto önce */
+    .about-grid.about-reverse .about-portrait { order: 1 !important; }
+    .about-grid.about-reverse .about-text { order: 2 !important; }
+
+    /* About text typography — mobile'da daha okunabilir */
+    .about-title {
+        font-size: clamp(1.5rem, 6vw, 2.2rem) !important;
+        text-align: center !important;
+    }
+    .about-eyebrow {
+        text-align: center !important;
+        font-size: 0.72rem !important;
+        letter-spacing: 0.22em !important;
+    }
+    .about-text p {
+        font-size: 1.02rem !important;
+        line-height: 1.7 !important;
+    }
+    /* Portrait altın çerçeve — mobilde fazla taşmasın */
+    .about-portrait::after {
+        top: 8px !important;
+        left: 8px !important;
+        right: -8px !important;
+        bottom: -8px !important;
+    }
+}
+
+/* === 4) About pillars — mobil'de tek sütun, ortalanmış === */
+@media (max-width: 760px) {
+    .about-pillars {
+        grid-template-columns: 1fr !important;
+        gap: 0.9rem !important;
+        text-align: center !important;
+    }
+    .about-pillar {
+        padding: 1rem !important;
+    }
+}
+
+/* === 5) HERO başlığı — mobil'de denge === */
+@media (max-width: 760px) {
+    .hero-title {
+        line-height: 1.05 !important;
+    }
+    .hero-title .hero-word-pre,
+    .hero-title .hero-word-post {
+        margin-left: 0 !important;
+        text-align: center !important;
+    }
+    .hero-title .hero-word-script {
+        text-align: center !important;
+        margin: -0.05em 0 -0.1em !important;
+    }
+    .hero-content {
+        text-align: center !important;
+        padding: 0 1rem !important;
+    }
+    .hero-kicker {
+        font-size: 0.66rem !important;
+        letter-spacing: 0.22em !important;
+        text-align: center !important;
+    }
+    .hero-tagline {
+        font-size: 0.98rem !important;
+        text-align: center !important;
+        max-width: 90% !important;
+        margin: 0.5rem auto 1.5rem !important;
+    }
+    .hero-cta {
+        font-size: 0.78rem !important;
+        padding: 0.85rem 1.6rem !important;
+        letter-spacing: 0.16em !important;
+    }
+}
+
+/* === 6) Section başlıkları + container padding — mobile === */
+@media (max-width: 760px) {
+    .section-title {
+        font-size: clamp(1.5rem, 6vw, 2.2rem) !important;
+        text-align: center !important;
+    }
+    .section-desc {
+        font-size: 0.95rem !important;
+        text-align: center !important;
+        padding: 0 1rem !important;
+    }
+    .container {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+}
+
+/* === 7) Modal — mobil'de tam ekran kullanım === */
+@media (max-width: 760px) {
+    .modal {
+        max-width: calc(100vw - 16px) !important;
+        max-height: calc(100dvh - 16px) !important;
+        margin: 8px !important;
+    }
+    .modal-body {
+        padding: 16px 18px 24px !important;
+    }
+    .modal-arcana-num,
+    .modal-arcana-circle {
+        width: 48px !important;
+        height: 48px !important;
+        font-size: 1rem !important;
+    }
+    .modal-title {
+        font-size: 1.15rem !important;
+    }
+    .modal-position {
+        font-size: 0.82rem !important;
+    }
+}
+
+/* === 8) Showcase, pricing, professions, footer — mobile spacing === */
+@media (max-width: 760px) {
+    .showcase-grid,
+    .pricing-grid,
+    .professions-grid,
+    .info-grid,
+    .why-grid,
+    .howto-grid,
+    .features-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem !important;
+    }
+    .pricing-card {
+        padding: 1.8rem 1.4rem !important;
+    }
+    .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+        text-align: center !important;
+    }
+}
+
+/* === 9) CTA Banner — mobile === */
+@media (max-width: 760px) {
+    .cta-banner-section {
+        padding: 40px 16px 60px !important;
+    }
+    .cta-banner {
+        padding: 40px 24px !important;
+        gap: 24px !important;
+    }
+    .cta-title {
+        font-size: clamp(1.8rem, 7vw, 2.4rem) !important;
+        text-align: center !important;
+    }
+    .cta-desc {
+        font-size: 1rem !important;
+        text-align: center !important;
+        margin: 0 auto 1.5rem !important;
+    }
+    .cta-btn {
+        margin: 0 auto !important;
+        font-size: 0.74rem !important;
+        padding: 0.95rem 1.6rem !important;
+        letter-spacing: 0.2em !important;
+    }
+}
+
+/* === 10) Input form — mobile dokunma alanı genişlet === */
+@media (max-width: 760px) {
+    .input-row {
+        flex-direction: column !important;
+        gap: 1rem !important;
+    }
+    .input-group {
+        width: 100% !important;
+    }
+    input[type="text"],
+    input[type="date"],
+    input[type="time"],
+    input[type="email"],
+    input[type="password"],
+    select {
+        font-size: 16px !important; /* iOS auto-zoom önler */
+        padding: 0.9rem 1rem !important;
+    }
+    .calculate-btn,
+    button.cta-btn,
+    .hero-cta {
+        min-height: 48px !important; /* touch target standardı */
+    }
+}
+
+/* === 11) Cursor sparkles tamamen kapalı mobile'da (zaten kapalı ama emin ol) === */
+@media (hover: none), (pointer: coarse) {
+    .mouse-sparkles-star,
+    .mouse-sparkles-glow-point { display: none !important; }
+}
