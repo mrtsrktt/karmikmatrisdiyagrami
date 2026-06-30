@@ -11,5 +11,8 @@ Disallow: /api/
 Disallow: /auth/sifre-sifirla.html
 Disallow: /auth/sifremi-unuttum.html
 
+# Instagram bio "link in bio" sayfası — gizli kalsın
+Disallow: /link
+
 # Sitemap konumu
 Sitemap: https://gizemlikarma.com/sitemap.xml
