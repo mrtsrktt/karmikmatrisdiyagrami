@@ -7,7 +7,7 @@
 
 <!-- Gizli sayfa: Instagram bio için. Arama motorlarında çıkmasın. -->
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#E0B8AD">
+<meta name="theme-color" content="#120318">
 <meta name="description" content="Astro Susu — Karma Matris Analizi, Remil, Derin Numeroloji, Shopier ve iletişim. Tüm bağlantılar tek yerde.">
 
 <!-- Sosyal paylaşım -->
@@ -22,287 +22,256 @@
 <link rel="icon" type="image/png" href="/profil-2.png">
 <link rel="apple-touch-icon" href="/profil-2.png">
 
-<!-- Tema fontları (ana site ile aynı) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg-deep:#D2A597; --bg-base:#E0B8AD; --bg-surface:#FFFFFF; --bg-elevated:#DAB1A6;
-  --gold-bright:#C2906B; --gold-muted:#A2754F; --gold-glow:rgba(194,144,107,0.18);
-  --rose:#C08A86; --rose-deep:#8B4F55; --rose-glow:rgba(192,138,134,0.20);
-  --amethyst:#9B5C61;
-  --text-primary:#2B1F1D; --text-secondary:#6E5752; --text-muted:#A2897F;
-  --border-gold:rgba(150,95,88,0.22); --border-subtle:rgba(150,95,88,0.10);
+  --bg-0:#0B0210; --bg-1:#1A0826; --bg-2:#2A0E33;
+  --gold:#F1C57E; --gold-deep:#C9974A;
+  --rose:#F0A6AE; --rose-deep:#D96E8C;
+  --amethyst:#B388E6; --amethyst-deep:#7E4FC4;
+  --cream:#F6ECE3; --soft:#D8C4D4; --muted:#9C8AA6;
+  --glass:rgba(255,255,255,0.055);
+  --glass-strong:rgba(255,255,255,0.085);
+  --line:rgba(255,255,255,0.10);
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
-
 html{scroll-behavior:smooth}
 
 body{
   min-height:100vh;
   font-family:'Cormorant Garamond',serif;
-  color:var(--text-primary);
-  background:
-    radial-gradient(ellipse at 18% 12%, #F2D7CC 0%, transparent 55%),
-    radial-gradient(ellipse at 82% 88%, #D9A99B 0%, transparent 55%),
-    linear-gradient(160deg, #E7C3B8 0%, #E0B8AD 45%, #D6A899 100%);
-  background-attachment:fixed;
-  position:relative;
-  overflow-x:hidden;
+  color:var(--cream);
+  background:var(--bg-0);
+  position:relative;overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
-  padding:clamp(2.5rem,7vw,4.5rem) 1.25rem clamp(3rem,8vw,5rem);
+  padding:clamp(2.5rem,7vw,4rem) 1.25rem clamp(3rem,8vw,5rem);
 }
 
-/* İnce noise dokusu */
-body::before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  opacity:0.04;mix-blend-mode:multiply;
+/* Animasyonlu aurora / nebula arka plan */
+.aurora{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+  background:
+    radial-gradient(circle at 50% -10%, #3A1248 0%, transparent 55%),
+    linear-gradient(165deg, #14041C 0%, #1A0826 40%, #0B0210 100%);
 }
+.blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.55;mix-blend-mode:screen}
+.blob.b1{width:55vmax;height:55vmax;top:-22vmax;left:-18vmax;background:radial-gradient(circle,var(--amethyst-deep),transparent 65%);animation:drift1 26s ease-in-out infinite}
+.blob.b2{width:48vmax;height:48vmax;bottom:-20vmax;right:-16vmax;background:radial-gradient(circle,var(--rose-deep),transparent 65%);animation:drift2 30s ease-in-out infinite}
+.blob.b3{width:38vmax;height:38vmax;top:35%;right:-14vmax;background:radial-gradient(circle,rgba(201,151,74,0.5),transparent 65%);animation:drift3 34s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(8vmax,6vmax) scale(1.15)}}
+@keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-7vmax,-5vmax) scale(1.1)}}
+@keyframes drift3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-5vmax,8vmax) scale(1.2)}}
 
-/* Yüzen ışık lekeleri */
-.cosmic-light{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;opacity:0.55}
-.cosmic-light.a{width:520px;height:520px;top:-120px;left:-140px;background:radial-gradient(circle,var(--gold-glow) 0%,transparent 70%);animation:floatLight 22s ease-in-out infinite}
-.cosmic-light.b{width:460px;height:460px;bottom:-120px;right:-120px;background:radial-gradient(circle,var(--rose-glow) 0%,transparent 70%);animation:floatLight 26s ease-in-out infinite reverse}
-@keyframes floatLight{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(40px,-30px) scale(1.12)}}
+/* Yıldız tozu */
+#stars{position:fixed;inset:0;z-index:1;pointer-events:none}
+.star{position:absolute;border-radius:50%;background:#FFF;animation:tw ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:0.1;transform:scale(0.7)}50%{opacity:0.95;transform:scale(1.35)}}
 
-/* Yıldız parçacıkları */
-#stars{position:fixed;inset:0;z-index:0;pointer-events:none}
-.star{position:absolute;border-radius:50%;background:#FFF6EE;box-shadow:0 0 6px rgba(255,246,238,0.9);animation:twinkle ease-in-out infinite}
-@keyframes twinkle{0%,100%{opacity:0.15;transform:scale(0.8)}50%{opacity:0.9;transform:scale(1.3)}}
+/* İnce film grain */
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
 
-/* İçerik kabı */
-.wrap{position:relative;z-index:2;width:100%;max-width:520px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
+.wrap{position:relative;z-index:3;width:100%;max-width:500px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
 
-/* Giriş animasyonu — stagger */
-.reveal{opacity:0;transform:translateY(26px);animation:rise .9s cubic-bezier(0.25,0.46,0.45,0.94) forwards;animation-delay:calc(var(--i,0)*0.09s)}
+.reveal{opacity:0;transform:translateY(28px);animation:rise .85s cubic-bezier(0.22,1,0.36,1) forwards;animation-delay:calc(var(--i,0)*0.08s)}
 @keyframes rise{to{opacity:1;transform:translateY(0)}}
 
 /* Avatar */
-.avatar-ring{
-  position:relative;width:148px;height:148px;border-radius:50%;
-  padding:4px;
-  background:conic-gradient(from 140deg,var(--gold-bright),var(--rose),var(--gold-muted),var(--gold-bright));
-  box-shadow:0 14px 44px rgba(139,79,85,0.28),0 0 0 1px var(--border-gold);
+.avatar-ring{position:relative;width:130px;height:130px;border-radius:50%;padding:3px;
+  background:conic-gradient(from 120deg,var(--gold),var(--rose),var(--amethyst),var(--gold-deep),var(--gold));
+  box-shadow:0 0 0 1px rgba(255,255,255,0.12),0 18px 50px rgba(126,79,196,0.45),0 0 60px rgba(217,110,140,0.35);
+  animation:floatA 6s ease-in-out infinite;
 }
-.avatar-ring::after{
-  content:'';position:absolute;inset:-9px;border-radius:50%;
-  border:1px solid var(--border-gold);
-  animation:spinSlow 36s linear infinite;
-}
-@keyframes spinSlow{to{transform:rotate(360deg)}}
-.avatar{
-  width:100%;height:100%;border-radius:50%;object-fit:cover;
-  object-position:62% 26%;display:block;
-  border:2px solid rgba(255,255,255,0.65);
-}
+.avatar-ring::before{content:'';position:absolute;inset:-10px;border-radius:50%;
+  background:conic-gradient(from 0deg,transparent,rgba(243,197,126,0.6),transparent 40%);
+  filter:blur(6px);animation:spin 14s linear infinite;z-index:-1}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes floatA{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.avatar{width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:62% 26%;display:block;border:2px solid rgba(11,2,16,0.6)}
 
-/* İsim & tagline */
-.name{
-  font-family:'Cinzel Decorative',serif;font-weight:900;
-  font-size:clamp(1.85rem,7vw,2.6rem);letter-spacing:0.12em;
-  color:var(--rose-deep);margin-top:1.4rem;text-align:center;line-height:1.1;
-  text-shadow:0 2px 14px rgba(139,79,85,0.18);
-}
-.handle{
-  font-family:'IM Fell English',serif;font-style:italic;
-  font-size:1.05rem;color:var(--gold-muted);margin-top:.45rem;letter-spacing:0.04em;
-}
-.tagline{
-  font-size:1.18rem;color:var(--text-secondary);margin-top:.7rem;
-  font-weight:400;font-style:italic;text-align:center;
-}
-/* İnce altın ayraç */
-.divider{display:flex;align-items:center;gap:.7rem;margin:1.6rem 0 .4rem;width:64%}
-.divider .ln{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border-gold),transparent)}
-.divider .dot{width:5px;height:5px;border-radius:50%;background:var(--gold-bright);box-shadow:0 0 8px var(--gold-glow)}
+/* Online rozeti */
+.live{display:inline-flex;align-items:center;gap:.45rem;margin-top:1.1rem;padding:.3rem .85rem;
+  font-size:.78rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--soft);
+  background:var(--glass);border:1px solid var(--line);border-radius:100px;backdrop-filter:blur(8px)}
+.live .pulse{width:7px;height:7px;border-radius:50%;background:#5FD08A;box-shadow:0 0 10px #5FD08A;animation:beat 1.8s ease-in-out infinite}
+@keyframes beat{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
 
-/* Bağlantı listesi */
-.links{width:100%;display:flex;flex-direction:column;gap:.95rem;margin-top:1.5rem}
+.name{font-family:'Cinzel Decorative',serif;font-weight:900;font-size:clamp(2rem,8vw,2.7rem);letter-spacing:0.1em;
+  margin-top:.85rem;text-align:center;line-height:1.08;
+  background:linear-gradient(110deg,var(--gold) 0%,#FFF1D9 35%,var(--rose) 70%,var(--amethyst) 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 2px 18px rgba(243,197,126,0.25))}
+.handle{font-family:'IM Fell English',serif;font-style:italic;font-size:1.05rem;color:var(--gold);margin-top:.5rem;letter-spacing:0.05em;opacity:.85}
+.tagline{font-size:1.16rem;color:var(--soft);margin-top:.7rem;font-style:italic;text-align:center;font-weight:400;max-width:340px;line-height:1.5}
 
-.link{
-  position:relative;display:flex;align-items:center;gap:1rem;
-  padding:1.05rem 1.2rem;text-decoration:none;color:var(--text-primary);
-  background:linear-gradient(135deg,rgba(255,255,255,0.92) 0%,rgba(255,250,248,0.82) 100%);
-  border:1px solid var(--border-gold);border-radius:3px;
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  box-shadow:0 8px 26px rgba(139,79,85,0.10);
-  transition:transform .4s cubic-bezier(0.25,0.46,0.45,0.94),box-shadow .4s ease,border-color .4s ease;
-  overflow:hidden;
-}
-/* Köşe süsleri */
-.link::before,.link::after{content:'';position:absolute;width:14px;height:14px;border-color:var(--gold-bright);border-style:solid;opacity:0;transition:opacity .4s ease}
-.link::before{top:7px;left:7px;border-width:1px 0 0 1px}
-.link::after{bottom:7px;right:7px;border-width:0 1px 1px 0}
-.link:hover{transform:translateY(-4px);border-color:var(--gold-bright);box-shadow:0 18px 44px rgba(194,144,107,0.28),0 0 0 1px var(--border-gold)}
-.link:hover::before,.link:hover::after{opacity:1}
+.divider{display:flex;align-items:center;gap:.7rem;margin:1.7rem 0 .3rem;width:60%}
+.divider .ln{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent)}
+.divider .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold)}
 
-/* Işıma sweep */
-.link>.sweep{position:absolute;top:-50%;left:-60%;width:40%;height:200%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.45),transparent);transform:skewX(-20deg);transition:left .6s ease;pointer-events:none}
-.link:hover>.sweep{left:130%}
+.links{width:100%;display:flex;flex-direction:column;gap:.9rem;margin-top:1.5rem}
 
-.ic{
-  flex:0 0 46px;width:46px;height:46px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  background:radial-gradient(circle at 30% 25%,#FBEDE6,#EFD3C8);
-  border:1px solid var(--border-gold);
-  box-shadow:inset 0 1px 4px rgba(255,255,255,0.7);
-}
-.ic svg{width:24px;height:24px}
-.link:hover .ic{filter:drop-shadow(0 0 8px var(--gold-glow))}
+.link{position:relative;display:flex;align-items:center;gap:1rem;padding:1.05rem 1.15rem;text-decoration:none;color:var(--cream);
+  background:var(--glass);border-radius:18px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  box-shadow:0 10px 30px rgba(0,0,0,0.35);overflow:hidden;
+  transition:transform .45s cubic-bezier(0.22,1,0.36,1),box-shadow .45s ease,background .45s ease}
+/* Gradyan kenarlık (mask tekniği) */
+.link::before{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
+  background:linear-gradient(135deg,rgba(243,197,126,0.55),rgba(255,255,255,0.06) 40%,rgba(179,136,230,0.45));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
+  opacity:.7;transition:opacity .45s ease}
+.link>.sweep{content:'';position:absolute;top:-50%;left:-70%;width:45%;height:200%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent);transform:skewX(-20deg);transition:left .65s ease;pointer-events:none}
+.link:hover{transform:translateY(-5px);background:var(--glass-strong);box-shadow:0 22px 50px rgba(126,79,196,0.35),0 0 0 1px rgba(243,197,126,0.18)}
+.link:hover::before{opacity:1}
+.link:hover>.sweep{left:140%}
+
+.ic{flex:0 0 48px;width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(150deg,rgba(243,197,126,0.18),rgba(179,136,230,0.16));
+  border:1px solid rgba(255,255,255,0.12);box-shadow:inset 0 1px 6px rgba(255,255,255,0.10);transition:box-shadow .45s ease,transform .45s ease}
+.ic svg{width:25px;height:25px}
+.link:hover .ic{box-shadow:0 0 18px rgba(243,197,126,0.45),inset 0 1px 6px rgba(255,255,255,0.15);transform:scale(1.06)}
 
 .txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:.22rem}
-.txt .t{display:block;font-family:'Cinzel Decorative',serif;font-weight:700;font-size:.86rem;letter-spacing:0.05em;color:var(--rose-deep);text-transform:uppercase;line-height:1.2}
-.txt .d{display:block;font-size:1.02rem;color:var(--text-secondary);line-height:1.3}
+.txt .row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.txt .t{font-family:'Cinzel Decorative',serif;font-weight:700;font-size:.85rem;letter-spacing:0.04em;text-transform:uppercase;line-height:1.2;
+  background:linear-gradient(100deg,var(--gold),#FFF1D9 60%,var(--rose));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.txt .d{font-size:1.04rem;color:var(--soft);line-height:1.32}
+.tag{font-family:'Cormorant Garamond',serif;font-size:.62rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--bg-0);background:linear-gradient(100deg,var(--gold),var(--rose));padding:.12rem .5rem;border-radius:100px;white-space:nowrap}
 
-.arrow{flex:0 0 auto;color:var(--gold-muted);transition:transform .4s ease}
-.link:hover .arrow{transform:translateX(4px);color:var(--gold-bright)}
+.arrow{flex:0 0 auto;color:var(--gold);opacity:.7;transition:transform .45s ease,opacity .45s ease}
+.link:hover .arrow{transform:translateX(5px);opacity:1}
 
 /* WhatsApp vurgulu */
-.link.wa{background:linear-gradient(135deg,#9C5A60 0%,#8B4F55 100%);border-color:var(--rose-deep)}
-.link.wa .txt .t{color:#F3DCD3}
-.link.wa .txt .d{color:rgba(255,246,240,0.85)}
-.link.wa .arrow{color:#F3DCD3}
-.link.wa .ic{background:radial-gradient(circle at 30% 25%,#FBEDE6,#F0D4C9)}
-.link.wa:hover{box-shadow:0 18px 44px rgba(139,79,85,0.40)}
+.link.wa{background:linear-gradient(135deg,rgba(37,211,102,0.16),rgba(18,140,80,0.10))}
+.link.wa::before{background:linear-gradient(135deg,rgba(95,208,138,0.7),rgba(255,255,255,0.06) 45%,rgba(37,211,102,0.5));opacity:.85}
+.link.wa .ic{background:linear-gradient(150deg,rgba(95,208,138,0.28),rgba(37,211,102,0.18))}
+.link.wa:hover{box-shadow:0 22px 50px rgba(37,211,102,0.30),0 0 0 1px rgba(95,208,138,0.25)}
+.link.wa .txt .t{background:linear-gradient(100deg,#A8F0C4,#5FD08A);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.link.wa .arrow{color:#7FE3A8}
 
-/* Sosyal satır */
-.social{display:flex;gap:1rem;margin-top:1.9rem}
-.social a{
-  width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,rgba(255,255,255,0.9),rgba(255,250,248,0.8));
-  border:1px solid var(--border-gold);color:var(--rose-deep);
-  box-shadow:0 8px 22px rgba(139,79,85,0.12);
-  transition:transform .4s cubic-bezier(0.25,0.46,0.45,0.94),box-shadow .4s ease,color .4s ease;
-}
-.social a:hover{transform:translateY(-4px) scale(1.06);box-shadow:0 14px 34px rgba(194,144,107,0.30);color:var(--gold-bright)}
-.social svg{width:24px;height:24px}
+.social{display:flex;gap:.9rem;margin-top:1.9rem}
+.social a{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;
+  background:var(--glass);border:1px solid var(--line);color:var(--gold);backdrop-filter:blur(10px);
+  box-shadow:0 8px 22px rgba(0,0,0,0.3);transition:transform .45s cubic-bezier(0.22,1,0.36,1),box-shadow .45s ease,color .45s ease}
+.social a:hover{transform:translateY(-5px) scale(1.07);box-shadow:0 16px 34px rgba(126,79,196,0.4);color:#FFF1D9}
+.social svg{width:25px;height:25px}
 
-.foot{margin-top:2.4rem;font-family:'IM Fell English',serif;font-style:italic;font-size:.92rem;color:var(--text-muted);text-align:center;letter-spacing:0.03em}
-.foot a{color:var(--gold-muted);text-decoration:none}
+.foot{margin-top:2.4rem;font-family:'IM Fell English',serif;font-style:italic;font-size:.92rem;color:var(--muted);text-align:center;letter-spacing:0.03em}
+.foot a{color:var(--gold);text-decoration:none;opacity:.8}
 
-@media (max-width:380px){
-  .txt .d{font-size:.95rem}
-  .avatar-ring{width:128px;height:128px}
-}
+@media (max-width:380px){.txt .d{font-size:.97rem}.avatar-ring{width:116px;height:116px}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001s !important;animation-iteration-count:1 !important}}
 </style>
 </head>
 <body>
 
-<div class="cosmic-light a"></div>
-<div class="cosmic-light b"></div>
+<div class="aurora">
+  <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+</div>
 <div id="stars"></div>
 
 <main class="wrap">
 
   <div class="reveal" style="--i:0">
-    <div class="avatar-ring">
-      <img class="avatar" src="/profil-2.png" alt="Astro Susu" width="148" height="148">
-    </div>
+    <div class="avatar-ring"><img class="avatar" src="/profil-2.png" alt="Astro Susu" width="130" height="130"></div>
   </div>
 
-  <h1 class="name reveal" style="--i:1">ASTRO SUSU</h1>
-  <div class="handle reveal" style="--i:2">@astrosusu</div>
-  <p class="tagline reveal" style="--i:3">Astrolog &amp; Ezoterik Eğitimci · Derine… daha derine</p>
+  <span class="live reveal" style="--i:1"><span class="pulse"></span>Yeni rehberliklere açık</span>
 
-  <div class="divider reveal" style="--i:4">
-    <span class="ln"></span><span class="dot"></span><span class="ln"></span>
-  </div>
+  <h1 class="name reveal" style="--i:2">ASTRO SUSU</h1>
+  <div class="handle reveal" style="--i:3">@astrosusu</div>
+  <p class="tagline reveal" style="--i:4">Astrolog &amp; Ezoterik Eğitimci<br>Derine… daha derine</p>
+
+  <div class="divider reveal" style="--i:5"><span class="ln"></span><span class="dot"></span><span class="ln"></span></div>
 
   <nav class="links">
 
     <!-- Karma Matris -->
-    <a class="link reveal" style="--i:5" href="https://gizemlikarma.com" target="_blank" rel="noopener">
+    <a class="link reveal" style="--i:6" href="https://gizemlikarma.com" target="_blank" rel="noopener">
       <span class="sweep"></span>
-      <span class="ic">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#8B4F55" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2l2.6 6.4L21 9.3l-4.8 4.3L17.6 21 12 17.3 6.4 21l1.4-7.4L3 9.3l6.4-.9z"/>
-        </svg>
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g1" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#F1C57E"/><stop offset="1" stop-color="#B388E6"/></linearGradient></defs><path d="M12 2l2.6 6.4L21 9.3l-4.8 4.3L17.6 21 12 17.3 6.4 21l1.4-7.4L3 9.3l6.4-.9z"/></svg></span>
+      <span class="txt">
+        <span class="row"><span class="t">Karma Matris Analizi</span><span class="tag">En Popüler</span></span>
+        <span class="d">Doğduğun an ruhuna kodlanan şifreyi çöz — geçmiş yaşam borçların ve kaderinin haritası seni bekliyor.</span>
       </span>
-      <span class="txt"><span class="t">Karma Matris Analizi</span><span class="d">Doğum tarihinden kişiye özel karma haritası</span></span>
-      <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
     </a>
 
     <!-- Remil -->
-    <a class="link reveal" style="--i:6" href="https://remilanahtari.com" target="_blank" rel="noopener">
+    <a class="link reveal" style="--i:7" href="https://remilanahtari.com" target="_blank" rel="noopener">
       <span class="sweep"></span>
-      <span class="ic">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#8B4F55" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="8" cy="8" r="5"/><path d="M11.5 11.5L21 21"/><path d="M16 16l2.5-2.5"/><path d="M8 6v4M6 8h4"/>
-        </svg>
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g2)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g2" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#F1C57E"/><stop offset="1" stop-color="#D96E8C"/></linearGradient></defs><circle cx="8" cy="8" r="5"/><path d="M11.5 11.5L21 21"/><path d="M16 16l2.5-2.5"/><path d="M8 6v4M6 8h4"/></svg></span>
+      <span class="txt">
+        <span class="row"><span class="t">Remil Anahtarı</span></span>
+        <span class="d">Aklındaki o soru var ya… Kadim remil taşları cevabı çoktan biliyor. Kapını çal, yolunu aç.</span>
       </span>
-      <span class="txt"><span class="t">Remil Anahtarı</span><span class="d">Remil ile rehberlik, açılım ve yorum</span></span>
-      <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
     </a>
 
     <!-- Numeroloji -->
-    <a class="link reveal" style="--i:7" href="https://derinnumeroloji.com" target="_blank" rel="noopener">
+    <a class="link reveal" style="--i:8" href="https://derinnumeroloji.com" target="_blank" rel="noopener">
       <span class="sweep"></span>
-      <span class="ic">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#8B4F55" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 4h6l-1.5 16"/><path d="M14 9a3 3 0 113 3c-1.5 0-3 1.2-3 3v3h6"/>
-        </svg>
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g3)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g3" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#B388E6"/><stop offset="1" stop-color="#F0A6AE"/></linearGradient></defs><path d="M5 4h6l-1.5 16"/><path d="M14 9a3 3 0 113 3c-1.5 0-3 1.2-3 3v3h6"/></svg></span>
+      <span class="txt">
+        <span class="row"><span class="t">Derin Numeroloji</span></span>
+        <span class="d">İsmin ve doğum tarihin tesadüf değil. Sayıların seni hangi kadere çağırdığını keşfet.</span>
       </span>
-      <span class="txt"><span class="t">Derin Numeroloji</span><span class="d">Sayıların ardındaki ruhsal kodlar</span></span>
-      <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
     </a>
 
     <!-- Shopier -->
-    <a class="link reveal" style="--i:8" href="https://shop.shopier.com/astrosusu" target="_blank" rel="noopener">
+    <a class="link reveal" style="--i:9" href="https://shop.shopier.com/astrosusu" target="_blank" rel="noopener">
       <span class="sweep"></span>
-      <span class="ic">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#8B4F55" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6 8h12l-1 11a2 2 0 01-2 1.8H9a2 2 0 01-2-1.8z"/><path d="M9 8V6.5a3 3 0 016 0V8"/><path d="M9 11.5v1M15 11.5v1"/>
-        </svg>
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g4)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g4" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#F1C57E"/><stop offset="1" stop-color="#B388E6"/></linearGradient></defs><path d="M6 8h12l-1 11a2 2 0 01-2 1.8H9a2 2 0 01-2-1.8z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></svg></span>
+      <span class="txt">
+        <span class="row"><span class="t">Shopier Mağaza</span><span class="tag">Anında Erişim</span></span>
+        <span class="d">Tüm analiz ve danışmanlıklar tek mağazada — güvenle satın al, yolculuğuna hemen başla.</span>
       </span>
-      <span class="txt"><span class="t">Shopier Mağaza</span><span class="d">Tüm hizmet ve ürünler — güvenli ödeme</span></span>
-      <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
     </a>
 
-    <!-- WhatsApp (vurgulu) -->
-    <a class="link wa reveal" style="--i:9" href="https://wa.me/905370300640" target="_blank" rel="noopener">
+    <!-- WhatsApp -->
+    <a class="link wa reveal" style="--i:10" href="https://wa.me/905370300640" target="_blank" rel="noopener">
       <span class="sweep"></span>
-      <span class="ic">
-        <svg viewBox="0 0 24 24" fill="#25543A">
-          <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm0 18.15h-.01c-1.52 0-3.01-.41-4.3-1.18l-.31-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 01-1.26-4.36c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 012.41 5.82c0 4.54-3.69 8.24-8.24 8.24zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.41-.56-.42-.14-.01-.31-.01-.48-.01s-.43.06-.66.31c-.22.25-.86.85-.86 2.07s.89 2.4 1.01 2.56c.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/>
-        </svg>
+      <span class="ic"><svg viewBox="0 0 24 24" fill="#5FD08A"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm4.52 11.99c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.41-.56-.42-.14-.01-.31-.01-.48-.01s-.43.06-.66.31c-.22.25-.86.85-.86 2.07s.89 2.4 1.01 2.56c.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg></span>
+      <span class="txt">
+        <span class="row"><span class="t">WhatsApp</span></span>
+        <span class="d">Sorularını yaz, sana özel yol haritanı birlikte çizelim. Hemen yanındayım.</span>
       </span>
-      <span class="txt"><span class="t">WhatsApp</span><span class="d">Hızlı iletişim &amp; randevu — 0537 030 0640</span></span>
-      <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
     </a>
 
   </nav>
 
-  <div class="social reveal" style="--i:10">
+  <div class="social reveal" style="--i:11">
     <a href="https://instagram.com/astrosusu" target="_blank" rel="noopener" aria-label="Instagram">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
-      </svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
     </a>
     <a href="https://wa.me/905370300640" target="_blank" rel="noopener" aria-label="WhatsApp">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm4.52 11.99c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.41-.56-.42-.14-.01-.31-.01-.48-.01s-.43.06-.66.31c-.22.25-.86.85-.86 2.07s.89 2.4 1.01 2.56c.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg>
     </a>
   </div>
 
-  <p class="foot reveal" style="--i:11">© Astro Susu · <a href="https://gizemlikarma.com" target="_blank" rel="noopener">gizemlikarma.com</a></p>
+  <p class="foot reveal" style="--i:12">© Astro Susu · <a href="https://gizemlikarma.com" target="_blank" rel="noopener">gizemlikarma.com</a></p>
 
 </main>
 
 <script>
-// Yıldız parçacıkları — hafif, açık tema için ince
 (function(){
   const c=document.getElementById('stars');
-  const n=Math.min(160,Math.floor(window.innerWidth*window.innerHeight/9000));
+  const n=Math.min(170,Math.floor(window.innerWidth*window.innerHeight/8500));
   const f=document.createDocumentFragment();
   for(let i=0;i<n;i++){
     const s=document.createElement('span');s.className='star';
-    const sz=Math.random()*2+0.6;
+    const sz=Math.random()*2+0.5;
     s.style.width=sz+'px';s.style.height=sz+'px';
     s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';
-    s.style.opacity=Math.random()*0.5+0.1;
+    s.style.boxShadow='0 0 '+(sz*2)+'px rgba(255,255,255,0.8)';
+    s.style.opacity=Math.random()*0.6+0.1;
     s.style.animationDuration=(Math.random()*4+3)+'s';
     s.style.animationDelay=(Math.random()*5)+'s';
     f.appendChild(s);
