@@ -54,10 +54,11 @@ body{
 /* Animasyonlu aurora / nebula arka plan */
 .aurora{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;
   background:
-    radial-gradient(circle at 50% -10%, #3A1248 0%, transparent 55%),
-    linear-gradient(165deg, #14041C 0%, #1A0826 40%, #0B0210 100%);
+    radial-gradient(circle at 50% -15%, #2A0E40 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 110%, #1A0830 0%, transparent 55%),
+    linear-gradient(165deg, #070210 0%, #0C0418 45%, #04010A 100%);
 }
-.blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.55;mix-blend-mode:screen}
+.blob{position:absolute;border-radius:50%;filter:blur(85px);opacity:0.4;mix-blend-mode:screen}
 .blob.b1{width:55vmax;height:55vmax;top:-22vmax;left:-18vmax;background:radial-gradient(circle,var(--amethyst-deep),transparent 65%);animation:drift1 26s ease-in-out infinite}
 .blob.b2{width:48vmax;height:48vmax;bottom:-20vmax;right:-16vmax;background:radial-gradient(circle,var(--rose-deep),transparent 65%);animation:drift2 30s ease-in-out infinite}
 .blob.b3{width:38vmax;height:38vmax;top:35%;right:-14vmax;background:radial-gradient(circle,rgba(201,151,74,0.5),transparent 65%);animation:drift3 34s ease-in-out infinite}
@@ -65,10 +66,8 @@ body{
 @keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-7vmax,-5vmax) scale(1.1)}}
 @keyframes drift3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-5vmax,8vmax) scale(1.2)}}
 
-/* Yıldız tozu */
-#stars{position:fixed;inset:0;z-index:1;pointer-events:none}
-.star{position:absolute;border-radius:50%;background:#FFF;animation:tw ease-in-out infinite}
-@keyframes tw{0%,100%{opacity:0.1;transform:scale(0.7)}50%{opacity:0.95;transform:scale(1.35)}}
+/* Gerçek uzay — canvas yıldız tarlası */
+#sky{position:fixed;inset:0;z-index:1;pointer-events:none}
 
 /* İnce film grain */
 body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0.05;
@@ -163,6 +162,31 @@ body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;opac
 .foot{margin-top:2.4rem;font-family:'Sora',sans-serif;font-weight:400;font-size:.8rem;color:var(--muted);text-align:center;letter-spacing:0.02em}
 .foot a{color:var(--gold);text-decoration:none;opacity:.8}
 
+/* ---- Satır başı ikon animasyonları ---- */
+.ic{position:relative}
+.spin-cw{transform-box:view-box;transform-origin:center;animation:spin 22s linear infinite}
+.spin-ccw{transform-box:view-box;transform-origin:center;animation:spinR 11s linear infinite}
+@keyframes spinR{to{transform:rotate(-360deg)}}
+.orbit{transform-box:view-box;transform-origin:center;animation:spin 5.5s linear infinite}
+.key{transform-box:view-box;transform-origin:12px 6.5px;animation:keyTurn 4.6s ease-in-out infinite}
+@keyframes keyTurn{0%,100%{transform:rotate(-11deg)}50%{transform:rotate(15deg)}}
+.bob{transform-box:view-box;transform-origin:center;animation:bob 3.2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.8px)}}
+.twk{transform-box:view-box;transform-origin:center;animation:twk 2.3s ease-in-out infinite}
+@keyframes twk{0%,100%{opacity:.2;transform:scale(.45)}50%{opacity:1;transform:scale(1.15)}}
+/* numeroloji rakam rulosu */
+.numroll{height:26px;overflow:hidden;display:flex;justify-content:center}
+.numroll .col{display:flex;flex-direction:column;font-family:'Sora',sans-serif;font-weight:800;font-size:19px;line-height:26px;
+  animation:roll 8s steps(9,end) infinite}
+.numroll .col span{display:block;height:26px;text-align:center;
+  background:linear-gradient(150deg,#C9A4F0,#F0A6AE);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(0 0 4px rgba(179,136,230,0.5))}
+@keyframes roll{to{transform:translateY(-234px)}}
+/* whatsapp nabız halkası */
+.wa-pulse{position:absolute;inset:0;border-radius:14px;border:2px solid rgba(95,208,138,0.55);animation:waPulse 2.2s ease-out infinite;pointer-events:none}
+.wa-pulse.d2{animation-delay:1.1s}
+@keyframes waPulse{0%{transform:scale(.7);opacity:.8}100%{transform:scale(1.3);opacity:0}}
+
 @media (max-width:380px){.txt .d{font-size:.97rem}.avatar-ring{width:116px;height:116px}}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.001s !important;animation-iteration-count:1 !important}}
 </style>
@@ -172,7 +196,7 @@ body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;opac
 <div class="aurora">
   <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
 </div>
-<div id="stars"></div>
+<canvas id="sky"></canvas>
 
 <main class="wrap">
 
@@ -193,7 +217,7 @@ body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;opac
     <!-- Karma Matris -->
     <a class="link reveal" style="--i:6" href="https://gizemlikarma.com" target="_blank" rel="noopener">
       <span class="sweep"></span>
-      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g1" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#F1C57E"/><stop offset="1" stop-color="#B388E6"/></linearGradient></defs><path d="M12 2l2.6 6.4L21 9.3l-4.8 4.3L17.6 21 12 17.3 6.4 21l1.4-7.4L3 9.3l6.4-.9z"/></svg></span>
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g1" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#F1C57E"/><stop offset="1" stop-color="#B388E6"/></linearGradient></defs><g class="spin-cw"><circle cx="12" cy="12" r="9.3"/><circle cx="12" cy="12" r="4.6"/><path d="M12 2.7v18.6M2.7 12h18.6M5.4 5.4l13.2 13.2M18.6 5.4L5.4 18.6"/></g><g class="orbit"><circle cx="12" cy="2.7" r="1.6" fill="url(#g1)" stroke="none"/></g><circle cx="12" cy="12" r="1.8" fill="url(#g1)" stroke="none"/></svg></span>
       <span class="txt">
         <span class="row"><span class="t">Karma Matris Analizi</span><span class="tag">En Popüler</span></span>
         <span class="d">Doğduğun an ruhuna kodlanan şifreyi çöz — geçmiş yaşam borçların ve kaderinin haritası seni bekliyor.</span>
@@ -204,7 +228,7 @@ body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;opac
     <!-- Remil -->
     <a class="link reveal" style="--i:7" href="https://remilanahtari.com" target="_blank" rel="noopener">
       <span class="sweep"></span>
-      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g2)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g2" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#F1C57E"/><stop offset="1" stop-color="#D96E8C"/></linearGradient></defs><circle cx="8" cy="8" r="5"/><path d="M11.5 11.5L21 21"/><path d="M16 16l2.5-2.5"/><path d="M8 6v4M6 8h4"/></svg></span>
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g2)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g2" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#F1C57E"/><stop offset="1" stop-color="#D96E8C"/></linearGradient></defs><g class="key"><circle cx="12" cy="6.5" r="3.5"/><circle cx="12" cy="6.5" r="1.1" fill="url(#g2)" stroke="none"/><path d="M12 10v9.5"/><path d="M12 14.2h3M12 17h2.4"/></g></svg></span>
       <span class="txt">
         <span class="row"><span class="t">Remil Anahtarı</span></span>
         <span class="d">Aklındaki o soru var ya… Kadim remil taşları cevabı çoktan biliyor. Kapını çal, yolunu aç.</span>
@@ -215,7 +239,7 @@ body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;opac
     <!-- Numeroloji -->
     <a class="link reveal" style="--i:8" href="https://derinnumeroloji.com" target="_blank" rel="noopener">
       <span class="sweep"></span>
-      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g3)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g3" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#B388E6"/><stop offset="1" stop-color="#F0A6AE"/></linearGradient></defs><path d="M5 4h6l-1.5 16"/><path d="M14 9a3 3 0 113 3c-1.5 0-3 1.2-3 3v3h6"/></svg></span>
+      <span class="ic"><span class="numroll"><span class="col"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></span>
       <span class="txt">
         <span class="row"><span class="t">Derin Numeroloji</span></span>
         <span class="d">İsmin ve doğum tarihin tesadüf değil. Sayıların seni hangi kadere çağırdığını keşfet.</span>
@@ -226,7 +250,7 @@ body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;opac
     <!-- Shopier -->
     <a class="link reveal" style="--i:9" href="https://shop.shopier.com/astrosusu" target="_blank" rel="noopener">
       <span class="sweep"></span>
-      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g4)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g4" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#F1C57E"/><stop offset="1" stop-color="#B388E6"/></linearGradient></defs><path d="M6 8h12l-1 11a2 2 0 01-2 1.8H9a2 2 0 01-2-1.8z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></svg></span>
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none"><defs><linearGradient id="g4" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#F1C57E"/><stop offset="1" stop-color="#B388E6"/></linearGradient></defs><g class="bob" stroke="url(#g4)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 11a2 2 0 01-2 1.8H9a2 2 0 01-2-1.8z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></g><path class="twk" d="M18 3l.55 1.45L20 5l-1.45.55L18 7l-.55-1.45L16 5l1.45-.55z" fill="url(#g4)"/></svg></span>
       <span class="txt">
         <span class="row"><span class="t">Shopier Mağaza</span><span class="tag">Anında Erişim</span></span>
         <span class="d">Tüm analiz ve danışmanlıklar tek mağazada — güvenle satın al, yolculuğuna hemen başla.</span>
@@ -237,7 +261,7 @@ body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;opac
     <!-- WhatsApp -->
     <a class="link wa reveal" style="--i:10" href="https://wa.me/905370300640" target="_blank" rel="noopener">
       <span class="sweep"></span>
-      <span class="ic"><svg viewBox="0 0 24 24" fill="#5FD08A"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm4.52 11.99c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.41-.56-.42-.14-.01-.31-.01-.48-.01s-.43.06-.66.31c-.22.25-.86.85-.86 2.07s.89 2.4 1.01 2.56c.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg></span>
+      <span class="ic"><span class="wa-pulse"></span><span class="wa-pulse d2"></span><svg viewBox="0 0 24 24" fill="#5FD08A"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm4.52 11.99c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.41-.56-.42-.14-.01-.31-.01-.48-.01s-.43.06-.66.31c-.22.25-.86.85-.86 2.07s.89 2.4 1.01 2.56c.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg></span>
       <span class="txt">
         <span class="row"><span class="t">WhatsApp</span></span>
         <span class="d">Sorularını yaz, sana özel yol haritanı birlikte çizelim. Hemen yanındayım.</span>
@@ -262,21 +286,84 @@ body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;opac
 
 <script>
 (function(){
-  const c=document.getElementById('stars');
-  const n=Math.min(170,Math.floor(window.innerWidth*window.innerHeight/8500));
-  const f=document.createDocumentFragment();
-  for(let i=0;i<n;i++){
-    const s=document.createElement('span');s.className='star';
-    const sz=Math.random()*2+0.5;
-    s.style.width=sz+'px';s.style.height=sz+'px';
-    s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';
-    s.style.boxShadow='0 0 '+(sz*2)+'px rgba(255,255,255,0.8)';
-    s.style.opacity=Math.random()*0.6+0.1;
-    s.style.animationDuration=(Math.random()*4+3)+'s';
-    s.style.animationDelay=(Math.random()*5)+'s';
-    f.appendChild(s);
+  const cv=document.getElementById('sky');
+  const ctx=cv.getContext('2d');
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W,H,DPR,stars=[],shooting=[],t=0;
+
+  // Yıldız renkleri — gerçek yıldızlar gibi hafif sıcak/soğuk tonlar
+  const TINT=['255,255,255','255,244,224','224,232,255','255,228,214','214,226,255'];
+
+  function resize(){
+    DPR=Math.min(window.devicePixelRatio||1,2);
+    W=cv.width=Math.floor(innerWidth*DPR);
+    H=cv.height=Math.floor(innerHeight*DPR);
+    cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';
+    build();
   }
-  c.appendChild(f);
+  function build(){
+    const area=innerWidth*innerHeight;
+    const n=Math.min(420,Math.floor(area/2600));
+    stars=[];
+    for(let i=0;i<n;i++){
+      const depth=Math.random();            // 0 uzak — 1 yakın (parallax + boyut)
+      stars.push({
+        x:Math.random()*W, y:Math.random()*H,
+        z:depth,
+        r:(depth*1.5+0.35)*DPR,
+        vx:(-0.04-depth*0.10)*DPR,          // hafif yatay sürüklenme
+        vy:(0.02+depth*0.05)*DPR,
+        tint:TINT[(Math.random()*TINT.length)|0],
+        tw:Math.random()*Math.PI*2,         // titreşim fazı
+        tws:0.6+Math.random()*1.6           // titreşim hızı
+      });
+    }
+  }
+  function spawnShoot(){
+    const startX=Math.random()*W*0.7+W*0.15;
+    const startY=Math.random()*H*0.4;
+    const ang=Math.PI*(0.18+Math.random()*0.12); // sağ-aşağı doğru
+    const sp=(8+Math.random()*6)*DPR;
+    shooting.push({x:startX,y:startY,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,life:0,max:60+Math.random()*30,len:(120+Math.random()*120)*DPR});
+  }
+  function frame(){
+    t++;
+    ctx.clearRect(0,0,W,H);
+    // yıldızlar
+    for(const s of stars){
+      s.x+=s.vx; s.y+=s.vy; s.tw+=0.02*s.tws;
+      if(s.x<-2)s.x=W+2; if(s.y>H+2)s.y=-2;
+      const a=0.55+Math.sin(s.tw)*0.45;     // titreşim
+      ctx.beginPath();
+      ctx.fillStyle='rgba('+s.tint+','+(a*(0.4+s.z*0.6)).toFixed(3)+')';
+      ctx.arc(s.x,s.y,s.r,0,6.2832);
+      ctx.fill();
+      // parlak yıldızlara hale
+      if(s.z>0.85){
+        ctx.beginPath();
+        ctx.fillStyle='rgba('+s.tint+','+(a*0.12).toFixed(3)+')';
+        ctx.arc(s.x,s.y,s.r*3.2,0,6.2832);
+        ctx.fill();
+      }
+    }
+    // kayan yıldızlar
+    for(let i=shooting.length-1;i>=0;i--){
+      const m=shooting[i]; m.life++; m.x+=m.vx; m.y+=m.vy;
+      const k=1-m.life/m.max;
+      const tx=m.x-m.vx/Math.hypot(m.vx,m.vy)*m.len, ty=m.y-m.vy/Math.hypot(m.vx,m.vy)*m.len;
+      const grd=ctx.createLinearGradient(m.x,m.y,tx,ty);
+      grd.addColorStop(0,'rgba(255,248,232,'+(k*0.9).toFixed(3)+')');
+      grd.addColorStop(1,'rgba(255,248,232,0)');
+      ctx.strokeStyle=grd; ctx.lineWidth=1.6*DPR; ctx.lineCap='round';
+      ctx.beginPath(); ctx.moveTo(m.x,m.y); ctx.lineTo(tx,ty); ctx.stroke();
+      if(m.life>=m.max||m.x>W+50||m.y>H+50)shooting.splice(i,1);
+    }
+    if(!reduce && shooting.length<2 && Math.random()<0.004) spawnShoot();
+    requestAnimationFrame(frame);
+  }
+  addEventListener('resize',resize,{passive:true});
+  resize();
+  if(reduce){ frame(); } else { frame(); }
 })();
 </script>
 </body>
