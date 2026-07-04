@@ -161,6 +161,12 @@ body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;opac
 .link.c-gold::before{background:linear-gradient(135deg,rgba(250,216,152,0.95),rgba(255,255,255,0.07) 45%,rgba(235,182,112,0.55))}
 .link.c-gold:hover{box-shadow:0 22px 50px rgba(235,182,112,0.40),0 0 0 1px rgba(250,216,152,0.38)}
 
+.link.c-book{background:linear-gradient(135deg,rgba(240,150,82,0.30),rgba(118,62,22,0.24))}
+.link.c-book::before{background:linear-gradient(135deg,rgba(252,200,150,0.92),rgba(255,255,255,0.07) 45%,rgba(240,150,82,0.55))}
+.link.c-book:hover{box-shadow:0 22px 50px rgba(240,150,82,0.42),0 0 0 1px rgba(252,200,150,0.36)}
+.link.c-book .txt .t{background:linear-gradient(100deg,#FBD9A6,#F0975A);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.link.c-book .arrow{color:#F7C48C}
+
 .link.c-call{background:linear-gradient(135deg,rgba(72,198,200,0.30),rgba(18,92,100,0.24))}
 .link.c-call::before{background:linear-gradient(135deg,rgba(150,236,238,0.9),rgba(255,255,255,0.07) 45%,rgba(72,198,200,0.55))}
 .link.c-call:hover{box-shadow:0 22px 50px rgba(72,198,200,0.42),0 0 0 1px rgba(150,236,238,0.35)}
@@ -237,8 +243,19 @@ body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;opac
 
   <nav class="links">
 
+    <!-- E-Kitaplar -->
+    <a class="link c-book reveal" style="--i:6" href="https://www.shopier.com/astrosusu#E-Kitaplar" target="_blank" rel="noopener">
+      <span class="sweep"></span>
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none"><defs><linearGradient id="g6" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#FBD9A6"/><stop offset="1" stop-color="#F0975A"/></linearGradient></defs><g class="bob" stroke="url(#g6)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.6C10 5.1 6.7 4.6 4.2 5.1v12.8c2.5-.5 5.8 0 7.8 1.5"/><path d="M12 6.6c2-1.5 5.3-2 7.8-1.5v12.8c-2.5-.5-5.8 0-7.8 1.5z"/><path d="M12 6.6v12.8"/></g><path class="twk" d="M18.4 3l.5 1.4 1.4.5-1.4.5-.5 1.4-.5-1.4L16 4.9l1.4-.5z" fill="url(#g6)"/></svg></span>
+      <span class="txt">
+        <span class="row"><span class="t">E-Kitaplar</span><span class="tag">Yeni</span></span>
+        <span class="d">Kadim bilgeliği cebine al — e-kitapları anında indir, dilediğin an oku ve dönüşümüne bugün başla.</span>
+      </span>
+      <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+    </a>
+
     <!-- Karma Matris -->
-    <a class="link c-violet reveal" style="--i:6" href="https://gizemlikarma.com" target="_blank" rel="noopener">
+    <a class="link c-violet reveal" style="--i:7" href="https://gizemlikarma.com" target="_blank" rel="noopener">
       <span class="sweep"></span>
       <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g1" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#F1C57E"/><stop offset="1" stop-color="#B388E6"/></linearGradient></defs><g class="spin-cw"><circle cx="12" cy="12" r="9.3"/><circle cx="12" cy="12" r="4.6"/><path d="M12 2.7v18.6M2.7 12h18.6M5.4 5.4l13.2 13.2M18.6 5.4L5.4 18.6"/></g><g class="orbit"><circle cx="12" cy="2.7" r="1.6" fill="url(#g1)" stroke="none"/></g><circle cx="12" cy="12" r="1.8" fill="url(#g1)" stroke="none"/></svg></span>
       <span class="txt">
@@ -249,7 +266,7 @@ body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;opac
     </a>
 
     <!-- Remil -->
-    <a class="link c-rose reveal" style="--i:7" href="https://remilanahtari.com" target="_blank" rel="noopener">
+    <a class="link c-rose reveal" style="--i:8" href="https://remilanahtari.com" target="_blank" rel="noopener">
       <span class="sweep"></span>
       <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g2)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g2" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#F1C57E"/><stop offset="1" stop-color="#D96E8C"/></linearGradient></defs><g class="key"><circle cx="12" cy="6.5" r="3.5"/><circle cx="12" cy="6.5" r="1.1" fill="url(#g2)" stroke="none"/><path d="M12 10v9.5"/><path d="M12 14.2h3M12 17h2.4"/></g></svg></span>
       <span class="txt">
@@ -260,7 +277,7 @@ body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;opac
     </a>
 
     <!-- Numeroloji -->
-    <a class="link c-sky reveal" style="--i:8" href="https://derinnumeroloji.com" target="_blank" rel="noopener">
+    <a class="link c-sky reveal" style="--i:9" href="https://derinnumeroloji.com" target="_blank" rel="noopener">
       <span class="sweep"></span>
       <span class="ic"><span class="numroll"><span class="col"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></span>
       <span class="txt">
@@ -271,7 +288,7 @@ body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;opac
     </a>
 
     <!-- Shopier -->
-    <a class="link c-gold reveal" style="--i:9" href="https://shop.shopier.com/astrosusu" target="_blank" rel="noopener">
+    <a class="link c-gold reveal" style="--i:10" href="https://shop.shopier.com/astrosusu" target="_blank" rel="noopener">
       <span class="sweep"></span>
       <span class="ic"><svg viewBox="0 0 24 24" fill="none"><defs><linearGradient id="g4" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#F1C57E"/><stop offset="1" stop-color="#B388E6"/></linearGradient></defs><g class="bob" stroke="url(#g4)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 11a2 2 0 01-2 1.8H9a2 2 0 01-2-1.8z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></g><path class="twk" d="M18 3l.55 1.45L20 5l-1.45.55L18 7l-.55-1.45L16 5l1.45-.55z" fill="url(#g4)"/></svg></span>
       <span class="txt">
@@ -282,7 +299,7 @@ body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;opac
     </a>
 
     <!-- WhatsApp -->
-    <a class="link wa reveal" style="--i:10" href="https://wa.me/905370300640" target="_blank" rel="noopener">
+    <a class="link wa reveal" style="--i:11" href="https://wa.me/905370300640" target="_blank" rel="noopener">
       <span class="sweep"></span>
       <span class="ic"><span class="wa-pulse"></span><span class="wa-pulse d2"></span><svg viewBox="0 0 24 24" fill="#5FD08A"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm4.52 11.99c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.41-.56-.42-.14-.01-.31-.01-.48-.01s-.43.06-.66.31c-.22.25-.86.85-.86 2.07s.89 2.4 1.01 2.56c.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg></span>
       <span class="txt">
@@ -293,7 +310,7 @@ body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;opac
     </a>
 
     <!-- Beni Ara -->
-    <a class="link c-call reveal" style="--i:11" href="tel:+905370300640">
+    <a class="link c-call reveal" style="--i:12" href="tel:+905370300640">
       <span class="sweep"></span>
       <span class="ic"><svg viewBox="0 0 24 24" fill="none"><defs><linearGradient id="g5" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#A6F0F1"/><stop offset="1" stop-color="#5FD0C8"/></linearGradient></defs><g class="ring"><path d="M6.6 10.8a13 13 0 006.6 6.6l2.2-2.2a1 1 0 011-.24 11 11 0 003.4.55 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11 11 0 00.55 3.4 1 1 0 01-.24 1z" fill="url(#g5)"/></g></svg></span>
       <span class="txt">
