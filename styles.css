@@ -279,11 +279,11 @@ select {
     border-radius: 0 !important;
     color: var(--text-primary) !important;
     box-shadow: none !important;
-    padding: 30px 4px 12px !important;
+    padding: 34px 4px 12px !important;
     font-family: 'Cormorant Garamond', serif !important;
     font-size: 1.375rem !important;
     font-weight: 400 !important;
-    line-height: 1.3 !important;
+    line-height: 1.25 !important;
     letter-spacing: 0 !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -325,8 +325,9 @@ select:focus {
 }
 .input-field input:focus + label,
 .input-field input:not(:placeholder-shown) + label {
-    top: 6px !important;
-    transform: translateY(0) scale(0.78) !important;
+    top: 8px !important;
+    transform: translateY(0) scale(0.72) !important;
+    transform-origin: left top !important;
     color: var(--gold-bright) !important;
     letter-spacing: 0.1em !important;
     background: transparent !important;

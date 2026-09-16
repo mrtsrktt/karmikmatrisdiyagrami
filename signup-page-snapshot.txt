@@ -1,0 +1,65 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "— Ana Sayfa" [ref=e3] [cursor=pointer]:
+      - /url: /
+    - generic [ref=e4]: Gizemli Karma
+  - main [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - img [ref=e8]
+        - heading "Hesap Oluştur" [level=1] [ref=e11]
+        - paragraph [ref=e12]: Profesyonel danışmanlık yolculuğunuza başlayın.
+      - generic [ref=e13]:
+        - generic [ref=e14]:
+          - generic [ref=e15]: Ad Soyad
+          - textbox "Ad Soyad" [ref=e16]:
+            - /placeholder: Adınız Soyadınız
+        - generic [ref=e17]:
+          - generic [ref=e18]: E-posta
+          - textbox "E-posta" [ref=e19]:
+            - /placeholder: ornek@karmamatris.com
+        - generic [ref=e20]:
+          - generic [ref=e21]: Telefon (opsiyonel)
+          - textbox "Telefon (opsiyonel)" [ref=e22]:
+            - /placeholder: +90 5XX XXX XX XX
+          - paragraph [ref=e23]: Önemli güncellemeler için kullanılır.
+        - generic [ref=e24]:
+          - generic [ref=e25]: Şifre
+          - textbox "Şifre" [ref=e26]:
+            - /placeholder: En az 8 karakter
+          - paragraph [ref=e28]: En az 8 karakter, tercihen büyük/küçük harf ve rakam.
+        - generic [ref=e29]:
+          - generic [ref=e30]: Şifre (Tekrar)
+          - textbox "Şifre (Tekrar)" [ref=e31]:
+            - /placeholder: ••••••••
+        - generic [ref=e32]:
+          - generic [ref=e33] [cursor=pointer]:
+            - checkbox "KVKK Aydınlatma Metni ve Açık Rıza Metni'ni okudum, kişisel verilerimin işlenmesine onay veriyorum." [ref=e34]
+            - generic [ref=e35]:
+              - link "KVKK Aydınlatma Metni" [ref=e36]:
+                - /url: /legal/kvkk-aydinlatma-metni.html
+              - text: ve
+              - link "Açık Rıza Metni" [ref=e37]:
+                - /url: /legal/acik-riza-metni.html
+              - text: "'ni okudum, kişisel verilerimin işlenmesine onay veriyorum."
+          - generic [ref=e38] [cursor=pointer]:
+            - checkbox "Kullanım Koşulları, Mesafeli Satış Sözleşmesi ve Gizlilik Politikası'nı kabul ediyorum." [ref=e39]
+            - generic [ref=e40]:
+              - link "Kullanım Koşulları" [ref=e41]:
+                - /url: /legal/kullanim-kosullari.html
+              - text: ","
+              - link "Mesafeli Satış Sözleşmesi" [ref=e42]:
+                - /url: /legal/mesafeli-satis-sozlesmesi.html
+              - text: ve
+              - link "Gizlilik Politikası" [ref=e43]:
+                - /url: /legal/gizlilik-politikasi.html
+              - text: "'nı kabul ediyorum."
+        - button "Hesap Oluştur" [ref=e44] [cursor=pointer]
+      - generic [ref=e45]:
+        - text: Zaten hesabınız var mı?
+        - link "Giriş Yapın" [ref=e46] [cursor=pointer]:
+          - /url: /auth/giris.html
+  - link "WhatsApp ile bize ulaşın" [ref=e47] [cursor=pointer]:
+    - /url: https://wa.me/905370300640?text=Merhaba%2C%20Karma%20Matris%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum.
+    - generic: Bize yazın
+    - img [ref=e48]
