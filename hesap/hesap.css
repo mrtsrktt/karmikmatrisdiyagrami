@@ -744,9 +744,11 @@ a.hesap-home-pill svg {
 
 .iban-row {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
-    align-items: center;
-    padding: 0.6rem 0;
+    align-items: baseline;
+    gap: 0.3rem 1rem;
+    padding: 0.7rem 0;
     border-bottom: 1px dashed var(--border-subtle);
     font-size: 1.375rem;
 }
@@ -756,12 +758,28 @@ a.hesap-home-pill svg {
 .iban-label {
     color: var(--text-secondary);
     font-weight: 500;
+    flex: 0 1 auto;
+    min-width: 9rem;
+}
+
+.iban-row > span:last-child {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
 .iban-value {
     color: var(--text-primary);
     font-family: 'IM Fell English', serif;
-    font-size: 1.4375rem;
+    font-size: 1.375rem;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    min-width: 0;
 }
 
 .iban-copy-btn {
@@ -770,13 +788,30 @@ a.hesap-home-pill svg {
     color: var(--gold-bright);
     cursor: pointer;
     padding: 0.3rem 0.7rem;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     font-family: 'Cinzel Decorative', serif;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     border-radius: 2px;
     margin-left: 0.5rem;
+    flex-shrink: 0;
+    white-space: nowrap;
     transition: all 0.3s;
+}
+
+@media (max-width: 560px) {
+    .iban-box { padding: 1.25rem 1.1rem; }
+    .iban-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.35rem;
+    }
+    .iban-label { min-width: 0; }
+    .iban-row > span:last-child {
+        justify-content: flex-start;
+        width: 100%;
+    }
+    .iban-copy-btn { margin-left: 0; }
 }
 
 .iban-copy-btn:hover {
