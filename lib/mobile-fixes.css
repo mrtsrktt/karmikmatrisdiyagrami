@@ -8,13 +8,13 @@
 /* === 1) TOP BAR + AUTH WIDGET — mobile === */
 @media (max-width: 760px) {
     /* Top bar daha kompakt, letter-spacing düşür */
-    .top-bar {
+.top-bar {
         padding: 14px clamp(1rem, 3vw, 1.5rem) !important;
         letter-spacing: 0.18em !important;
-        font-size: 0.72rem !important;
+        font-size: 0.9rem !important;
     }
-    .top-bar-brand {
-        font-size: 0.85rem !important;
+.top-bar-brand {
+        font-size: 1.0625rem !important;
         letter-spacing: 0.12em !important;
     }
     .top-bar-brand em {
@@ -22,7 +22,7 @@
     }
     /* Eski Giriş Yap top-bar linki — yer kaplamasın */
     .top-bar-link {
-        font-size: 0.72rem !important;
+        font-size: 0.9rem !important;
         letter-spacing: 0.16em !important;
     }
     .top-bar-link::after {
@@ -33,8 +33,8 @@
     .auth-widget {
         padding: 14px clamp(1rem, 3vw, 1.5rem) !important;
     }
-    .auth-widget-link {
-        font-size: 0.72rem !important;
+.auth-widget-link {
+        font-size: 0.9rem !important;
         letter-spacing: 0.16em !important;
         gap: 0.5em !important;
     }
@@ -42,20 +42,20 @@
         width: 12px !important;
         height: 12px !important;
     }
-    .auth-widget-signup {
-        font-size: 0.72rem !important;
+.auth-widget-signup {
+        font-size: 0.9rem !important;
         letter-spacing: 0.16em !important;
         margin-left: 0.7em !important;
         padding-left: 0.7em !important;
     }
     .auth-widget-credit {
-        font-size: 0.68rem !important;
+        font-size: 0.85rem !important;
         letter-spacing: 0.14em !important;
         margin-left: 0.3rem !important;
         padding-left: 0.6rem !important;
     }
     .auth-widget-admin {
-        font-size: 0.72rem !important;
+        font-size: 0.9rem !important;
         letter-spacing: 0.14em !important;
     }
     .auth-widget-sep {
@@ -65,8 +65,8 @@
 
 /* === 2) Çok küçük telefonlar (< 420px) — ekstra sıkı === */
 @media (max-width: 420px) {
-    .top-bar-brand {
-        font-size: 0.78rem !important;
+.top-bar-brand {
+        font-size: 0.95rem !important;
         letter-spacing: 0.08em !important;
     }
     .top-bar-brand em {
@@ -74,18 +74,18 @@
         margin-right: 10px !important;
     }
     .auth-widget-link {
-        font-size: 0.66rem !important;
+        font-size: 0.85rem !important;
         letter-spacing: 0.10em !important;
     }
     .auth-widget-signup {
-        font-size: 0.66rem !important;
+        font-size: 0.85rem !important;
         letter-spacing: 0.10em !important;
         margin-left: 0.5em !important;
         padding-left: 0.5em !important;
     }
     /* Logged-in iken kredi rozetini sıkıştır */
     .auth-widget-credit {
-        font-size: 0.62rem !important;
+        font-size: 0.82rem !important;
         letter-spacing: 0.08em !important;
     }
 }
@@ -118,12 +118,12 @@
     }
     .about-eyebrow {
         text-align: center !important;
-        font-size: 0.72rem !important;
+        font-size: 0.9rem !important;
         letter-spacing: 0.22em !important;
     }
     .about-text p {
-        font-size: 1.02rem !important;
-        line-height: 1.7 !important;
+        font-size: 1.28rem !important;
+        line-height: 1.75 !important;
     }
     /* Portrait altın çerçeve — mobilde fazla taşmasın */
     .about-portrait::after {
@@ -164,19 +164,19 @@
         text-align: center !important;
         padding: 0 1rem !important;
     }
-    .hero-kicker {
-        font-size: 0.66rem !important;
+.hero-kicker {
+        font-size: 1.025rem !important;
         letter-spacing: 0.22em !important;
         text-align: center !important;
     }
     .hero-tagline {
-        font-size: 0.98rem !important;
+        font-size: 1.12rem !important;
         text-align: center !important;
         max-width: 90% !important;
         margin: 0.5rem auto 1.5rem !important;
     }
     .hero-cta {
-        font-size: 0.78rem !important;
+        font-size: 0.95rem !important;
         padding: 0.85rem 1.6rem !important;
         letter-spacing: 0.16em !important;
     }
@@ -189,9 +189,10 @@
         text-align: center !important;
     }
     .section-desc {
-        font-size: 0.95rem !important;
+        font-size: 1.18rem !important;
         text-align: center !important;
         padding: 0 1rem !important;
+        line-height: 1.7 !important;
     }
     .container {
         padding-left: 1rem !important;
@@ -215,11 +216,11 @@
         height: 48px !important;
         font-size: 1rem !important;
     }
-    .modal-title {
-        font-size: 1.15rem !important;
+.modal-title {
+        font-size: 1.4rem !important;
     }
     .modal-position {
-        font-size: 0.82rem !important;
+        font-size: 1.05rem !important;
     }
 }
 
@@ -258,14 +259,14 @@
         font-size: clamp(1.8rem, 7vw, 2.4rem) !important;
         text-align: center !important;
     }
-    .cta-desc {
-        font-size: 1rem !important;
+.cta-desc {
+        font-size: 1.25rem !important;
         text-align: center !important;
         margin: 0 auto 1.5rem !important;
     }
     .cta-btn {
         margin: 0 auto !important;
-        font-size: 0.74rem !important;
+        font-size: 1.0625rem !important;
         padding: 0.95rem 1.6rem !important;
         letter-spacing: 0.2em !important;
     }
@@ -322,20 +323,20 @@
         font-size: 1.1rem !important;
         flex-shrink: 0;
     }
-    .modal-title {
-        font-size: 1.15rem !important;
+.modal-title {
+        font-size: 1.4rem !important;
         line-height: 1.3 !important;
     }
     .modal-position {
-        font-size: 0.92rem !important;
+        font-size: 1.15rem !important;
         line-height: 1.5 !important;
         margin-top: 6px !important;
     }
     .modal-body {
         padding: 20px 22px 32px !important;
     }
-    .modal-body h3 {
-        font-size: 1.05rem !important;       /* önce 0.9rem — çok küçüktü */
+.modal-body h3 {
+        font-size: 1.3rem !important;        /* önce 1.05rem — hâlâ küçüktü */
         letter-spacing: 0.05em !important;
         margin: 24px 0 10px !important;
     }
@@ -353,26 +354,26 @@
         font-weight: 400 !important;
         padding-left: 22px !important;
     }
-    .modal-body .tag-positive,
+.modal-body .tag-positive,
     .modal-body .tag-negative {
-        font-size: 0.85rem !important;
+        font-size: 1.0625rem !important;
         padding: 4px 12px !important;
     }
     /* Consultant note + practical solutions */
     .consultant-note,
     .practical-solutions li,
     .consultant-section p {
-        font-size: 1.08rem !important;
+        font-size: 1.35rem !important;
         line-height: 1.8 !important;
         font-weight: 400 !important;
     }
     .consultant-divider span,
     .consultant-section h3 {
-        font-size: 1rem !important;
+        font-size: 1.25rem !important;
     }
     .formula-box,
     .formula-box p {
-        font-size: 0.95rem !important;
+        font-size: 1.1875rem !important;
     }
 }
 
@@ -388,37 +389,37 @@
         font-size: 1.05rem !important;
         flex-shrink: 0;
     }
-    .result-card .card-label {
-        font-size: 0.95rem !important;       /* önce 0.95 — kalıyor */
+.result-card .card-label {
+        font-size: 1.1875rem !important;
         line-height: 1.4 !important;
     }
     .result-card .card-name {
-        font-size: 1.15rem !important;        /* önce 1.1 — biraz büyüt */
+        font-size: 1.4375rem !important;
         line-height: 1.35 !important;
         margin-top: 5px !important;
     }
     .result-card .card-arcana {
-        font-size: 1rem !important;           /* önce 0.95 */
+        font-size: 1.25rem !important;
         margin-top: 5px !important;
     }
     .result-card::before {
         font-size: 4rem !important;           /* watermark daha küçük mobile'da */
     }
     /* Grup başlığı (Yol, Kazanım, Karmik Düğüm) */
-    .result-group h3 {
-        font-size: 1.05rem !important;
+.result-group h3 {
+        font-size: 1.3rem !important;
         margin-bottom: 14px !important;
     }
 }
 
 /* === 14) Analiz hesaplama formu sonuçları — section başlıkları === */
 @media (max-width: 760px) {
-    .age-period .period-label {
-        font-size: 0.78rem !important;
+.age-period .period-label {
+        font-size: 1.1875rem !important;
         letter-spacing: 0.12em !important;
     }
     .age-period .period-range {
-        font-size: 1.05rem !important;
+        font-size: 1.3125rem !important;
     }
 }
 
@@ -434,3 +435,34 @@
         background-repeat: no-repeat !important;
     }
 }
+
+/* ====== READABILITY FLOOR (mobile, non-info-card) ====== */
+/* styles.css sonundaki "READABILITY FLOOR" ile SENKRON olmalı — yoksa buradaki
+   !important kuralları styles.css değerlerini ezip metni küçük bırakır. */
+.consultant-divider span { font-size: 1.484rem !important; }
+.consultant-note { font-size: 1.484rem !important; }
+.practical-solutions li { font-size: 1.484rem !important; }
+.detailed-reading p { font-size: 1.484rem !important; }
+.planet-card .planet-name { font-size: 1.325rem !important; }
+.planet-card .planet-degree { font-size: 1.484rem !important; }
+.chart-disclaimer { font-size: 1.484rem !important; }
+.about-pillar-title { font-size: 1.125rem !important; }
+.about-pillar-desc { font-size: 1.484rem !important; }
+.practical-solutions li::before { font-size: 1.125rem !important; }
+/* Ne Sunuyoruz + Karmik Diyagram sembol altı metinler */
+.showcase-card h3 { font-size: 1.875rem !important; }
+.showcase-card p { font-size: 1.325rem !important; }
+.section-desc,
+.section-description { font-size: 1.64rem !important; }
+.stat-label { font-size: 1.25rem !important; }
+/* "Karma Matris Nedir / Nasıl Hesaplanır / Ne İşe Yarar" info kartları */
+.info-card h3 { font-size: 1.5625rem !important; }
+.info-card p { font-size: 1.325rem !important; }
+/* Footer metinleri */
+.footer-brand-desc { font-size: 1.25rem !important; }
+.footer-col-title { font-size: 1.1875rem !important; }
+.footer-link { font-size: 1.4375rem !important; }
+.footer-copyright,
+.footer-legal { font-size: 1.375rem !important; }
+.footer-contact-brand { font-size: 1.25rem !important; }
+.footer-social span { font-size: 1.25rem !important; }
