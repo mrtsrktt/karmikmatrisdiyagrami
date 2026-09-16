@@ -279,10 +279,11 @@ select {
     border-radius: 0 !important;
     color: var(--text-primary) !important;
     box-shadow: none !important;
-    padding: 22px 4px 10px !important;
+    padding: 30px 4px 12px !important;
     font-family: 'Cormorant Garamond', serif !important;
-    font-size: 1.1rem !important;
+    font-size: 1.375rem !important;
     font-weight: 400 !important;
+    line-height: 1.3 !important;
     letter-spacing: 0 !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -318,13 +319,13 @@ select:focus {
     letter-spacing: 0 !important;
     text-transform: none !important;
     text-shadow: none !important;
-    font-size: 1.05rem !important;
+    font-size: 1.3125rem !important;
     background: transparent !important;
     padding: 0 !important;
 }
 .input-field input:focus + label,
 .input-field input:not(:placeholder-shown) + label {
-    top: 4px !important;
+    top: 6px !important;
     transform: translateY(0) scale(0.78) !important;
     color: var(--gold-bright) !important;
     letter-spacing: 0.1em !important;
@@ -340,11 +341,20 @@ select:focus {
     color: var(--text-primary) !important;
     text-transform: none !important;
     letter-spacing: -0.01em !important;
-    font-size: 1.6rem !important;
+    font-size: 2rem !important;
+    line-height: 1.25 !important;
     background: none !important;
     -webkit-text-fill-color: var(--text-primary) !important;
     margin-bottom: 2rem !important;
     display: block !important;
+}
+.input-hint {
+    font-size: 1.4375rem !important;
+    line-height: 1.5 !important;
+}
+.input-hint-sub {
+    font-size: 1.375rem !important;
+    line-height: 1.6 !important;
 }
 .input-hint,
 .input-hint-sub {
@@ -1751,7 +1761,7 @@ body::before, body::after { display: none; }
 .input-card-title {
     display: block;
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1.3rem;
+    font-size: 1.625rem;
     font-weight: 600;
     margin-bottom: 36px;
     background: linear-gradient(135deg, #F2D9C2 0%, #C2906B 50%, #F2D9C2 100%);
@@ -1779,8 +1789,8 @@ body::before, body::after { display: none; }
 }
 .input-field input {
     width: 100%;
-    padding: 22px 20px 14px 20px;
-    font-size: 1.05rem;
+    padding: 26px 20px 14px 20px;
+    font-size: 1.3125rem;
     border: 1px solid rgba(212, 175, 55, 0.25);
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.04);
@@ -1817,7 +1827,7 @@ body::before, body::after { display: none; }
     top: 50%;
     transform: translateY(-50%);
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1.05rem;
+    font-size: 1.3125rem;
     font-weight: 500;
     color: #F0D99C;
     letter-spacing: 0.05em;
@@ -1835,11 +1845,8 @@ body::before, body::after { display: none; }
     transform: translateY(-50%) scale(0.78);
     color: var(--gold-bright);
     letter-spacing: 0.1em;
-    /* Carve a notch in the border */
-    background: linear-gradient(180deg,
-        transparent 0%, transparent 35%,
-        var(--bg-base) 35%, var(--bg-base) 65%,
-        transparent 65%, transparent 100%);
+    /* Carve a notch in the border — kart arka planıyla uyumlu */
+    background: #FBF3EF;
 }
 
 /* Focus state — gold glow + left vertical accent */
@@ -1869,7 +1876,7 @@ body::before, body::after { display: none; }
 /* ====== CTA BUTTON — Gold gradient with particle/ripple/spinner ====== */
 .input-card button {
     padding: 1.05rem 3.2rem;
-    font-size: 1.125rem;
+    font-size: 1.40625rem;
     font-weight: 400;
     background: linear-gradient(135deg, #c8a84b 0%, #f0d080 50%, #c8a84b 100%);
     background-size: 200% 100%;
@@ -1969,7 +1976,7 @@ body::before, body::after { display: none; }
 .input-hint {
     margin-top: 20px;
     color: #E8D4A8;
-    font-size: 1.15rem;
+    font-size: 1.4375rem;
     font-weight: 500;
     font-family: 'Cormorant Garamond', serif;
     letter-spacing: 0.02em;
@@ -3786,7 +3793,7 @@ body::before, body::after { display: none; }
     margin-top: 8px;
     color: #D8C2C8;
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem;
+    font-size: 1.375rem;
     font-weight: 400;
     opacity: 0.92;
     line-height: 1.55;
@@ -4262,11 +4269,11 @@ body.is-loading > *:not(.intro-loader) {
     .aurora-blob.aurora-2 { width: 200px; height: 200px; }
     .aurora-blob.aurora-3 { width: 180px; height: 180px; }
     .input-card { padding: 30px 20px; border-radius: 12px; }
-    .input-card-title { font-size: 1.25rem; margin-bottom: 26px; }
-    .input-row { flex-direction: column; gap: 14px; align-items: center; }
-    .input-field { width: 100%; max-width: 280px; }
-    .input-field:has(> #birthTime) { width: 100%; max-width: 280px; }
-    .input-field input { padding: 20px 18px 12px 18px; font-size: 1rem; }
+    .input-card-title { font-size: 1.5625rem; margin-bottom: 30px; }
+    .input-row { flex-direction: column; gap: 18px; align-items: center; }
+    .input-field { width: 100%; max-width: 300px; }
+    .input-field:has(> #birthTime) { width: 100%; max-width: 300px; }
+    .input-field input { padding: 26px 18px 14px 18px; font-size: 1.3125rem; }
     .city-autocomplete-wrapper { max-width: 100%; }
     .result-cards { grid-template-columns: 1fr; }
     .modal { max-width: 95vw; }
@@ -4281,7 +4288,7 @@ body.is-loading > *:not(.intro-loader) {
     .birthchart-wrapper svg { max-width: 100%; overflow: visible; }
     .download-btn { padding: 10px 20px; font-size: 1rem; }
     .matrix-section { padding: 30px 10px; }
-    .input-card button { padding: 14px 24px; font-size: 1rem; letter-spacing: 0.15em; }
+    .input-card button { padding: 16px 28px; font-size: 1.3125rem; letter-spacing: 0.15em; }
 .info-card { padding: 24px; }
     /* Intro loader mobile sizing */
     .intro-symbol-wrap { width: 170px; height: 170px; }

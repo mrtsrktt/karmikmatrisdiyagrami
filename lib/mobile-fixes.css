@@ -274,13 +274,29 @@
 
 /* === 10) Input form — mobile dokunma alanı genişlet === */
 @media (max-width: 760px) {
-    .input-row {
+.input-row {
         flex-direction: column !important;
-        gap: 1rem !important;
+        gap: 1.15rem !important;
     }
     .input-group {
         width: 100% !important;
     }
+    /* Floating label + input çakışmasını önle: label input'un üstünde dursun */
+    .input-field input {
+        font-size: 1.3125rem !important;
+        padding: 26px 18px 14px 18px !important;
+        line-height: 1.3 !important;
+    }
+    .input-field label {
+        font-size: 1.3125rem !important;
+        line-height: 1.2 !important;
+    }
+    .input-card-title {
+        font-size: 1.5625rem !important;
+        line-height: 1.25 !important;
+    }
+    .input-hint { font-size: 1.4375rem !important; line-height: 1.5 !important; }
+    .input-hint-sub { font-size: 1.375rem !important; line-height: 1.6 !important; }
     input[type="text"],
     input[type="date"],
     input[type="time"],
