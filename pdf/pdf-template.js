@@ -86,10 +86,10 @@
     for (const [key, pos] of Object.entries(NODE_POSITIONS)) {
       const color = nodeColor(pos.type);
       const value = values[key];
-      svg += `<circle cx="${pos.x}" cy="${pos.y}" r="28" fill="${color}" stroke="#FFFFFF" stroke-width="2"/>`;
+      svg += `<circle cx="${pos.x}" cy="${pos.y}" r="37" fill="${color}" stroke="#FFFFFF" stroke-width="2"/>`;
       // Use registered fonts (Helvetica is NOT available since we override pdfMake.fonts)
-      svg += `<text x="${pos.x}" y="${pos.y + 7}" text-anchor="middle" font-family="IMFell" font-size="22" font-weight="bold" fill="#0A0612">${value}</text>`;
-      svg += `<text x="${pos.x}" y="${pos.y + 50}" text-anchor="middle" font-family="Cinzel" font-size="15" fill="#6E5752">${key}</text>`;
+      svg += `<text x="${pos.x}" y="${pos.y + 10}" text-anchor="middle" font-family="IMFell" font-size="27" font-weight="bold" fill="#0A0612">${value}</text>`;
+      svg += `<text x="${pos.x}" y="${pos.y + 66}" text-anchor="middle" font-family="Cinzel" font-size="19" fill="#6E5752">${key}</text>`;
     }
 
     svg += '</svg>';
@@ -213,11 +213,11 @@
           // Header: big number + arcana name
           {
             columns: [
-              { text: String(num), font: 'IMFell', fontSize: 30, color: COLORS.goldBright, width: 'auto' },
+              { text: String(num), font: 'IMFell', fontSize: 40, color: COLORS.goldBright, width: 'auto' },
               {
                 stack: [
-                  { text: arcanaName, font: 'Cinzel', fontSize: 15.5, color: COLORS.goldBright, characterSpacing: 1, margin: [10, 4, 0, 0] },
-                  { text: badgeText, font: 'Cormorant', italics: true, fontSize: 12.5, color: COLORS.textSecondary, margin: [10, 2, 0, 0] },
+                  { text: arcanaName, font: 'Cinzel', fontSize: 21, color: COLORS.goldBright, characterSpacing: 1, margin: [10, 4, 0, 0] },
+                  { text: badgeText, font: 'Cormorant', italics: true, fontSize: 17, color: COLORS.textSecondary, margin: [10, 2, 0, 0] },
                 ],
                 width: '*',
               },
@@ -294,7 +294,7 @@
 
       defaultStyle: {
         font: 'Cormorant',
-        fontSize: 14.5,
+        fontSize: 19.5,
         color: COLORS.textPrimary,
         lineHeight: 1.55,
       },
@@ -305,7 +305,7 @@
         {
           text: 'KARMA MATRİS',
           font: 'Cinzel',
-          fontSize: 32,
+          fontSize: 43,
           alignment: 'center',
           color: COLORS.goldBright,
           characterSpacing: 4,
@@ -314,7 +314,7 @@
         {
           text: 'A N A L İ Z İ',
           font: 'Cinzel',
-          fontSize: 24,
+          fontSize: 32,
           alignment: 'center',
           color: COLORS.goldBright,
           characterSpacing: 6,
@@ -328,7 +328,7 @@
         {
           text: 'Doğum Tarihi',
           font: 'Cinzel',
-          fontSize: 12,
+          fontSize: 16,
           alignment: 'center',
           color: COLORS.textSecondary,
           characterSpacing: 2,
@@ -337,7 +337,7 @@
         {
           text: birthDate,
           font: 'IMFell',
-          fontSize: 26,
+          fontSize: 35,
           alignment: 'center',
           color: COLORS.goldBright,
           margin: [0, 0, 0, 80],
@@ -346,7 +346,7 @@
           text: `Hazırlanma: ${formatDateTR(new Date())}`,
           font: 'Cormorant',
           italics: true,
-          fontSize: 10,
+          fontSize: 13.5,
           alignment: 'center',
           color: COLORS.textMuted,
           margin: [0, 0, 0, 0],
@@ -479,7 +479,7 @@
       styles: {
         sectionTitle: {
           font: 'Cinzel',
-          fontSize: 18,
+          fontSize: 24.4,
           color: COLORS.goldBright,
           characterSpacing: 2.5,
           alignment: 'center',
@@ -487,61 +487,61 @@
         sectionDesc: {
           font: 'Cormorant',
           italics: true,
-          fontSize: 14.5,
+          fontSize: 19.5,
           color: COLORS.textSecondary,
           alignment: 'center',
         },
         cardTitle: {
           font: 'Cinzel',
-          fontSize: 15.5,
+          fontSize: 21,
           color: COLORS.goldBright,
           characterSpacing: 1,
         },
         cardNumber: {
           font: 'IMFell',
-          fontSize: 28,
+          fontSize: 38,
           color: COLORS.goldBright,
         },
         cardArcana: {
           font: 'Cormorant',
           italics: true,
-          fontSize: 15.5,
+          fontSize: 21,
           color: COLORS.textPrimary,
         },
         cardFormula: {
           font: 'IMFell',
           italics: true,
-          fontSize: 12.5,
+          fontSize: 17.1,
           color: COLORS.textMuted,
         },
         cardBody: {
           font: 'Cormorant',
-          fontSize: 14.5,
+          fontSize: 19.7,
           color: COLORS.textPrimary,
           lineHeight: 1.55,
         },
         healthCatLabel: {
           font: 'Cinzel',
-          fontSize: 13.5,
+          fontSize: 18,
           color: COLORS.goldBright,
         },
         healthCatItems: {
           font: 'Cormorant',
-          fontSize: 14,
+          fontSize: 19,
           color: COLORS.textPrimary,
           lineHeight: 1.5,
         },
         healthInterpretation: {
           font: 'Cormorant',
           italics: true,
-          fontSize: 14.5,
+          fontSize: 19.5,
           color: COLORS.textPrimary,
           lineHeight: 1.6,
           alignment: 'justify',
         },
         narrative: {
           font: 'Cormorant',
-          fontSize: 15,
+          fontSize: 20.3,
           color: COLORS.textPrimary,
           lineHeight: 1.65,
           alignment: 'justify',
@@ -549,7 +549,7 @@
         narrativeMuted: {
           font: 'Cormorant',
           italics: true,
-          fontSize: 13,
+          fontSize: 17.5,
           color: COLORS.textSecondary,
           lineHeight: 1.6,
         },
@@ -561,8 +561,8 @@
         if (currentPage === 1) return null;
         return {
           columns: [
-            { text: 'Karma Matris Analizi', font: 'Cormorant', italics: true, fontSize: 10, color: COLORS.textMuted, alignment: 'left', margin: [55, 20, 0, 0] },
-            { text: `${currentPage} / ${pageCount}`, font: 'IMFell', fontSize: 10, color: COLORS.textMuted, alignment: 'right', margin: [0, 20, 55, 0] },
+            { text: 'Karma Matris Analizi', font: 'Cormorant', italics: true, fontSize: 13.5, color: COLORS.textMuted, alignment: 'left', margin: [55, 20, 0, 0] },
+            { text: `${currentPage} / ${pageCount}`, font: 'IMFell', fontSize: 13.5, color: COLORS.textMuted, alignment: 'right', margin: [0, 20, 55, 0] },
           ],
         };
       },
@@ -571,8 +571,8 @@
     function periodCell(label, range) {
       return {
         stack: [
-          { text: label, font: 'Cinzel', fontSize: 12, color: COLORS.goldBright, alignment: 'center', characterSpacing: 1, margin: [0, 0, 0, 4] },
-          { text: range, font: 'IMFell', fontSize: 14, color: COLORS.textPrimary, alignment: 'center' },
+          { text: label, font: 'Cinzel', fontSize: 16, color: COLORS.goldBright, alignment: 'center', characterSpacing: 1, margin: [0, 0, 0, 4] },
+          { text: range, font: 'IMFell', fontSize: 19, color: COLORS.textPrimary, alignment: 'center' },
         ],
         fillColor: COLORS.bgSurface,
       };
